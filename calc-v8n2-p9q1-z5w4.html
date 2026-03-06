@@ -12,17 +12,16 @@
     <link rel="icon" href="sd3.png" type="image/png">
     <link rel="apple-touch-icon" href="sd3.png">
     
-    <title>利益計算ツール</title>
+    <title>利益計算</title>
     <style>
         :root {
             --bg-color: #f8f9fa;
             --main-blue: #007aff;
             --text-gray: #8e8e93;
-            --line-green: #06C755; /* LINE風のアクセント用 */
+            --line-green: #06C755;
         }
 
         body {
-            /* フォントを LINE Seed JP に設定 */
             font-family: 'Line Seed JP', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--bg-color);
             margin: 0;
@@ -72,7 +71,7 @@
             width: 100%;
             padding: 14px;
             font-size: 16px;
-            font-family: inherit; /* 親要素のフォントを継承 */
+            font-family: inherit;
             border: 1px solid #e0e0e0;
             border-radius: 10px;
             box-sizing: border-box;
@@ -96,9 +95,17 @@
 
         .result-item:last-child { border-bottom: none; }
 
-        .profit-row {
+        /* 利益（太文字）用のスタイル */
+        .profit-bold {
             font-size: 20px;
-            font-weight: 700;
+            font-weight: 700; /* 太文字 */
+            margin-top: 5px;
+        }
+
+        /* 利益率（通常）用のスタイル */
+        .margin-normal {
+            font-size: 20px;
+            font-weight: 400; /* 標準 */
             margin-top: 5px;
         }
 
@@ -131,7 +138,7 @@
 
 <div class="container">
     <div class="card">
-        <h2>入力項目</h2>
+        <h2>利益計算</h2>
         <div class="input-group">
             <label>売値 (円)</label>
             <input type="number" id="sale-price" placeholder="0" oninput="calculate()">
@@ -174,11 +181,11 @@
             <span>配送料</span>
             <span id="shipping-cost-display">0 円</span>
         </div>
-        <div class="result-item profit-row" style="color: var(--main-blue);">
+        <div class="result-item profit-bold" style="color: var(--main-blue);">
             <span>利益</span>
             <span id="profit">0 円</span>
         </div>
-        <div class="result-item profit-row" style="color: var(--text-gray);">
+        <div class="result-item margin-normal" style="color: var(--text-gray);">
             <span>利益率</span>
             <span id="margin">0 %</span>
         </div>
