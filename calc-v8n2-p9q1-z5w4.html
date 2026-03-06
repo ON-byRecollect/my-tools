@@ -7,9 +7,10 @@
     <title>利益計算ツール</title>
     <style>
         :root {
-            --post-red: #CC0100;
-            --yamato-green: #00806E;
-            --bg-color: #f2f2f7;
+            /* 配色ルールの削除に伴い、使用しない変数を整理 */
+            --bg-color: #f2f2f7; /* iOS風の背景色 */
+            --main-blue: #007aff; /* iOS風の青色 */
+            --text-gray: #8e8e93; /* iOS風のグレー色 */
         }
 
         body {
@@ -39,7 +40,7 @@
             font-size: 18px;
             margin-top: 0;
             color: #333;
-            border-left: 4px solid #007aff;
+            border-left: 4px solid var(--main-blue);
             padding-left: 10px;
         }
 
@@ -62,7 +63,7 @@
             border: 1px solid #ddd;
             border-radius: 8px;
             box-sizing: border-box;
-            -webkit-appearance: none;
+            -webkit-appearance: none; /* iOSデフォルトスタイル解除 */
         }
 
         .result-item {
@@ -70,20 +71,26 @@
             justify-content: space-between;
             padding: 10px 0;
             border-bottom: 1px solid #eee;
+            color: #333; /* デフォルトの文字色 */
         }
 
         .result-item:last-child { border-bottom: none; }
 
+        /* 計算結果の強調スタイル */
         .profit-row {
             font-size: 20px;
             font-weight: bold;
-            color: #000;
+        }
+
+        #shipping-cost-display {
+            font-weight: bold;
+            /* 配送料の背景色関連スタイルを削除 */
         }
 
         .reset-btn {
             width: 100%;
             padding: 15px;
-            background-color: #ff3b30;
+            background-color: #ff3b30; /* iOS風の赤色 */
             color: white;
             border: none;
             border-radius: 12px;
@@ -91,18 +98,12 @@
             font-weight: bold;
             cursor: pointer;
             margin-top: 10px;
+            -webkit-tap-highlight-color: transparent; /* タップ時のハイライトを透過 */
         }
 
         .reset-btn:active {
             opacity: 0.7;
         }
-
-        #shipping-cost-display {
-            font-weight: bold;
-        }
-
-        .bg-post { background-color: var(--post-red); color: white !important; padding: 2px 8px; border-radius: 4px; }
-        .bg-yamato { background-color: var(--yamato-green); color: white !important; padding: 2px 8px; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -152,11 +153,11 @@
             <span>配送料</span>
             <span id="shipping-cost-display">0 円</span>
         </div>
-        <div class="result-item profit-row">
+        <div class="result-item profit-row" style="color: var(--main-blue);">
             <span>利益</span>
             <span id="profit">0 円</span>
         </div>
-        <div class="result-item profit-row" style="color: #007aff;">
+        <div class="result-item profit-row" style="color: var(--text-gray);">
             <span>利益率</span>
             <span id="margin">0 %</span>
         </div>
@@ -172,28 +173,29 @@
         const shippingSelect = document.getElementById('shipping-method');
         const shippingCost = parseFloat(shippingSelect.value) || 0;
         
+        // 販売手数料 (5%)
         const fee = Math.floor(salePrice * 0.05);
+        // 利益計算
         const profit = salePrice - costPrice - fee - shippingCost;
+        // 利益率計算 (少数第一位まで)
         const margin = salePrice > 0 ? ((profit / salePrice) * 100).toFixed(1) : 0;
 
+        // 結果を表示
         document.getElementById('fee').innerText = fee.toLocaleString() + " 円";
         document.getElementById('shipping-cost-display').innerText = shippingCost.toLocaleString() + " 円";
         document.getElementById('profit').innerText = profit.toLocaleString() + " 円";
         document.getElementById('margin').innerText = margin + " %";
 
-        const selectedOption = shippingSelect.options[shippingSelect.selectedIndex];
-        const type = selectedOption.getAttribute('data-type');
-        const shippingDisplay = document.getElementById('shipping-cost-display');
-        
-        shippingDisplay.classList.remove('bg-post', 'bg-yamato');
-        if (type === 'post') shippingDisplay.classList.add('bg-post');
-        else if (type === 'yamato') shippingDisplay.classList.add('bg-yamato');
+        // 配送料の背景色切り替えJavaScript処理を削除
     }
 
     function resetAll() {
+        // 入力値をクリア
         document.getElementById('sale-price').value = '';
         document.getElementById('cost-price').value = '';
+        // 選択肢を初期化
         document.getElementById('shipping-method').selectedIndex = 0;
+        // 再計算して表示を初期化
         calculate();
     }
 </script>
