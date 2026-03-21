@@ -64,11 +64,11 @@
         }
 
         .input-group {
-            flex: 1; /* 均等割 */
+            flex: 1;
         }
 
         .input-group-large {
-            flex: 1.5; /* 少し広め */
+            flex: 1.5;
         }
 
         label {
@@ -145,12 +145,12 @@
         }
 
         .profit-bold {
-            font-size: 16px;
+            font-size: 15px; /* 単位が入るため少し調整 */
             font-weight: 700;
         }
 
         .margin-normal {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 400;
         }
 
@@ -228,35 +228,37 @@
     </div>
 
     <div class="card">
-        <div class="section-title">利益 (円)</div>
+        <h2>計算結果</h2>
+
+        <div class="section-title">利益</div>
         <div class="result-grid">
             <div class="result-box">
                 <div class="result-label">最低売値</div>
-                <div class="profit-bold" style="color: var(--main-blue);" id="profit-min">0</div>
+                <div class="profit-bold" style="color: var(--main-blue);" id="profit-min">0 円</div>
             </div>
             <div class="result-box">
                 <div class="result-label">5%</div>
-                <div class="profit-bold" style="color: var(--main-blue);" id="profit-5">0</div>
+                <div class="profit-bold" style="color: var(--main-blue);" id="profit-5">0 円</div>
             </div>
             <div class="result-box">
                 <div class="result-label">7%</div>
-                <div class="profit-bold" style="color: var(--main-blue);" id="profit-7">0</div>
+                <div class="profit-bold" style="color: var(--main-blue);" id="profit-7">0 円</div>
             </div>
         </div>
 
-        <div class="section-title">利益率 (%)</div>
+        <div class="section-title">利益率</div>
         <div class="result-grid" style="margin-bottom: 0;">
             <div class="result-box">
                 <div class="result-label">最低売値</div>
-                <div class="margin-normal" style="color: var(--text-gray);" id="margin-min">0</div>
+                <div class="margin-normal" style="color: var(--text-gray);" id="margin-min">0 ％</div>
             </div>
             <div class="result-box">
                 <div class="result-label">5%</div>
-                <div class="margin-normal" style="color: var(--text-gray);" id="margin-5">0</div>
+                <div class="margin-normal" style="color: var(--text-gray);" id="margin-5">0 ％</div>
             </div>
             <div class="result-box">
                 <div class="result-label">7%</div>
-                <div class="margin-normal" style="color: var(--text-gray);" id="margin-7">0</div>
+                <div class="margin-normal" style="color: var(--text-gray);" id="margin-7">0 ％</div>
             </div>
         </div>
     </div>
@@ -270,7 +272,7 @@
         const shippingCost = parseFloat(document.getElementById('shipping-method').value) || 0;
         const minSalePrice = parseFloat(document.getElementById('sale-price').value) || 0;
         
-        // 5%, 7%高の売値を計算 (四捨五入で自然な金額に)
+        // 5%, 7%高の売値を計算 (四捨五入)
         const salePrice5 = minSalePrice > 0 ? Math.round(minSalePrice * 1.05) : 0;
         const salePrice7 = minSalePrice > 0 ? Math.round(minSalePrice * 1.07) : 0;
 
@@ -282,10 +284,10 @@
         function getMetrics(price) {
             if (price === 0) return { profit: 0, margin: 0 };
             
-            // 販売手数料(5%)と配送料金は裏側でのみ計算
             const fee = Math.floor(price * 0.05);
             const profit = price - costPrice - fee - shippingCost;
-            const margin = ((profit / price) * 100).toFixed(1);
+            // 利益率は小数点切り捨てに変更
+            const margin = Math.floor((profit / price) * 100);
             
             return { profit, margin };
         }
@@ -295,15 +297,15 @@
         const metrics5 = getMetrics(salePrice5);
         const metrics7 = getMetrics(salePrice7);
 
-        // 利益の表示更新
-        document.getElementById('profit-min').innerText = metricsMin.profit.toLocaleString();
-        document.getElementById('profit-5').innerText = metrics5.profit.toLocaleString();
-        document.getElementById('profit-7').innerText = metrics7.profit.toLocaleString();
+        // 利益の表示更新（円を追加）
+        document.getElementById('profit-min').innerText = metricsMin.profit.toLocaleString() + " 円";
+        document.getElementById('profit-5').innerText = metrics5.profit.toLocaleString() + " 円";
+        document.getElementById('profit-7').innerText = metrics7.profit.toLocaleString() + " 円";
 
-        // 利益率の表示更新
-        document.getElementById('margin-min').innerText = metricsMin.margin;
-        document.getElementById('margin-5').innerText = metrics5.margin;
-        document.getElementById('margin-7').innerText = metrics7.margin;
+        // 利益率の表示更新（％を追加）
+        document.getElementById('margin-min').innerText = metricsMin.margin + " ％";
+        document.getElementById('margin-5').innerText = metrics5.margin + " ％";
+        document.getElementById('margin-7').innerText = metrics7.margin + " ％";
     }
 
     function resetAll() {
