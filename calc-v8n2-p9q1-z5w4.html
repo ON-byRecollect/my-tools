@@ -55,13 +55,25 @@
             font-weight: 700;
         }
 
-        .input-group {
+        /* 横並びレイアウト用 */
+        .row-flex {
+            display: flex;
+            gap: 12px;
             margin-bottom: 18px;
+            width: 100%;
+        }
+
+        .input-group {
+            flex: 1; /* 均等割 */
+        }
+
+        .input-group-large {
+            flex: 1.5; /* 少し広め */
         }
 
         label {
             display: block;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             margin-bottom: 8px;
             color: #555;
@@ -85,32 +97,61 @@
             background-color: #fff;
         }
 
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .result-item:last-child { border-bottom: none; }
-
-        /* 利益（太文字）用のスタイル */
-        .profit-bold {
-            font-size: 20px;
-            font-weight: 700; /* 太文字 */
-            margin-top: 5px;
-        }
-
-        /* 利益率（通常）用のスタイル */
-        .margin-normal {
-            font-size: 20px;
-            font-weight: 400; /* 標準 */
-            margin-top: 5px;
-        }
-
-        #shipping-cost-display {
+        /* 自動表示される売値用のスタイル */
+        .calc-display {
+            width: 100%;
+            padding: 14px 0;
+            font-size: 15px;
             font-weight: 700;
+            color: #333;
+            text-align: center;
+            background-color: #f2f2f7;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+        /* 3段目・4段目のグリッドレイアウト用 */
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #333;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            margin-top: 5px;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .result-box {
+            background-color: #fafafa;
+            border: 1px solid #f0f0f0;
+            border-radius: 10px;
+            padding: 12px 5px;
+            text-align: center;
+        }
+
+        .result-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #666;
+            margin-bottom: 6px;
+        }
+
+        .profit-bold {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .margin-normal {
+            font-size: 16px;
+            font-weight: 400;
         }
 
         .reset-btn {
@@ -126,6 +167,7 @@
             cursor: pointer;
             margin-top: 10px;
             transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .reset-btn:active {
@@ -139,55 +181,83 @@
 <div class="container">
     <div class="card">
         <h2>利益計算</h2>
-        <div class="input-group">
-            <label>売値 (円)</label>
-            <input type="number" id="sale-price" placeholder="0" oninput="calculate()">
+        
+        <div class="row-flex">
+            <div class="input-group">
+                <label>仕入値 (円)</label>
+                <input type="number" id="cost-price" placeholder="0" oninput="calculate()">
+            </div>
+            <div class="input-group">
+                <label>配送方法</label>
+                <select id="shipping-method" onchange="calculate()">
+                    <option value="0">選択してください</option>
+                    <optgroup label="郵便局">
+                        <option value="180">ゆうパケットポストmini</option>
+                        <option value="215">ゆうパケットポスト</option>
+                        <option value="475">ゆうパケットプラス</option>
+                    </optgroup>
+                    <optgroup label="ヤマト運輸">
+                        <option value="210">ネコポス</option>
+                        <option value="560">宅急便コンパクト</option>
+                        <option value="750">宅急便（60）</option>
+                        <option value="850">宅急便（80）</option>
+                        <option value="1050">宅急便（100）</option>
+                        <option value="1200">宅急便（120）</option>
+                        <option value="1400">宅急便（140）</option>
+                        <option value="1700">宅急便（160）</option>
+                        <option value="2100">宅急便（200）</option>
+                    </optgroup>
+                </select>
+            </div>
         </div>
-        <div class="input-group">
-            <label>仕入値 (円)</label>
-            <input type="number" id="cost-price" placeholder="0" oninput="calculate()">
-        </div>
-        <div class="input-group">
-            <label>配送方法</label>
-            <select id="shipping-method" onchange="calculate()">
-                <option value="0">選択してください</option>
-                <optgroup label="郵便局">
-                    <option value="180">ゆうパケットポストmini</option>
-                    <option value="215">ゆうパケットポスト</option>
-                    <option value="475">ゆうパケットプラス</option>
-                </optgroup>
-                <optgroup label="ヤマト運輸">
-                    <option value="210">ネコポス</option>
-                    <option value="560">宅急便コンパクト</option>
-                    <option value="750">宅急便（60）</option>
-                    <option value="850">宅急便（80）</option>
-                    <option value="1050">宅急便（100）</option>
-                    <option value="1200">宅急便（120）</option>
-                    <option value="1400">宅急便（140）</option>
-                    <option value="1700">宅急便（160）</option>
-                    <option value="2100">宅急便（200）</option>
-                </optgroup>
-            </select>
+
+        <div class="row-flex" style="align-items: flex-end; margin-bottom: 0;">
+            <div class="input-group-large">
+                <label>最低売値 (円)</label>
+                <input type="number" id="sale-price" placeholder="0" oninput="calculate()">
+            </div>
+            <div class="input-group">
+                <label>5%</label>
+                <div class="calc-display" id="sale-5-display">-</div>
+            </div>
+            <div class="input-group">
+                <label>7%</label>
+                <div class="calc-display" id="sale-7-display">-</div>
+            </div>
         </div>
     </div>
 
     <div class="card">
-        <h2>計算結果</h2>
-        <div class="result-item">
-            <span>販売手数料 (5%)</span>
-            <span id="fee">0 円</span>
+        <div class="section-title">利益 (円)</div>
+        <div class="result-grid">
+            <div class="result-box">
+                <div class="result-label">最低売値</div>
+                <div class="profit-bold" style="color: var(--main-blue);" id="profit-min">0</div>
+            </div>
+            <div class="result-box">
+                <div class="result-label">5%</div>
+                <div class="profit-bold" style="color: var(--main-blue);" id="profit-5">0</div>
+            </div>
+            <div class="result-box">
+                <div class="result-label">7%</div>
+                <div class="profit-bold" style="color: var(--main-blue);" id="profit-7">0</div>
+            </div>
         </div>
-        <div class="result-item">
-            <span>配送料</span>
-            <span id="shipping-cost-display">0 円</span>
-        </div>
-        <div class="result-item profit-bold" style="color: var(--main-blue);">
-            <span>利益</span>
-            <span id="profit">0 円</span>
-        </div>
-        <div class="result-item margin-normal" style="color: var(--text-gray);">
-            <span>利益率</span>
-            <span id="margin">0 %</span>
+
+        <div class="section-title">利益率 (%)</div>
+        <div class="result-grid" style="margin-bottom: 0;">
+            <div class="result-box">
+                <div class="result-label">最低売値</div>
+                <div class="margin-normal" style="color: var(--text-gray);" id="margin-min">0</div>
+            </div>
+            <div class="result-box">
+                <div class="result-label">5%</div>
+                <div class="margin-normal" style="color: var(--text-gray);" id="margin-5">0</div>
+            </div>
+            <div class="result-box">
+                <div class="result-label">7%</div>
+                <div class="margin-normal" style="color: var(--text-gray);" id="margin-7">0</div>
+            </div>
         </div>
     </div>
 
@@ -196,25 +266,50 @@
 
 <script>
     function calculate() {
-        const salePrice = parseFloat(document.getElementById('sale-price').value) || 0;
         const costPrice = parseFloat(document.getElementById('cost-price').value) || 0;
-        const shippingSelect = document.getElementById('shipping-method');
-        const shippingCost = parseFloat(shippingSelect.value) || 0;
+        const shippingCost = parseFloat(document.getElementById('shipping-method').value) || 0;
+        const minSalePrice = parseFloat(document.getElementById('sale-price').value) || 0;
         
-        const fee = Math.floor(salePrice * 0.05);
-        const profit = salePrice - costPrice - fee - shippingCost;
-        const margin = salePrice > 0 ? ((profit / salePrice) * 100).toFixed(1) : 0;
+        // 5%, 7%高の売値を計算 (四捨五入で自然な金額に)
+        const salePrice5 = minSalePrice > 0 ? Math.round(minSalePrice * 1.05) : 0;
+        const salePrice7 = minSalePrice > 0 ? Math.round(minSalePrice * 1.07) : 0;
 
-        document.getElementById('fee').innerText = fee.toLocaleString() + " 円";
-        document.getElementById('shipping-cost-display').innerText = shippingCost.toLocaleString() + " 円";
-        document.getElementById('profit').innerText = profit.toLocaleString() + " 円";
-        document.getElementById('margin').innerText = margin + " %";
+        // 売値の表示更新
+        document.getElementById('sale-5-display').innerText = salePrice5 > 0 ? salePrice5.toLocaleString() : "-";
+        document.getElementById('sale-7-display').innerText = salePrice7 > 0 ? salePrice7.toLocaleString() : "-";
+
+        // 利益・利益率を計算する共通関数
+        function getMetrics(price) {
+            if (price === 0) return { profit: 0, margin: 0 };
+            
+            // 販売手数料(5%)と配送料金は裏側でのみ計算
+            const fee = Math.floor(price * 0.05);
+            const profit = price - costPrice - fee - shippingCost;
+            const margin = ((profit / price) * 100).toFixed(1);
+            
+            return { profit, margin };
+        }
+
+        // 3パターンの計算を実行
+        const metricsMin = getMetrics(minSalePrice);
+        const metrics5 = getMetrics(salePrice5);
+        const metrics7 = getMetrics(salePrice7);
+
+        // 利益の表示更新
+        document.getElementById('profit-min').innerText = metricsMin.profit.toLocaleString();
+        document.getElementById('profit-5').innerText = metrics5.profit.toLocaleString();
+        document.getElementById('profit-7').innerText = metrics7.profit.toLocaleString();
+
+        // 利益率の表示更新
+        document.getElementById('margin-min').innerText = metricsMin.margin;
+        document.getElementById('margin-5').innerText = metrics5.margin;
+        document.getElementById('margin-7').innerText = metrics7.margin;
     }
 
     function resetAll() {
-        document.getElementById('sale-price').value = '';
         document.getElementById('cost-price').value = '';
         document.getElementById('shipping-method').selectedIndex = 0;
+        document.getElementById('sale-price').value = '';
         calculate();
     }
 </script>
