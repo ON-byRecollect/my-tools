@@ -272,9 +272,9 @@
         const shippingCost = parseFloat(document.getElementById('shipping-method').value) || 0;
         const minSalePrice = parseFloat(document.getElementById('sale-price').value) || 0;
         
-        // 5%, 7%高の売値を計算 (四捨五入)
-        const salePrice5 = minSalePrice > 0 ? Math.round(minSalePrice * 1.05) : 0;
-        const salePrice7 = minSalePrice > 0 ? Math.round(minSalePrice * 1.07) : 0;
+        // 改善点: 5%, 7%OFFされた時に「最低売値」に戻る販売価格を割り算で逆算（端数は四捨五入）
+        const salePrice5 = minSalePrice > 0 ? Math.round(minSalePrice / 0.95) : 0;
+        const salePrice7 = minSalePrice > 0 ? Math.round(minSalePrice / 0.93) : 0;
 
         // 売値の表示更新
         document.getElementById('sale-5-display').innerText = salePrice5 > 0 ? salePrice5.toLocaleString() : "-";
@@ -296,12 +296,12 @@
         const metrics5 = getMetrics(salePrice5);
         const metrics7 = getMetrics(salePrice7);
 
-        // 利益の表示更新（円を追加）
+        // 利益の表示更新
         document.getElementById('profit-min').innerText = metricsMin.profit.toLocaleString() + " 円";
         document.getElementById('profit-5').innerText = metrics5.profit.toLocaleString() + " 円";
         document.getElementById('profit-7').innerText = metrics7.profit.toLocaleString() + " 円";
 
-        // 利益率の表示更新（％を追加）
+        // 利益率の表示更新
         document.getElementById('margin-min').innerText = metricsMin.margin + " ％";
         document.getElementById('margin-5').innerText = metrics5.margin + " ％";
         document.getElementById('margin-7').innerText = metrics7.margin + " ％";
