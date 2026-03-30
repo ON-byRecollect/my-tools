@@ -55,6 +55,28 @@
             font-weight: 700;
         }
 
+        /* メモ欄用のスタイル */
+        textarea.memo-input {
+            width: 100%;
+            height: 80px;
+            padding: 14px;
+            font-size: 14px;
+            font-family: inherit;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            box-sizing: border-box;
+            background-color: #fafafa;
+            resize: vertical;
+            -webkit-appearance: none;
+            margin-bottom: 20px;
+        }
+
+        textarea.memo-input:focus {
+            outline: none;
+            border-color: var(--line-green);
+            background-color: #fff;
+        }
+
         /* 横並びレイアウト用 */
         .row-flex {
             display: flex;
@@ -179,6 +201,8 @@
 <body>
 
 <div class="container">
+    <textarea id="memo" class="memo-input" placeholder="メモを入力... (商品名や特記事項など)"></textarea>
+
     <div class="card">
         <h2>利益計算</h2>
         
@@ -272,18 +296,26 @@
         const shippingCost = parseFloat(document.getElementById('shipping-method').value) || 0;
         const minSalePrice = parseFloat(document.getElementById('sale-price').value) || 0;
         
-        // 1. まず、7%引かれた時に「最低売値」になるような「出品開始価格」を逆算
-        const startingPrice = minSalePrice > 0 ? Math.floor(minSalePrice / 0.93) : 0;
-
-        // 2. その出品開始価格に対して、フリマアプリが提示する「5%OFF」の金額を計算
-        // 【修正点】1000円以上は100円単位、1000円未満は10円単位で切り上げ
+        let startingPrice = 0;
         let fleaMarket5PercentOff = 0;
-        if (startingPrice > 0) {
-            const discountedPrice = startingPrice * 0.95;
-            if (discountedPrice >= 1000) {
-                fleaMarket5PercentOff = Math.ceil(discountedPrice / 100) * 100;
+
+        if (minSalePrice > 0) {
+            // 1. 丸め単位（切り上げ幅）の自動判定
+            const roundingUnit = minSalePrice >= 1000 ? 100 : 10;
+
+            // 2. 「開始価格」の逆算（お買い得戦略ロジック）
+            // 入力された最低価格から丸め単位を引き、0.93で割り戻す
+            const baseCalc = (minSalePrice - roundingUnit) / 0.93;
+            // 結果を10円単位で切り捨て、最後に10円だけ足す
+            startingPrice = Math.floor(baseCalc / 10) * 10 + 10;
+
+            // 3. 「5%引き」価格の算出
+            const discounted5 = startingPrice * 0.95;
+            // 丸め単位に合わせて切り上げ処理
+            if (roundingUnit === 100) {
+                fleaMarket5PercentOff = Math.ceil(discounted5 / 100) * 100;
             } else {
-                fleaMarket5PercentOff = Math.ceil(discountedPrice / 10) * 10;
+                fleaMarket5PercentOff = Math.ceil(discounted5 / 10) * 10;
             }
         }
 
@@ -317,6 +349,7 @@
     }
 
     function resetAll() {
+        document.getElementById('memo').value = '';
         document.getElementById('cost-price').value = '';
         document.getElementById('shipping-method').selectedIndex = 0;
         document.getElementById('sale-price').value = '';
