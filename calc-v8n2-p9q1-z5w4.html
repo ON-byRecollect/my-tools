@@ -68,7 +68,7 @@
             background-color: #fafafa;
             resize: vertical;
             -webkit-appearance: none;
-            margin-bottom: 20px;
+            /* margin-bottomはカード側で制御するため削除 */
         }
 
         textarea.memo-input:focus {
@@ -201,7 +201,11 @@
 <body>
 
 <div class="container">
-    <textarea id="memo" class="memo-input" placeholder="メモを入力... (商品名や特記事項など)"></textarea>
+    
+    <div class="card">
+        <h2>メモ</h2>
+        <textarea id="memo" class="memo-input" placeholder="商品名や特記事項など"></textarea>
+    </div>
 
     <div class="card">
         <h2>利益計算</h2>
@@ -304,14 +308,11 @@
             const roundingUnit = minSalePrice >= 1000 ? 100 : 10;
 
             // 2. 「開始価格」の逆算（お買い得戦略ロジック）
-            // 入力された最低価格から丸め単位を引き、0.93で割り戻す
             const baseCalc = (minSalePrice - roundingUnit) / 0.93;
-            // 結果を10円単位で切り捨て、最後に10円だけ足す
             startingPrice = Math.floor(baseCalc / 10) * 10 + 10;
 
             // 3. 「5%引き」価格の算出
             const discounted5 = startingPrice * 0.95;
-            // 丸め単位に合わせて切り上げ処理
             if (roundingUnit === 100) {
                 fleaMarket5PercentOff = Math.ceil(discounted5 / 100) * 100;
             } else {
