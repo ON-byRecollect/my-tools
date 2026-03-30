@@ -272,15 +272,14 @@
         const shippingCost = parseFloat(document.getElementById('shipping-method').value) || 0;
         const minSalePrice = parseFloat(document.getElementById('sale-price').value) || 0;
         
-        // 【修正点】フリマアプリの仕様に完全準拠
         // 1. まず、7%引かれた時に「最低売値」になるような「出品開始価格」を逆算
         const startingPrice = minSalePrice > 0 ? Math.floor(minSalePrice / 0.93) : 0;
 
-        // 2. その出品開始価格に対して、フリマアプリが提示する「5%OFF」の金額を計算（100円単位で切り上げ）
-        const fleaMarket5PercentOff = startingPrice > 0 ? Math.ceil((startingPrice * 0.95) / 100) * 100 : 0;
+        // 2. その出品開始価格に対して、フリマアプリが提示する「5%OFF」の金額を計算
+        // 【修正点】100円単位切り上げから、10円単位切り上げ（Math.ceil(価格 / 10) * 10）に変更
+        const fleaMarket5PercentOff = startingPrice > 0 ? Math.ceil((startingPrice * 0.95) / 10) * 10 : 0;
 
-        // 表示の更新（レイアウト名称はそのまま、表示される値の意味合いを変更）
-        // 7%の箱＝出品推奨価格（元値） / 5%の箱＝フリマアプリでの5%OFF表示額
+        // 表示の更新
         document.getElementById('sale-7-display').innerText = startingPrice > 0 ? startingPrice.toLocaleString() : "-";
         document.getElementById('sale-5-display').innerText = fleaMarket5PercentOff > 0 ? fleaMarket5PercentOff.toLocaleString() : "-";
 
@@ -294,11 +293,8 @@
         }
 
         // 3パターンの計算を実行
-        // ①最低売値（フリマアプリで7%OFFボタンを押された場合）
         const metricsMin = getMetrics(minSalePrice);
-        // ②5%OFF（フリマアプリで5%OFFボタンを押された場合）
         const metrics5 = getMetrics(fleaMarket5PercentOff);
-        // ③7%（値下げなし、出品開始価格のまま売れた場合）
         const metrics7 = getMetrics(startingPrice);
 
         // 利益の表示更新
