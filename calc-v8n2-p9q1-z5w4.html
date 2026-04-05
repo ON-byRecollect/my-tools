@@ -12,13 +12,16 @@
     <link rel="icon" href="sd3.png" type="image/png">
     <link rel="apple-touch-icon" href="sd3.png">
     
-    <title>利益計算</title>
+    <title>利益計算 & 相場検索</title>
     <style>
         :root {
             --bg-color: #f8f9fa;
             --main-blue: #007aff;
             --text-gray: #8e8e93;
             --line-green: #06C755;
+            --line-red: #ff3b30;
+            /* 現在のアクセントカラー（JSで動的に変更） */
+            --current-accent: var(--line-green); 
         }
 
         body {
@@ -37,6 +40,34 @@
             max-width: 400px;
         }
 
+        /* タブ切り替え用デザイン */
+        .tab-container {
+            display: flex;
+            background-color: #e5e5ea;
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+            font-weight: 700;
+            color: #8e8e93;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .tab-btn.active {
+            background-color: white;
+            color: #000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
         .card {
             background: white;
             border-radius: 16px;
@@ -50,12 +81,12 @@
             margin-top: 0;
             margin-bottom: 20px;
             color: #000;
-            border-left: 5px solid var(--line-green);
+            border-left: 5px solid var(--current-accent);
             padding-left: 12px;
             font-weight: 700;
+            transition: border-color 0.3s ease;
         }
 
-        /* メモ欄用のスタイル */
         textarea.memo-input {
             width: 100%;
             height: 80px;
@@ -68,16 +99,14 @@
             background-color: #fafafa;
             resize: vertical;
             -webkit-appearance: none;
-            /* margin-bottomはカード側で制御するため削除 */
         }
 
         textarea.memo-input:focus {
             outline: none;
-            border-color: var(--line-green);
+            border-color: var(--current-accent);
             background-color: #fff;
         }
 
-        /* 横並びレイアウト用 */
         .row-flex {
             display: flex;
             gap: 12px;
@@ -87,6 +116,7 @@
 
         .input-group {
             flex: 1;
+            min-width: 0; /* フレックスアイテムの縮小を許可 */
         }
 
         .input-group-large {
@@ -99,27 +129,30 @@
             font-weight: 700;
             margin-bottom: 8px;
             color: #555;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         input[type="number"], select {
             width: 100%;
             padding: 14px;
-            font-size: 16px;
+            font-size: 15px;
             font-family: inherit;
             border: 1px solid #e0e0e0;
             border-radius: 10px;
             box-sizing: border-box;
             background-color: #fafafa;
             -webkit-appearance: none;
+            text-overflow: ellipsis;
         }
 
-        input:focus {
+        input:focus, select:focus {
             outline: none;
-            border-color: var(--line-green);
+            border-color: var(--current-accent);
             background-color: #fff;
         }
 
-        /* 自動表示される売値用のスタイル */
         .calc-display {
             width: 100%;
             padding: 14px 0;
@@ -131,9 +164,10 @@
             border: 1px solid #e0e0e0;
             border-radius: 10px;
             box-sizing: border-box;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        /* 3段目・4段目のグリッドレイアウト用 */
         .section-title {
             font-size: 14px;
             font-weight: 700;
@@ -147,6 +181,14 @@
         .result-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        /* 2カラム用のグリッド（相場検索用） */
+        .result-grid-2col {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
             gap: 8px;
             margin-bottom: 20px;
         }
@@ -196,122 +238,375 @@
             background-color: #e5e5ea;
             transform: scale(0.98);
         }
+
+        .db-btn {
+            color: var(--main-blue);
+            margin-top: 20px;
+            font-size: 14px;
+            background: none;
+            text-decoration: underline;
+        }
+
+        /* モーダル用スタイル */
+        #db-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 350px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--line-green);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .cancel-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: transparent;
+            color: #8e8e93;
+            border: none;
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     
-    <div class="card">
-        <h2>メモ</h2>
-        <textarea id="memo" class="memo-input" placeholder="商品名や特記事項など"></textarea>
+    <div class="tab-container">
+        <div class="tab-btn active" id="tab-calc" onclick="switchMode('calc')">利益計算</div>
+        <div class="tab-btn" id="tab-market" onclick="switchMode('market')">相場検索</div>
     </div>
 
-    <div class="card">
-        <h2>利益計算</h2>
+    <div id="mode-calc">
+        <div class="card">
+            <h2>メモ</h2>
+            <textarea id="calc-memo" class="memo-input" placeholder="商品名や特記事項など"></textarea>
+        </div>
+
+        <div class="card">
+            <h2>利益計算</h2>
+            <div class="row-flex">
+                <div class="input-group">
+                    <label>仕入値 (円)</label>
+                    <input type="number" id="calc-cost-price" inputmode="numeric" placeholder="0" oninput="calculateCalc()">
+                </div>
+                <div class="input-group">
+                    <label>配送方法</label>
+                    <select id="calc-shipping-method" onchange="calculateCalc()">
+                        <option value="0">選択してください</option>
+                        <optgroup label="郵便局">
+                            <option value="180">ゆうパケットポストmini</option>
+                            <option value="215">ゆうパケットポスト</option>
+                            <option value="475">ゆうパケットプラス</option>
+                        </optgroup>
+                        <optgroup label="ヤマト運輸">
+                            <option value="210">ネコポス</option>
+                            <option value="560">宅急便コンパクト</option>
+                            <option value="750">宅急便（60）</option>
+                            <option value="850">宅急便（80）</option>
+                            <option value="1050">宅急便（100）</option>
+                            <option value="1200">宅急便（120）</option>
+                            <option value="1400">宅急便（140）</option>
+                            <option value="1700">宅急便（160）</option>
+                            <option value="2100">宅急便（200）</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row-flex" style="align-items: flex-end; margin-bottom: 0;">
+                <div class="input-group-large">
+                    <label>最低売値 (円)</label>
+                    <input type="number" id="calc-sale-price" inputmode="numeric" placeholder="0" oninput="calculateCalc()">
+                </div>
+                <div class="input-group">
+                    <label>5%</label>
+                    <div class="calc-display" id="calc-sale-5-display">-</div>
+                </div>
+                <div class="input-group">
+                    <label>7%</label>
+                    <div class="calc-display" id="calc-sale-7-display">-</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>計算結果</h2>
+            <div class="section-title">利益</div>
+            <div class="result-grid">
+                <div class="result-box">
+                    <div class="result-label">最低売値</div>
+                    <div class="profit-bold" style="color: var(--main-blue);" id="calc-profit-min">0 円</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">5%</div>
+                    <div class="profit-bold" style="color: var(--main-blue);" id="calc-profit-5">0 円</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">7%</div>
+                    <div class="profit-bold" style="color: var(--main-blue);" id="calc-profit-7">0 円</div>
+                </div>
+            </div>
+
+            <div class="section-title">利益率</div>
+            <div class="result-grid" style="margin-bottom: 0;">
+                <div class="result-box">
+                    <div class="result-label">最低売値</div>
+                    <div class="margin-normal" style="color: var(--text-gray);" id="calc-margin-min">0 ％</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">5%</div>
+                    <div class="margin-normal" style="color: var(--text-gray);" id="calc-margin-5">0 ％</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">7%</div>
+                    <div class="margin-normal" style="color: var(--text-gray);" id="calc-margin-7">0 ％</div>
+                </div>
+            </div>
+        </div>
+        <button class="reset-btn" onclick="resetCalc()">すべてリセット</button>
+    </div>
+
+
+    <div id="mode-market" style="display: none;">
+        <div class="card">
+            <h2>製品情報</h2>
+            <div class="row-flex">
+                <div class="input-group-large">
+                    <label>製品名</label>
+                    <select id="market-product" onchange="calculateMarket()">
+                        <option value="0">選択してください</option>
+                        <option value="Apple Watch SE 第2世代">Apple Watch SE 第2世代</option>
+                        <option value="Apple Watch SE 第3世代">Apple Watch SE 第3世代</option>
+                        <option value="Apple Watch Series10">Apple Watch Series10</option>
+                        <option value="Apple Watch Series11">Apple Watch Series11</option>
+                        <option value="AirPods Pro">AirPods Pro</option>
+                        <option value="AirPods Pro 2">AirPods Pro 2</option>
+                        <option value="AirPods Pro 3">AirPods Pro 3</option>
+                        <option value="AirPods 4">AirPods 4</option>
+                        <option value="AirPods 4 ANC">AirPods 4 ANC</option>
+                        <option value="Apple Pencil">Apple Pencil</option>
+                        <option value="Apple Pencil 第2世代">Apple Pencil 第2世代</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>モデル</label>
+                    <select id="market-model" onchange="calculateMarket()">
+                        <option value="0">-</option>
+                        <option value="40">40</option>
+                        <option value="42">42</option>
+                        <option value="44">44</option>
+                        <option value="46">46</option>
+                        <option value="Lightning">Lightning</option>
+                        <option value="Type-C">Type-C</option>
+                        <option value="64GB">64GB</option>
+                        <option value="128GB">128GB</option>
+                        <option value="256GB">256GB</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row-flex">
+                <div class="input-group">
+                    <label>カラー</label>
+                    <select id="market-color" onchange="calculateMarket()">
+                        <option value="ー">ー</option>
+                        <option value="ミッドナイト">ミッドナイト</option>
+                        <option value="スターライト">スターライト</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>状態</label>
+                    <select id="market-condition" onchange="calculateMarket()">
+                        <option value="0">選択</option>
+                        <option value="中古">中古</option>
+                        <option value="新品">新品</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row-flex" style="margin-bottom:0;">
+                <div class="input-group">
+                    <label>配送方法</label>
+                    <select id="market-shipping-method" onchange="calculateMarket()">
+                        <option value="0">選択してください</option>
+                        <optgroup label="郵便局">
+                            <option value="180">ゆうパケットポストmini</option>
+                            <option value="215">ゆうパケットポスト</option>
+                            <option value="475">ゆうパケットプラス</option>
+                        </optgroup>
+                        <optgroup label="ヤマト運輸">
+                            <option value="210">ネコポス</option>
+                            <option value="560">宅急便コンパクト</option>
+                            <option value="750">宅急便（60）</option>
+                            <option value="850">宅急便（80）</option>
+                            <option value="1050">宅急便（100）</option>
+                            <option value="1200">宅急便（120）</option>
+                            <option value="1400">宅急便（140）</option>
+                            <option value="1700">宅急便（160）</option>
+                            <option value="2100">宅急便（200）</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>相場検索結果</h2>
+            
+            <div class="row-flex" style="align-items: flex-end; margin-bottom: 20px;">
+                <div class="input-group-large">
+                    <label>目標仕入額 (これ以下ならOK)</label>
+                    <div class="calc-display" id="market-target-cost" style="color: var(--line-red); font-size: 18px;">-</div>
+                </div>
+            </div>
+
+            <div class="section-title">販売想定 (データ参照)</div>
+            <div class="result-grid-2col">
+                <div class="result-box">
+                    <div class="result-label">最安値 (すぐに売る)</div>
+                    <div class="profit-bold" style="color: var(--main-blue);" id="market-sale-min">-</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">最高値 (待って売る)</div>
+                    <div class="profit-bold" style="color: var(--main-blue);" id="market-sale-max">-</div>
+                </div>
+            </div>
+
+            <div class="section-title">想定利益 (目標仕入額で買った場合)</div>
+            <div class="result-grid-2col" style="margin-bottom: 0;">
+                <div class="result-box">
+                    <div class="result-label">最安値での利益</div>
+                    <div class="profit-bold" style="color: #333;" id="market-profit-min">-</div>
+                    <div class="margin-normal" style="color: var(--text-gray); font-size:12px;" id="market-margin-min">-</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">最高値での利益</div>
+                    <div class="profit-bold" style="color: #333;" id="market-profit-max">-</div>
+                    <div class="margin-normal" style="color: var(--text-gray); font-size:12px;" id="market-margin-max">-</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="reset-btn db-btn" onclick="openDbModal()">相場データを登録・更新する</button>
+    </div>
+
+</div>
+
+<div id="db-modal">
+    <div class="modal-content">
+        <h2 style="border-left-color: var(--line-red);">相場データ登録</h2>
+        <p style="font-size:12px; color:#666; margin-bottom:15px;">登録する製品の情報を選択し、過去の販売実績を3件入力してください。</p>
         
-        <div class="row-flex">
-            <div class="input-group">
-                <label>仕入値 (円)</label>
-                <input type="number" id="cost-price" inputmode="numeric" placeholder="0" oninput="calculate()">
-            </div>
-            <div class="input-group">
-                <label>配送方法</label>
-                <select id="shipping-method" onchange="calculate()">
-                    <option value="0">選択してください</option>
-                    <optgroup label="郵便局">
-                        <option value="180">ゆうパケットポストmini</option>
-                        <option value="215">ゆうパケットポスト</option>
-                        <option value="475">ゆうパケットプラス</option>
-                    </optgroup>
-                    <optgroup label="ヤマト運輸">
-                        <option value="210">ネコポス</option>
-                        <option value="560">宅急便コンパクト</option>
-                        <option value="750">宅急便（60）</option>
-                        <option value="850">宅急便（80）</option>
-                        <option value="1050">宅急便（100）</option>
-                        <option value="1200">宅急便（120）</option>
-                        <option value="1400">宅急便（140）</option>
-                        <option value="1700">宅急便（160）</option>
-                        <option value="2100">宅急便（200）</option>
-                    </optgroup>
+        <div class="input-group" style="margin-bottom:10px;">
+            <select id="db-product">
+                <option value="0">製品名を選択</option>
                 </select>
-            </div>
         </div>
-
-        <div class="row-flex" style="align-items: flex-end; margin-bottom: 0;">
-            <div class="input-group-large">
-                <label>最低売値 (円)</label>
-                <input type="number" id="sale-price" inputmode="numeric" placeholder="0" oninput="calculate()">
+        <div class="row-flex" style="margin-bottom:10px;">
+            <div class="input-group">
+                <select id="db-model"><option value="0">モデル選択</option></select>
             </div>
             <div class="input-group">
-                <label>5%</label>
-                <div class="calc-display" id="sale-5-display">-</div>
+                <select id="db-color"><option value="ー">カラー選択 (ー)</option></select>
+            </div>
+        </div>
+        <div class="input-group" style="margin-bottom:15px;">
+            <select id="db-condition">
+                <option value="0">状態を選択</option>
+                <option value="中古">中古</option>
+                <option value="新品">新品</option>
+            </select>
+        </div>
+
+        <div class="row-flex" style="gap:8px;">
+            <div class="input-group">
+                <label>実績1(円)</label>
+                <input type="number" id="db-price1" inputmode="numeric" placeholder="0">
             </div>
             <div class="input-group">
-                <label>7%</label>
-                <div class="calc-display" id="sale-7-display">-</div>
+                <label>実績2(円)</label>
+                <input type="number" id="db-price2" inputmode="numeric" placeholder="0">
+            </div>
+            <div class="input-group">
+                <label>実績3(円)</label>
+                <input type="number" id="db-price3" inputmode="numeric" placeholder="0">
             </div>
         </div>
+
+        <button class="save-btn" onclick="saveToDb()">登録する</button>
+        <button class="cancel-btn" onclick="closeDbModal()">キャンセル</button>
     </div>
-
-    <div class="card">
-        <h2>計算結果</h2>
-
-        <div class="section-title">利益</div>
-        <div class="result-grid">
-            <div class="result-box">
-                <div class="result-label">最低売値</div>
-                <div class="profit-bold" style="color: var(--main-blue);" id="profit-min">0 円</div>
-            </div>
-            <div class="result-box">
-                <div class="result-label">5%</div>
-                <div class="profit-bold" style="color: var(--main-blue);" id="profit-5">0 円</div>
-            </div>
-            <div class="result-box">
-                <div class="result-label">7%</div>
-                <div class="profit-bold" style="color: var(--main-blue);" id="profit-7">0 円</div>
-            </div>
-        </div>
-
-        <div class="section-title">利益率</div>
-        <div class="result-grid" style="margin-bottom: 0;">
-            <div class="result-box">
-                <div class="result-label">最低売値</div>
-                <div class="margin-normal" style="color: var(--text-gray);" id="margin-min">0 ％</div>
-            </div>
-            <div class="result-box">
-                <div class="result-label">5%</div>
-                <div class="margin-normal" style="color: var(--text-gray);" id="margin-5">0 ％</div>
-            </div>
-            <div class="result-box">
-                <div class="result-label">7%</div>
-                <div class="margin-normal" style="color: var(--text-gray);" id="margin-7">0 ％</div>
-            </div>
-        </div>
-    </div>
-
-    <button class="reset-btn" onclick="resetAll()">すべてリセット</button>
 </div>
 
 <script>
-    function calculate() {
-        const costPrice = parseFloat(document.getElementById('cost-price').value) || 0;
-        const shippingCost = parseFloat(document.getElementById('shipping-method').value) || 0;
-        const minSalePrice = parseFloat(document.getElementById('sale-price').value) || 0;
+    // --- データベース管理 ---
+    let marketDB = JSON.parse(localStorage.getItem('marketDB')) || {};
+
+    function generateDbKey(product, model, color, condition) {
+        return `${product}_${model}_${color}_${condition}`;
+    }
+
+    // --- モード切り替え ---
+    function switchMode(mode) {
+        document.getElementById('tab-calc').classList.remove('active');
+        document.getElementById('tab-market').classList.remove('active');
+        document.getElementById('mode-calc').style.display = 'none';
+        document.getElementById('mode-market').style.display = 'none';
+
+        if (mode === 'calc') {
+            document.getElementById('tab-calc').classList.add('active');
+            document.getElementById('mode-calc').style.display = 'block';
+            document.documentElement.style.setProperty('--current-accent', 'var(--line-green)');
+        } else {
+            document.getElementById('tab-market').classList.add('active');
+            document.getElementById('mode-market').style.display = 'block';
+            document.documentElement.style.setProperty('--current-accent', 'var(--line-red)');
+            calculateMarket(); // タブ切り替え時に再計算
+        }
+    }
+
+    // ==============================================
+    // 利益計算モードのロジック (既存維持)
+    // ==============================================
+    function calculateCalc() {
+        const costPrice = parseFloat(document.getElementById('calc-cost-price').value) || 0;
+        const shippingCost = parseFloat(document.getElementById('calc-shipping-method').value) || 0;
+        const minSalePrice = parseFloat(document.getElementById('calc-sale-price').value) || 0;
         
         let startingPrice = 0;
         let fleaMarket5PercentOff = 0;
 
         if (minSalePrice > 0) {
-            // 1. 丸め単位（切り上げ幅）の自動判定
             const roundingUnit = minSalePrice >= 1000 ? 100 : 10;
-
-            // 2. 「開始価格」の逆算（お買い得戦略ロジック）
             const baseCalc = (minSalePrice - roundingUnit) / 0.93;
             startingPrice = Math.floor(baseCalc / 10) * 10 + 10;
 
-            // 3. 「5%引き」価格の算出
             const discounted5 = startingPrice * 0.95;
             if (roundingUnit === 100) {
                 fleaMarket5PercentOff = Math.ceil(discounted5 / 100) * 100;
@@ -320,11 +615,9 @@
             }
         }
 
-        // 表示の更新
-        document.getElementById('sale-7-display').innerText = startingPrice > 0 ? startingPrice.toLocaleString() : "-";
-        document.getElementById('sale-5-display').innerText = fleaMarket5PercentOff > 0 ? fleaMarket5PercentOff.toLocaleString() : "-";
+        document.getElementById('calc-sale-7-display').innerText = startingPrice > 0 ? startingPrice.toLocaleString() : "-";
+        document.getElementById('calc-sale-5-display').innerText = fleaMarket5PercentOff > 0 ? fleaMarket5PercentOff.toLocaleString() : "-";
 
-        // 利益・利益率を計算する共通関数
         function getMetrics(price) {
             if (price === 0) return { profit: 0, margin: 0 };
             const fee = Math.floor(price * 0.05);
@@ -333,29 +626,170 @@
             return { profit, margin };
         }
 
-        // 3パターンの計算を実行
         const metricsMin = getMetrics(minSalePrice);
         const metrics5 = getMetrics(fleaMarket5PercentOff);
         const metrics7 = getMetrics(startingPrice);
 
-        // 利益の表示更新
-        document.getElementById('profit-min').innerText = metricsMin.profit.toLocaleString() + " 円";
-        document.getElementById('profit-5').innerText = metrics5.profit.toLocaleString() + " 円";
-        document.getElementById('profit-7').innerText = metrics7.profit.toLocaleString() + " 円";
-
-        // 利益率の表示更新
-        document.getElementById('margin-min').innerText = metricsMin.margin + " ％";
-        document.getElementById('margin-5').innerText = metrics5.margin + " ％";
-        document.getElementById('margin-7').innerText = metrics7.margin + " ％";
+        document.getElementById('calc-profit-min').innerText = metricsMin.profit.toLocaleString() + " 円";
+        document.getElementById('calc-profit-5').innerText = metrics5.profit.toLocaleString() + " 円";
+        document.getElementById('calc-profit-7').innerText = metrics7.profit.toLocaleString() + " 円";
+        document.getElementById('calc-margin-min').innerText = metricsMin.margin + " ％";
+        document.getElementById('calc-margin-5').innerText = metrics5.margin + " ％";
+        document.getElementById('calc-margin-7').innerText = metrics7.margin + " ％";
     }
 
-    function resetAll() {
-        document.getElementById('memo').value = '';
-        document.getElementById('cost-price').value = '';
-        document.getElementById('shipping-method').selectedIndex = 0;
-        document.getElementById('sale-price').value = '';
-        calculate();
+    function resetCalc() {
+        document.getElementById('calc-memo').value = '';
+        document.getElementById('calc-cost-price').value = '';
+        document.getElementById('calc-shipping-method').selectedIndex = 0;
+        document.getElementById('calc-sale-price').value = '';
+        calculateCalc();
     }
+
+    // ==============================================
+    // 相場検索モードのロジック (新設)
+    // ==============================================
+    function calculateMarket() {
+        const product = document.getElementById('market-product').value;
+        const model = document.getElementById('market-model').value;
+        const color = document.getElementById('market-color').value;
+        const condition = document.getElementById('market-condition').value;
+        const shippingSelect = document.getElementById('market-shipping-method');
+        const shippingCost = parseFloat(shippingSelect.value); // 0は選択なし
+        
+        // 初期化
+        document.getElementById('market-target-cost').innerText = "-";
+        document.getElementById('market-sale-min').innerText = "-";
+        document.getElementById('market-sale-max').innerText = "-";
+        document.getElementById('market-profit-min').innerText = "-";
+        document.getElementById('market-profit-max').innerText = "-";
+        document.getElementById('market-margin-min').innerText = "-";
+        document.getElementById('market-margin-max').innerText = "-";
+
+        if (product === "0" || condition === "0") return; // 製品と状態は必須
+
+        const dbKey = generateDbKey(product, model, color, condition);
+        const marketData = marketDB[dbKey];
+
+        if (!marketData) {
+            document.getElementById('market-target-cost').innerText = "データ未登録";
+            document.getElementById('market-target-cost').style.color = "var(--text-gray)";
+            return;
+        }
+
+        const minSalePrice = marketData.min;
+        const maxSalePrice = marketData.max;
+
+        document.getElementById('market-sale-min').innerText = minSalePrice.toLocaleString() + " 円";
+        document.getElementById('market-sale-max').innerText = maxSalePrice.toLocaleString() + " 円";
+
+        // 目標利益の決定 (中古:2000円, 新品:1000円)
+        const targetProfit = condition === "中古" ? 2000 : 1000;
+
+        // 配送方法が選ばれている場合のみ仕入上限を計算
+        if (!isNaN(shippingCost) && shippingCost > 0) {
+            // 最安値から逆算: 目標仕入値 = 最安値 - 販売手数料(5%) - 配送費 - 目標利益
+            const fee = Math.floor(minSalePrice * 0.05);
+            // 安全のため仕入上限は切り捨て
+            const targetCost = Math.floor(minSalePrice - fee - shippingCost - targetProfit);
+            
+            document.getElementById('market-target-cost').innerText = targetCost.toLocaleString() + " 円";
+            document.getElementById('market-target-cost').style.color = "var(--line-red)";
+
+            // 想定利益の計算（算出した仕入額で買った場合の利益）
+            function getMetrics(salePrice) {
+                const f = Math.floor(salePrice * 0.05);
+                const p = salePrice - targetCost - f - shippingCost;
+                const m = Math.floor((p / salePrice) * 100);
+                return { profit: p, margin: m };
+            }
+
+            const resMin = getMetrics(minSalePrice);
+            const resMax = getMetrics(maxSalePrice);
+
+            document.getElementById('market-profit-min').innerText = resMin.profit.toLocaleString() + " 円";
+            document.getElementById('market-margin-min').innerText = resMin.margin + " ％";
+            
+            document.getElementById('market-profit-max').innerText = resMax.profit.toLocaleString() + " 円";
+            document.getElementById('market-margin-max').innerText = resMax.margin + " ％";
+        } else {
+            document.getElementById('market-target-cost').innerText = "配送方法を選択";
+            document.getElementById('market-target-cost').style.color = "var(--text-gray)";
+        }
+    }
+
+    // ==============================================
+    // モーダル・DB登録関連
+    // ==============================================
+    function openDbModal() {
+        // プルダウンの選択肢をメイン画面からコピー
+        document.getElementById('db-product').innerHTML = document.getElementById('market-product').innerHTML;
+        document.getElementById('db-model').innerHTML = document.getElementById('market-model').innerHTML;
+        document.getElementById('db-color').innerHTML = document.getElementById('market-color').innerHTML;
+        
+        // 現在メイン画面で選択されている値を初期セット
+        document.getElementById('db-product').value = document.getElementById('market-product').value;
+        document.getElementById('db-model').value = document.getElementById('market-model').value;
+        document.getElementById('db-color').value = document.getElementById('market-color').value;
+        document.getElementById('db-condition').value = document.getElementById('market-condition').value;
+
+        // 入力欄リセット
+        document.getElementById('db-price1').value = '';
+        document.getElementById('db-price2').value = '';
+        document.getElementById('db-price3').value = '';
+
+        document.getElementById('db-modal').style.display = 'flex';
+    }
+
+    function closeDbModal() {
+        document.getElementById('db-modal').style.display = 'none';
+    }
+
+    function saveToDb() {
+        const product = document.getElementById('db-product').value;
+        const model = document.getElementById('db-model').value;
+        const color = document.getElementById('db-color').value;
+        const condition = document.getElementById('db-condition').value;
+
+        if (product === "0" || condition === "0") {
+            alert("製品名と状態は必ず選択してください。");
+            return;
+        }
+
+        const p1 = parseFloat(document.getElementById('db-price1').value);
+        const p2 = parseFloat(document.getElementById('db-price2').value);
+        const p3 = parseFloat(document.getElementById('db-price3').value);
+
+        if (isNaN(p1) || isNaN(p2) || isNaN(p3)) {
+            alert("実績を3件すべて入力してください。");
+            return;
+        }
+
+        const prices = [p1, p2, p3];
+        const minPrice = Math.min(...prices);
+        const maxPrice = Math.max(...prices);
+
+        const dbKey = generateDbKey(product, model, color, condition);
+        marketDB[dbKey] = {
+            min: minPrice,
+            max: maxPrice
+        };
+
+        // LocalStorageに保存
+        localStorage.setItem('marketDB', JSON.stringify(marketDB));
+
+        alert("相場データを登録しました！");
+        closeDbModal();
+
+        // 登録後、メイン画面のプルダウンも合わせる
+        document.getElementById('market-product').value = product;
+        document.getElementById('market-model').value = model;
+        document.getElementById('market-color').value = color;
+        document.getElementById('market-condition').value = condition;
+        
+        calculateMarket(); // 再計算
+    }
+
 </script>
 
 </body>
