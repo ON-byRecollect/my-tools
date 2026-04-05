@@ -222,7 +222,8 @@
         .reset-btn {
             width: 100%;
             padding: 16px;
-            background-color: var(--line-red);
+            /* 改善点: 背景色を20%薄く変更 (rgbaで透過率80%に指定) */
+            background-color: rgba(255, 59, 48, 0.8); 
             color: white;
             border: none;
             border-radius: 14px;
@@ -521,7 +522,7 @@
 <div id="db-modal">
     <div class="modal-content">
         <h2 style="border-left-color: var(--line-red);">相場データ登録</h2>
-        <p style="font-size:12px; color:#666; margin-bottom:15px;">最大10件まで入力可能。※同じ組合せで再登録すると上書きされます。</p>
+        <p style="font-size:12px; color:#666; margin-bottom:15px;">最低1件の入力から登録可能。※同じ組合せで再登録すると上書きされます。</p>
         
         <div class="input-group" style="margin-bottom:10px;">
             <select id="db-product">
