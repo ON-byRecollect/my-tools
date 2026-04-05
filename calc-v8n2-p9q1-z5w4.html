@@ -20,7 +20,6 @@
             --text-gray: #8e8e93;
             --line-green: #06C755;
             --line-red: #ff3b30;
-            /* 現在のアクセントカラー（JSで動的に変更） */
             --current-accent: var(--line-green); 
         }
 
@@ -87,9 +86,10 @@
             transition: border-color 0.3s ease;
         }
 
+        /* メモ欄（1行サイズに縮小） */
         textarea.memo-input {
             width: 100%;
-            height: 80px;
+            height: 48px;
             padding: 14px;
             font-size: 14px;
             font-family: inherit;
@@ -97,8 +97,10 @@
             border-radius: 10px;
             box-sizing: border-box;
             background-color: #fafafa;
-            resize: vertical;
+            resize: none;
             -webkit-appearance: none;
+            overflow: hidden;
+            white-space: nowrap;
         }
 
         textarea.memo-input:focus {
@@ -116,7 +118,7 @@
 
         .input-group {
             flex: 1;
-            min-width: 0; /* フレックスアイテムの縮小を許可 */
+            min-width: 0;
         }
 
         .input-group-large {
@@ -185,7 +187,6 @@
             margin-bottom: 20px;
         }
 
-        /* 2カラム用のグリッド（相場検索用） */
         .result-grid-2col {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -221,8 +222,8 @@
         .reset-btn {
             width: 100%;
             padding: 16px;
-            background-color: #f2f2f7;
-            color: #ff3b30;
+            background-color: var(--line-red); /* 赤色統一 */
+            color: white;
             border: none;
             border-radius: 14px;
             font-size: 16px;
@@ -235,16 +236,8 @@
         }
 
         .reset-btn:active {
-            background-color: #e5e5ea;
+            opacity: 0.8;
             transform: scale(0.98);
-        }
-
-        .db-btn {
-            color: var(--main-blue);
-            margin-top: 20px;
-            font-size: 14px;
-            background: none;
-            text-decoration: underline;
         }
 
         /* モーダル用スタイル */
@@ -268,6 +261,14 @@
             overflow-y: auto;
         }
 
+        /* 10件入力用のグリッド */
+        .db-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
         .save-btn {
             width: 100%;
             padding: 16px;
@@ -277,7 +278,7 @@
             border-radius: 14px;
             font-size: 16px;
             font-weight: 700;
-            margin-top: 20px;
+            margin-top: 10px;
             cursor: pointer;
         }
         .cancel-btn {
@@ -305,7 +306,7 @@
     <div id="mode-calc">
         <div class="card">
             <h2>メモ</h2>
-            <textarea id="calc-memo" class="memo-input" placeholder="商品名や特記事項など"></textarea>
+            <textarea id="calc-memo" class="memo-input" placeholder="商品名や特記事項など" rows="1"></textarea>
         </div>
 
         <div class="card">
@@ -513,7 +514,7 @@
             </div>
         </div>
 
-        <button class="reset-btn db-btn" onclick="openDbModal()">相場データを登録・更新する</button>
+        <button class="reset-btn" onclick="openDbModal()">登録</button>
     </div>
 
 </div>
@@ -521,12 +522,12 @@
 <div id="db-modal">
     <div class="modal-content">
         <h2 style="border-left-color: var(--line-red);">相場データ登録</h2>
-        <p style="font-size:12px; color:#666; margin-bottom:15px;">登録する製品の情報を選択し、過去の販売実績を3件入力してください。</p>
+        <p style="font-size:12px; color:#666; margin-bottom:15px;">最大10件まで入力可能。※同じ組合せで再登録すると上書きされます。</p>
         
         <div class="input-group" style="margin-bottom:10px;">
             <select id="db-product">
                 <option value="0">製品名を選択</option>
-                </select>
+            </select>
         </div>
         <div class="row-flex" style="margin-bottom:10px;">
             <div class="input-group">
@@ -544,22 +545,20 @@
             </select>
         </div>
 
-        <div class="row-flex" style="gap:8px;">
-            <div class="input-group">
-                <label>実績1(円)</label>
-                <input type="number" id="db-price1" inputmode="numeric" placeholder="0">
-            </div>
-            <div class="input-group">
-                <label>実績2(円)</label>
-                <input type="number" id="db-price2" inputmode="numeric" placeholder="0">
-            </div>
-            <div class="input-group">
-                <label>実績3(円)</label>
-                <input type="number" id="db-price3" inputmode="numeric" placeholder="0">
-            </div>
+        <div class="db-grid">
+            <div class="input-group"><input type="number" id="db-price1" inputmode="numeric" placeholder="実績1 (円)"></div>
+            <div class="input-group"><input type="number" id="db-price2" inputmode="numeric" placeholder="実績2 (円)"></div>
+            <div class="input-group"><input type="number" id="db-price3" inputmode="numeric" placeholder="実績3 (円)"></div>
+            <div class="input-group"><input type="number" id="db-price4" inputmode="numeric" placeholder="実績4 (円)"></div>
+            <div class="input-group"><input type="number" id="db-price5" inputmode="numeric" placeholder="実績5 (円)"></div>
+            <div class="input-group"><input type="number" id="db-price6" inputmode="numeric" placeholder="実績6 (円)"></div>
+            <div class="input-group"><input type="number" id="db-price7" inputmode="numeric" placeholder="実績7 (円)"></div>
+            <div class="input-group"><input type="number" id="db-price8" inputmode="numeric" placeholder="実績8 (円)"></div>
+            <div class="input-group"><input type="number" id="db-price9" inputmode="numeric" placeholder="実績9 (円)"></div>
+            <div class="input-group"><input type="number" id="db-price10" inputmode="numeric" placeholder="実績10 (円)"></div>
         </div>
 
-        <button class="save-btn" onclick="saveToDb()">登録する</button>
+        <button class="save-btn" onclick="saveToDb()">登録して上書きする</button>
         <button class="cancel-btn" onclick="closeDbModal()">キャンセル</button>
     </div>
 </div>
@@ -587,12 +586,12 @@
             document.getElementById('tab-market').classList.add('active');
             document.getElementById('mode-market').style.display = 'block';
             document.documentElement.style.setProperty('--current-accent', 'var(--line-red)');
-            calculateMarket(); // タブ切り替え時に再計算
+            calculateMarket();
         }
     }
 
     // ==============================================
-    // 利益計算モードのロジック (既存維持)
+    // 利益計算モードのロジック
     // ==============================================
     function calculateCalc() {
         const costPrice = parseFloat(document.getElementById('calc-cost-price').value) || 0;
@@ -647,7 +646,7 @@
     }
 
     // ==============================================
-    // 相場検索モードのロジック (新設)
+    // 相場検索モードのロジック
     // ==============================================
     function calculateMarket() {
         const product = document.getElementById('market-product').value;
@@ -655,9 +654,8 @@
         const color = document.getElementById('market-color').value;
         const condition = document.getElementById('market-condition').value;
         const shippingSelect = document.getElementById('market-shipping-method');
-        const shippingCost = parseFloat(shippingSelect.value); // 0は選択なし
+        const shippingCost = parseFloat(shippingSelect.value);
         
-        // 初期化
         document.getElementById('market-target-cost').innerText = "-";
         document.getElementById('market-sale-min').innerText = "-";
         document.getElementById('market-sale-max').innerText = "-";
@@ -666,7 +664,7 @@
         document.getElementById('market-margin-min').innerText = "-";
         document.getElementById('market-margin-max').innerText = "-";
 
-        if (product === "0" || condition === "0") return; // 製品と状態は必須
+        if (product === "0" || condition === "0") return;
 
         const dbKey = generateDbKey(product, model, color, condition);
         const marketData = marketDB[dbKey];
@@ -683,20 +681,15 @@
         document.getElementById('market-sale-min').innerText = minSalePrice.toLocaleString() + " 円";
         document.getElementById('market-sale-max').innerText = maxSalePrice.toLocaleString() + " 円";
 
-        // 目標利益の決定 (中古:2000円, 新品:1000円)
         const targetProfit = condition === "中古" ? 2000 : 1000;
 
-        // 配送方法が選ばれている場合のみ仕入上限を計算
         if (!isNaN(shippingCost) && shippingCost > 0) {
-            // 最安値から逆算: 目標仕入値 = 最安値 - 販売手数料(5%) - 配送費 - 目標利益
             const fee = Math.floor(minSalePrice * 0.05);
-            // 安全のため仕入上限は切り捨て
             const targetCost = Math.floor(minSalePrice - fee - shippingCost - targetProfit);
             
             document.getElementById('market-target-cost').innerText = targetCost.toLocaleString() + " 円";
             document.getElementById('market-target-cost').style.color = "var(--line-red)";
 
-            // 想定利益の計算（算出した仕入額で買った場合の利益）
             function getMetrics(salePrice) {
                 const f = Math.floor(salePrice * 0.05);
                 const p = salePrice - targetCost - f - shippingCost;
@@ -722,21 +715,19 @@
     // モーダル・DB登録関連
     // ==============================================
     function openDbModal() {
-        // プルダウンの選択肢をメイン画面からコピー
         document.getElementById('db-product').innerHTML = document.getElementById('market-product').innerHTML;
         document.getElementById('db-model').innerHTML = document.getElementById('market-model').innerHTML;
         document.getElementById('db-color').innerHTML = document.getElementById('market-color').innerHTML;
         
-        // 現在メイン画面で選択されている値を初期セット
         document.getElementById('db-product').value = document.getElementById('market-product').value;
         document.getElementById('db-model').value = document.getElementById('market-model').value;
         document.getElementById('db-color').value = document.getElementById('market-color').value;
         document.getElementById('db-condition').value = document.getElementById('market-condition').value;
 
-        // 入力欄リセット
-        document.getElementById('db-price1').value = '';
-        document.getElementById('db-price2').value = '';
-        document.getElementById('db-price3').value = '';
+        // 10件の入力欄をリセット
+        for (let i = 1; i <= 10; i++) {
+            document.getElementById('db-price' + i).value = '';
+        }
 
         document.getElementById('db-modal').style.display = 'flex';
     }
@@ -756,16 +747,21 @@
             return;
         }
 
-        const p1 = parseFloat(document.getElementById('db-price1').value);
-        const p2 = parseFloat(document.getElementById('db-price2').value);
-        const p3 = parseFloat(document.getElementById('db-price3').value);
+        // 10件の入力値から有効な金額のみを抽出
+        let prices = [];
+        for (let i = 1; i <= 10; i++) {
+            let val = parseFloat(document.getElementById('db-price' + i).value);
+            if (!isNaN(val) && val > 0) {
+                prices.push(val);
+            }
+        }
 
-        if (isNaN(p1) || isNaN(p2) || isNaN(p3)) {
-            alert("実績を3件すべて入力してください。");
+        // 最低1件以上の入力が必要
+        if (prices.length === 0) {
+            alert("実績を1件以上入力してください。");
             return;
         }
 
-        const prices = [p1, p2, p3];
         const minPrice = Math.min(...prices);
         const maxPrice = Math.max(...prices);
 
@@ -775,21 +771,18 @@
             max: maxPrice
         };
 
-        // LocalStorageに保存
         localStorage.setItem('marketDB', JSON.stringify(marketDB));
 
-        alert("相場データを登録しました！");
+        alert("相場データを登録（上書き）しました！");
         closeDbModal();
 
-        // 登録後、メイン画面のプルダウンも合わせる
         document.getElementById('market-product').value = product;
         document.getElementById('market-model').value = model;
         document.getElementById('market-color').value = color;
         document.getElementById('market-condition').value = condition;
         
-        calculateMarket(); // 再計算
+        calculateMarket();
     }
-
 </script>
 
 </body>
