@@ -39,6 +39,7 @@
             max-width: 400px;
         }
 
+        /* タブ切り替え用デザイン */
         .tab-container {
             display: flex;
             background-color: #e5e5ea;
@@ -85,6 +86,7 @@
             transition: border-color 0.3s ease;
         }
 
+        /* メモ欄（1行サイズ） */
         textarea.memo-input {
             width: 100%;
             height: 48px;
@@ -238,6 +240,7 @@
             transform: scale(0.98);
         }
 
+        /* モーダル用スタイル */
         #db-modal {
             display: none;
             position: fixed;
@@ -302,8 +305,9 @@
     <div id="mode-market" style="display: block;">
         <div class="card">
             <h2>製品情報</h2>
+            
             <div class="row-flex">
-                <div class="input-group-large">
+                <div class="input-group">
                     <label>製品名</label>
                     <select id="market-product" onchange="loadSavedShipping(); calculateMarket();">
                         <option value="0">選択してください</option>
@@ -320,6 +324,9 @@
                         <option value="Apple Pencil 第2世代">Apple Pencil 第2世代</option>
                     </select>
                 </div>
+            </div>
+
+            <div class="row-flex">
                 <div class="input-group">
                     <label>モデル</label>
                     <select id="market-model" onchange="loadSavedShipping(); calculateMarket();">
@@ -335,9 +342,6 @@
                         <option value="256GB">256GB</option>
                     </select>
                 </div>
-            </div>
-
-            <div class="row-flex">
                 <div class="input-group">
                     <label>カラー</label>
                     <select id="market-color" onchange="loadSavedShipping(); calculateMarket();">
@@ -346,6 +350,9 @@
                         <option value="スターライト">スターライト</option>
                     </select>
                 </div>
+            </div>
+
+            <div class="row-flex" style="margin-bottom:0;">
                 <div class="input-group">
                     <label>状態</label>
                     <select id="market-condition" onchange="loadSavedShipping(); calculateMarket();">
@@ -354,10 +361,7 @@
                         <option value="新品">新品</option>
                     </select>
                 </div>
-            </div>
-
-            <div class="row-flex" style="margin-bottom:0;">
-                <div class="input-group">
+                <div class="input-group-large" style="min-width: 0;">
                     <label>配送方法</label>
                     <select id="market-shipping-method" onchange="calculateMarket()">
                         <option value="0">選択してください</option>
@@ -514,8 +518,10 @@
         <h2 style="border-left-color: var(--line-red);">相場データ登録</h2>
         <p style="font-size:12px; color:#666; margin-bottom:15px;">最低1件から登録可能。配送方法も初期値として保存されます。</p>
         
-        <div class="input-group" style="margin-bottom:10px;">
-            <select id="db-product"><option value="0">製品名を選択</option></select>
+        <div class="row-flex" style="margin-bottom:10px;">
+            <div class="input-group">
+                <select id="db-product"><option value="0">製品名を選択</option></select>
+            </div>
         </div>
         <div class="row-flex" style="margin-bottom:10px;">
             <div class="input-group">
@@ -533,7 +539,7 @@
                     <option value="新品">新品</option>
                 </select>
             </div>
-            <div class="input-group">
+            <div class="input-group-large" style="min-width: 0;">
                 <select id="db-shipping"><option value="0">配送方法</option></select>
             </div>
         </div>
@@ -644,8 +650,6 @@
     // ==============================================
     // 相場検索モードのロジック
     // ==============================================
-    
-    // 追加: 配送方法の初期値をロードする関数
     function loadSavedShipping() {
         const product = document.getElementById('market-product').value;
         const model = document.getElementById('market-model').value;
@@ -658,7 +662,6 @@
         const marketData = marketDB[dbKey];
 
         if (marketData && marketData.shipping) {
-            // 保存された配送方法をセレクトボックスに反映（あくまでも初期値）
             document.getElementById('market-shipping-method').value = marketData.shipping;
         }
     }
@@ -803,7 +806,7 @@
         marketDB[dbKey] = {
             min: minPrice,
             max: maxPrice,
-            shipping: shipping // 配送方法を保存
+            shipping: shipping
         };
 
         localStorage.setItem('marketDB', JSON.stringify(marketDB));
