@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="robots" content="noindex, nofollow">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,7 +23,7 @@
             --current-accent: var(--line-red); 
         }
 
-        /* 改善点: 画面サイズを100dvhに固定し、スクロールを禁止 */
+        /* スクロール禁止と1画面固定化 */
         html, body {
             height: 100dvh;
             overflow: hidden;
@@ -32,13 +32,12 @@
             font-family: 'Line Seed JP', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--bg-color);
             color: #333;
-            box-sizing: border-box;
-            touch-action: none; /* iPhoneでのスワイプスクロールを防止 */
+            touch-action: none;
         }
 
         .container {
             width: 100%;
-            height: 100%;
+            height: 100dvh;
             max-width: 400px;
             margin: 0 auto;
             padding: 10px 15px;
@@ -47,21 +46,20 @@
             flex-direction: column;
         }
 
-        /* タブ切り替え用デザイン */
         .tab-container {
             display: flex;
             background-color: #e5e5ea;
             border-radius: 12px;
             padding: 4px;
-            margin-bottom: 10px; /* 20px -> 10px */
+            margin-bottom: 10px;
             flex-shrink: 0;
         }
 
         .tab-btn {
             flex: 1;
             text-align: center;
-            padding: 8px 0; /* 10px -> 8px */
-            font-size: 13px; /* 14px -> 13px */
+            padding: 8px 0;
+            font-size: 13px;
             font-weight: 700;
             color: #8e8e93;
             border-radius: 10px;
@@ -76,38 +74,39 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
-        /* モードごとのコンテナをフレックス化して要素を詰める */
-        #mode-market, #mode-calc {
+        /* 画面をFlexで埋めて下部へ要素を押し出す設定 */
+        #mode-calc, #mode-market {
             flex: 1;
             display: flex;
             flex-direction: column;
             min-height: 0;
+            overflow: hidden;
         }
 
         .card {
             background: white;
-            border-radius: 12px; /* 16px -> 12px */
-            padding: 12px 16px; /* 24px -> 12px 16px */
-            margin-bottom: 8px; /* 20px -> 8px */
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
             flex-shrink: 0;
         }
 
         h2 {
-            font-size: 15px; /* 18px -> 15px */
+            font-size: 15px;
             margin-top: 0;
-            margin-bottom: 10px; /* 20px -> 10px */
+            margin-bottom: 10px;
             color: #000;
-            border-left: 4px solid var(--current-accent); /* 5px -> 4px */
-            padding-left: 8px; /* 12px -> 8px */
+            border-left: 4px solid var(--current-accent);
+            padding-left: 8px;
             font-weight: 700;
             transition: border-color 0.3s ease;
         }
 
         textarea.memo-input {
             width: 100%;
-            height: 38px; /* 48px -> 38px */
-            padding: 10px; /* 14px -> 10px */
+            height: 36px;
+            padding: 8px 12px;
             font-size: 13px;
             font-family: inherit;
             border: 1px solid #e0e0e0;
@@ -128,8 +127,8 @@
 
         .row-flex {
             display: flex;
-            gap: 10px; /* 12px -> 10px */
-            margin-bottom: 8px; /* 18px -> 8px */
+            gap: 8px;
+            margin-bottom: 8px;
             width: 100%;
         }
 
@@ -145,9 +144,9 @@
 
         label {
             display: block;
-            font-size: 11px; /* 12px -> 11px */
+            font-size: 11px;
             font-weight: 700;
-            margin-bottom: 4px; /* 8px -> 4px */
+            margin-bottom: 4px;
             color: #555;
             white-space: nowrap;
             overflow: hidden;
@@ -156,11 +155,12 @@
 
         input[type="number"], select {
             width: 100%;
-            padding: 8px 10px; /* 14px -> 8px 10px */
-            font-size: 14px; /* 15px -> 14px */
+            padding: 8px 10px;
+            font-size: 14px;
             font-family: inherit;
             border: 1px solid #e0e0e0;
-            border-radius: 8px; /* 10px -> 8px */
+            border-radius: 8px;
+            height: 36px;
             box-sizing: border-box;
             background-color: #fafafa;
             -webkit-appearance: none;
@@ -175,34 +175,36 @@
 
         .calc-display {
             width: 100%;
-            padding: 8px 0; /* 14px -> 8px */
-            font-size: 14px; /* 15px -> 14px */
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
             font-weight: 700;
             color: #333;
-            text-align: center;
             background-color: #f2f2f7;
             border: 1px solid #e0e0e0;
-            border-radius: 8px; /* 10px -> 8px */
+            border-radius: 8px;
             box-sizing: border-box;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
         .section-title {
-            font-size: 12px; /* 14px -> 12px */
+            font-size: 12px;
             font-weight: 700;
             color: #333;
             border-bottom: 1px solid #f0f0f0;
-            padding-bottom: 4px; /* 8px -> 4px */
-            margin-bottom: 6px; /* 12px -> 6px */
+            padding-bottom: 4px;
+            margin-bottom: 6px;
             margin-top: 4px;
         }
 
         .result-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 6px; /* 8px -> 6px */
-            margin-bottom: 8px; /* 20px -> 8px */
+            gap: 6px;
+            margin-bottom: 8px;
         }
 
         .result-grid-2col {
@@ -216,39 +218,38 @@
             background-color: #fafafa;
             border: 1px solid #f0f0f0;
             border-radius: 8px;
-            padding: 6px 4px; /* 12px 5px -> 6px 4px */
+            padding: 6px 4px;
             text-align: center;
         }
 
         .result-label {
-            font-size: 10px; /* 11px -> 10px */
+            font-size: 10px;
             font-weight: 700;
             color: #666;
-            margin-bottom: 4px; /* 6px -> 4px */
+            margin-bottom: 4px;
         }
 
         .profit-bold {
-            font-size: 14px; /* 15px -> 14px */
+            font-size: 14px;
             font-weight: 700;
         }
 
         .margin-normal {
-            font-size: 11px; /* 15px -> 11px */
+            font-size: 11px;
             font-weight: 400;
         }
 
         .reset-btn {
             width: 100%;
-            padding: 12px; /* 16px -> 12px */
+            padding: 12px;
             background-color: rgba(255, 59, 48, 0.8);
             color: white;
             border: none;
-            border-radius: 10px; /* 14px -> 10px */
-            font-size: 15px; /* 16px -> 15px */
+            border-radius: 10px;
+            font-size: 15px;
             font-weight: 700;
             font-family: inherit;
             cursor: pointer;
-            margin-top: 4px; /* 10px -> 4px */
             transition: all 0.2s;
             -webkit-tap-highlight-color: transparent;
             flex-shrink: 0;
@@ -259,7 +260,7 @@
             transform: scale(0.98);
         }
 
-        /* モーダル用スタイル (ここはスクロール許可) */
+        /* モーダル用スタイル (モーダル内のみスクロール許可) */
         #db-modal {
             display: none;
             position: fixed;
@@ -268,7 +269,7 @@
             justify-content: center;
             align-items: center;
             z-index: 100;
-            touch-action: auto; /* モーダル内はスクロール許可 */
+            touch-action: auto; 
         }
 
         .modal-content {
@@ -291,7 +292,7 @@
 
         .save-btn {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             background-color: var(--line-green);
             color: white;
             border: none;
@@ -304,7 +305,7 @@
         
         .cancel-btn {
             flex: 1; 
-            padding: 14px;
+            padding: 12px;
             background-color: transparent;
             color: #8e8e93;
             border: none;
@@ -341,9 +342,7 @@
                         <option value="AirPods Pro 3">AirPods Pro 3</option>
                         <option value="AirPods 4">AirPods 4</option>
                         <option value="AirPods 4 ANC">AirPods 4 ANC</option>
-                        <option value="Apple Pencil 第1世代">Apple Pencil 第1世代</option>
                         <option value="Home Pod mini">Home Pod mini</option>
-                        <option value="iPad mini 第6世代">iPad mini 第6世代</option>
                         <option value="iPhone13 mini">iPhone13 mini</option>
                         <option value="AirPods Max 第1世代">AirPods Max 第1世代</option>
                     </select>
@@ -436,9 +435,9 @@
             </div>
         </div>
 
-        <div class="row-flex" style="margin-bottom: 0; margin-top: auto; padding-top: 8px;">
-            <button class="reset-btn" style="margin-top: 0; background-color: rgba(142, 142, 147, 0.6);" onclick="resetMarket()">リセット</button>
-            <button class="reset-btn" style="margin-top: 0;" onclick="openDbModal()">登録</button>
+        <div class="row-flex" style="margin-top: auto; margin-bottom: 0; padding-bottom: max(10px, env(safe-area-inset-bottom));">
+            <button class="reset-btn" style="background-color: rgba(142, 142, 147, 0.6);" onclick="resetMarket()">リセット</button>
+            <button class="reset-btn" onclick="openDbModal()">登録</button>
         </div>
     </div>
 
@@ -525,7 +524,8 @@
                 </div>
             </div>
         </div>
-        <button class="reset-btn" style="margin-top: auto;" onclick="resetCalc()">すべてリセット</button>
+        
+        <button class="reset-btn" style="margin-top: auto; margin-bottom: 0; padding-bottom: max(12px, env(safe-area-inset-bottom));" onclick="resetCalc()">すべてリセット</button>
     </div>
 
 </div>
@@ -582,7 +582,7 @@
 </div>
 
 <script>
-    // --- データベース管理 ---
+    // --- データベース管理 (変更なし) ---
     const defaultDB = {
         "Apple Watch SE 第2世代_40_中古": { min: 20000, max: 20000, shipping: "210" },
         "Apple Watch SE 第2世代_40_新品": { min: 24000, max: 24000, shipping: "210" },
@@ -608,11 +608,8 @@
         "AirPods 4_0_新品": { min: 16000, max: 16000, shipping: "210" },
         "AirPods 4 ANC_0_中古": { min: 17000, max: 17000, shipping: "210" },
         "AirPods 4 ANC_0_新品": { min: 22000, max: 22000, shipping: "210" },
-        "Apple Pencil 第1世代_0_新品": { min: 11000, max: 11000, shipping: "210" },
         "Home Pod mini_0_中古": { min: 8000, max: 8000, shipping: "750" },
         "Home Pod mini_0_新品": { min: 11000, max: 11800, shipping: "750" },
-        "iPad mini 第6世代_64GB_中古": { min: 44000, max: 44000, shipping: "560" },
-        "iPad mini 第6世代_256GB_中古": { min: 48000, max: 48000, shipping: "560" },
         "iPhone13 mini_128GB_中古": { min: 35800, max: 36400, shipping: "210" },
         "AirPods Max 第1世代_Lightning_中古": { min: 30000, max: 34000, shipping: "750" },
         "AirPods Max 第1世代_Type-C_中古": { min: 40800, max: 55800, shipping: "750" }
@@ -625,7 +622,7 @@
         return `${product}_${model}_${condition}`;
     }
 
-    // --- モード切り替え ---
+    // --- モード切り替え (flexに変更) ---
     function switchMode(mode) {
         document.getElementById('tab-calc').classList.remove('active');
         document.getElementById('tab-market').classList.remove('active');
@@ -634,11 +631,11 @@
 
         if (mode === 'calc') {
             document.getElementById('tab-calc').classList.add('active');
-            document.getElementById('mode-calc').style.display = 'flex'; // blockからflexに変更してボタンを下部固定
+            document.getElementById('mode-calc').style.display = 'flex'; 
             document.documentElement.style.setProperty('--current-accent', 'var(--line-green)');
         } else {
             document.getElementById('tab-market').classList.add('active');
-            document.getElementById('mode-market').style.display = 'flex'; // blockからflexに変更してボタンを下部固定
+            document.getElementById('mode-market').style.display = 'flex'; 
             document.documentElement.style.setProperty('--current-accent', 'var(--line-red)');
             calculateMarket();
         }
