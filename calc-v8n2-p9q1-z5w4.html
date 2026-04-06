@@ -38,9 +38,10 @@
         .container {
             width: 100%;
             height: 100dvh;
-            max-width: 400px;
+            /* 改善点: 画面フルに使うためmax-widthとpaddingを調整 */
+            max-width: 440px; 
             margin: 0 auto;
-            padding: 10px 15px;
+            padding: 8px; /* 15pxから8pxへ削り、左右の余白を極小化 */
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -50,16 +51,16 @@
             display: flex;
             background-color: #e5e5ea;
             border-radius: 12px;
-            padding: 4px;
-            margin-bottom: 10px;
+            padding: 6px;
+            margin-bottom: 12px;
             flex-shrink: 0;
         }
 
         .tab-btn {
             flex: 1;
             text-align: center;
-            padding: 8px 0;
-            font-size: 13px;
+            padding: 10px 0; /* タブを少し太く拡大 */
+            font-size: 14px; /* 文字拡大 */
             font-weight: 700;
             color: #8e8e93;
             border-radius: 10px;
@@ -74,7 +75,6 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
-        /* 画面をFlexで埋めて下部へ要素を押し出す設定 */
         #mode-calc, #mode-market {
             flex: 1;
             display: flex;
@@ -85,32 +85,32 @@
 
         .card {
             background: white;
-            border-radius: 12px;
-            padding: 12px 16px;
-            margin-bottom: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border-radius: 16px; /* 角丸を少し柔らかく拡大 */
+            padding: 16px; /* 中の余白を拡大 */
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
             flex-shrink: 0;
         }
 
         h2 {
-            font-size: 15px;
+            font-size: 16px; /* 見出し文字を拡大 */
             margin-top: 0;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             color: #000;
-            border-left: 4px solid var(--current-accent);
-            padding-left: 8px;
+            border-left: 5px solid var(--current-accent);
+            padding-left: 10px;
             font-weight: 700;
             transition: border-color 0.3s ease;
         }
 
         textarea.memo-input {
             width: 100%;
-            height: 36px;
-            padding: 8px 12px;
-            font-size: 13px;
+            height: 44px; /* 36pxからアプリ標準の44pxへ拡大 */
+            padding: 10px 12px;
+            font-size: 15px; /* 13pxから15pxへ拡大 */
             font-family: inherit;
             border: 1px solid #e0e0e0;
-            border-radius: 8px;
+            border-radius: 10px;
             box-sizing: border-box;
             background-color: #fafafa;
             resize: none;
@@ -127,8 +127,8 @@
 
         .row-flex {
             display: flex;
-            gap: 8px;
-            margin-bottom: 8px;
+            gap: 12px; /* 隙間を広げて見やすく */
+            margin-bottom: 12px;
             width: 100%;
         }
 
@@ -144,9 +144,9 @@
 
         label {
             display: block;
-            font-size: 11px;
+            font-size: 12px; /* ラベル文字拡大 */
             font-weight: 700;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             color: #555;
             white-space: nowrap;
             overflow: hidden;
@@ -155,12 +155,12 @@
 
         input[type="number"], select {
             width: 100%;
-            padding: 8px 10px;
-            font-size: 14px;
+            padding: 0 12px;
+            font-size: 15px; /* 文字拡大 */
             font-family: inherit;
             border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            height: 36px;
+            border-radius: 10px;
+            height: 44px; /* 36pxからアプリ標準の44pxへ拡大 */
             box-sizing: border-box;
             background-color: #fafafa;
             -webkit-appearance: none;
@@ -175,78 +175,78 @@
 
         .calc-display {
             width: 100%;
-            height: 36px;
+            height: 44px; /* 枠を拡大 */
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 16px; /* 文字拡大 */
             font-weight: 700;
             color: #333;
             background-color: #f2f2f7;
             border: 1px solid #e0e0e0;
-            border-radius: 8px;
+            border-radius: 10px;
             box-sizing: border-box;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
         .section-title {
-            font-size: 12px;
+            font-size: 13px; /* 文字拡大 */
             font-weight: 700;
             color: #333;
             border-bottom: 1px solid #f0f0f0;
-            padding-bottom: 4px;
-            margin-bottom: 6px;
-            margin-top: 4px;
+            padding-bottom: 6px;
+            margin-bottom: 8px;
+            margin-top: 8px;
         }
 
         .result-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            margin-bottom: 8px;
+            gap: 10px; /* 余白拡大 */
+            margin-bottom: 12px;
         }
 
         .result-grid-2col {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 6px;
-            margin-bottom: 8px;
+            gap: 10px; /* 余白拡大 */
+            margin-bottom: 12px;
         }
 
         .result-box {
             background-color: #fafafa;
             border: 1px solid #f0f0f0;
-            border-radius: 8px;
-            padding: 6px 4px;
+            border-radius: 10px;
+            padding: 10px 4px; /* ボックス内を拡大 */
             text-align: center;
         }
 
         .result-label {
-            font-size: 10px;
+            font-size: 11px; /* 文字拡大 */
             font-weight: 700;
             color: #666;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
         .profit-bold {
-            font-size: 14px;
+            font-size: 16px; /* 利益の文字を大きく */
             font-weight: 700;
         }
 
         .margin-normal {
-            font-size: 11px;
+            font-size: 13px; /* 利益率の文字を大きく */
             font-weight: 400;
         }
 
         .reset-btn {
             width: 100%;
-            padding: 12px;
+            padding: 16px; /* ボタンを太くタップしやすく拡大 */
             background-color: rgba(255, 59, 48, 0.8);
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 15px;
+            border-radius: 12px; /* 丸み拡大 */
+            font-size: 16px; /* 文字拡大 */
             font-weight: 700;
             font-family: inherit;
             cursor: pointer;
@@ -275,7 +275,7 @@
         .modal-content {
             background: white;
             padding: 20px;
-            border-radius: 12px;
+            border-radius: 16px;
             width: 90%;
             max-width: 350px;
             max-height: 85dvh;
@@ -292,12 +292,12 @@
 
         .save-btn {
             width: 100%;
-            padding: 12px;
+            padding: 16px;
             background-color: var(--line-green);
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 15px;
+            border-radius: 12px;
+            font-size: 16px;
             font-weight: 700;
             margin-top: 10px;
             cursor: pointer;
@@ -305,11 +305,11 @@
         
         .cancel-btn {
             flex: 1; 
-            padding: 12px;
+            padding: 16px;
             background-color: transparent;
             color: #8e8e93;
             border: none;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
             cursor: pointer;
         }
@@ -403,10 +403,10 @@
 
         <div class="card" style="margin-bottom: 0;">
             <h2>相場検索結果</h2>
-            <div class="row-flex" style="align-items: flex-end; margin-bottom: 10px;">
+            <div class="row-flex" style="align-items: flex-end; margin-bottom: 12px;">
                 <div class="input-group-large">
                     <label>目標仕入額</label>
-                    <div class="calc-display" id="market-target-cost" style="color: var(--line-red); font-size: 16px;">-</div>
+                    <div class="calc-display" id="market-target-cost" style="color: var(--line-red); font-size: 20px; height: 50px;">-</div>
                 </div>
             </div>
             <div class="section-title">販売想定</div>
@@ -435,9 +435,9 @@
             </div>
         </div>
 
-        <div class="row-flex" style="margin-top: auto; margin-bottom: 0; padding-bottom: max(10px, env(safe-area-inset-bottom));">
-            <button class="reset-btn" style="background-color: rgba(142, 142, 147, 0.6);" onclick="resetMarket()">リセット</button>
-            <button class="reset-btn" onclick="openDbModal()">登録</button>
+        <div class="row-flex" style="margin-top: auto; margin-bottom: 0; padding-bottom: max(12px, env(safe-area-inset-bottom)); gap: 12px;">
+            <button class="reset-btn" style="flex: 1; width: auto; background-color: rgba(142, 142, 147, 0.6);" onclick="resetMarket()">リセット</button>
+            <button class="reset-btn" style="flex: 1; width: auto;" onclick="openDbModal()">登録</button>
         </div>
     </div>
 
@@ -525,7 +525,7 @@
             </div>
         </div>
         
-        <button class="reset-btn" style="margin-top: auto; margin-bottom: 0; padding-bottom: max(12px, env(safe-area-inset-bottom));" onclick="resetCalc()">すべてリセット</button>
+        <button class="reset-btn" style="margin-top: auto; margin-bottom: 0; padding-bottom: max(16px, env(safe-area-inset-bottom));" onclick="resetCalc()">すべてリセット</button>
     </div>
 
 </div>
@@ -582,7 +582,7 @@
 </div>
 
 <script>
-    // --- データベース管理 (変更なし) ---
+    // --- データベース管理 ---
     const defaultDB = {
         "Apple Watch SE 第2世代_40_中古": { min: 20000, max: 20000, shipping: "210" },
         "Apple Watch SE 第2世代_40_新品": { min: 24000, max: 24000, shipping: "210" },
