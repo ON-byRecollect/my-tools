@@ -51,7 +51,7 @@
             background-color: #e5e5ea;
             border-radius: 12px;
             padding: 6px;
-            margin-bottom: 10px; /* 14pxから10pxへ変更 */
+            margin-bottom: 10px; 
             flex-shrink: 0;
         }
 
@@ -78,7 +78,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center; 
+            /* 中央揃えを解除し、上からキッチリ詰める */
             min-height: 0;
             overflow: hidden;
         }
@@ -87,7 +87,7 @@
             background: white;
             border-radius: 16px;
             padding: 20px; 
-            margin-bottom: 10px; /* 14pxから10pxへ変更 */
+            margin-bottom: 10px; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.04);
             flex-shrink: 0;
         }
@@ -127,8 +127,8 @@
 
         .row-flex {
             display: flex;
-            gap: 10px; /* 14pxから10pxへ変更 */
-            margin-bottom: 10px; /* 14pxから10pxへ変更 */
+            gap: 10px; 
+            margin-bottom: 10px; 
             width: 100%;
         }
 
@@ -239,9 +239,14 @@
             font-weight: 400;
         }
 
+        /* 改善点: ボタンの高さを正確に45pxに指定 */
         .reset-btn {
             width: 100%;
-            padding: 18px; 
+            height: 45px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background-color: rgba(255, 59, 48, 0.8);
             color: white;
             border: none;
@@ -436,7 +441,7 @@
             </div>
         </div>
 
-        <div class="row-flex" style="margin-top: 0; margin-bottom: 0; padding-bottom: max(16px, env(safe-area-inset-bottom)); gap: 10px;">
+        <div class="row-flex" style="margin-top: auto; margin-bottom: 0; padding-bottom: max(16px, env(safe-area-inset-bottom)); gap: 10px;">
             <button class="reset-btn" style="flex: 1; width: auto; background-color: rgba(142, 142, 147, 0.6);" onclick="resetMarket()">リセット</button>
             <button class="reset-btn" style="flex: 1; width: auto;" onclick="openDbModal()">登録</button>
         </div>
@@ -526,8 +531,8 @@
             </div>
         </div>
         
-        <div class="row-flex" style="margin-top: 0; margin-bottom: 0; padding-bottom: max(16px, env(safe-area-inset-bottom));">
-            <button class="reset-btn" style="flex: 1; width: auto;" onclick="resetCalc()">すべてリセット</button>
+        <div class="row-flex" style="margin-top: auto; margin-bottom: 0; padding-bottom: max(16px, env(safe-area-inset-bottom));">
+            <button class="reset-btn" style="flex: 1; width: auto; background-color: rgba(142, 142, 147, 0.6);" onclick="resetCalc()">すべてリセット</button>
         </div>
     </div>
 
