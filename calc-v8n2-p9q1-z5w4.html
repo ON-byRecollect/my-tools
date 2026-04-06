@@ -38,10 +38,10 @@
         .container {
             width: 100%;
             height: 100dvh;
-            /* 改善点: 画面フルに使うためmax-widthとpaddingを調整 */
             max-width: 440px; 
             margin: 0 auto;
-            padding: 8px; /* 15pxから8pxへ削り、左右の余白を極小化 */
+            /* 改善点: 左右と上下の余白を少し広げて窮屈さを解消 */
+            padding: 12px; 
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -52,15 +52,17 @@
             background-color: #e5e5ea;
             border-radius: 12px;
             padding: 6px;
-            margin-bottom: 12px;
+            /* 改善点: タブ下の余白を拡大 */
+            margin-bottom: 16px; 
             flex-shrink: 0;
         }
 
         .tab-btn {
             flex: 1;
             text-align: center;
-            padding: 10px 0; /* タブを少し太く拡大 */
-            font-size: 14px; /* 文字拡大 */
+            padding: 10px 0;
+            /* 改善点: タブの文字を少し大きく */
+            font-size: 15px; 
             font-weight: 700;
             color: #8e8e93;
             border-radius: 10px;
@@ -85,17 +87,21 @@
 
         .card {
             background: white;
-            border-radius: 16px; /* 角丸を少し柔らかく拡大 */
-            padding: 16px; /* 中の余白を拡大 */
-            margin-bottom: 12px;
+            border-radius: 16px;
+            /* 改善点: カード内の余白を拡大 */
+            padding: 20px; 
+            /* 改善点: カード間の余白を拡大 */
+            margin-bottom: 16px; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.04);
             flex-shrink: 0;
         }
 
         h2 {
-            font-size: 16px; /* 見出し文字を拡大 */
+            /* 改善点: 見出し文字を拡大 */
+            font-size: 17px; 
             margin-top: 0;
-            margin-bottom: 12px;
+            /* 改善点: 見出し下の余白を拡大 */
+            margin-bottom: 16px; 
             color: #000;
             border-left: 5px solid var(--current-accent);
             padding-left: 10px;
@@ -105,9 +111,10 @@
 
         textarea.memo-input {
             width: 100%;
-            height: 44px; /* 36pxからアプリ標準の44pxへ拡大 */
-            padding: 10px 12px;
-            font-size: 15px; /* 13pxから15pxへ拡大 */
+            /* 改善点: メモ欄の高さを標準サイズに拡大 */
+            height: 48px; 
+            padding: 12px 14px;
+            font-size: 15px;
             font-family: inherit;
             border: 1px solid #e0e0e0;
             border-radius: 10px;
@@ -127,8 +134,10 @@
 
         .row-flex {
             display: flex;
-            gap: 12px; /* 隙間を広げて見やすく */
-            margin-bottom: 12px;
+            /* 改善点: 横並び項目の間隔を広げる */
+            gap: 14px; 
+            /* 改善点: 行の間の余白を広げる */
+            margin-bottom: 14px; 
             width: 100%;
         }
 
@@ -144,9 +153,10 @@
 
         label {
             display: block;
-            font-size: 12px; /* ラベル文字拡大 */
+            /* 改善点: ラベルの文字サイズと余白を拡大 */
+            font-size: 13px; 
             font-weight: 700;
-            margin-bottom: 6px;
+            margin-bottom: 8px; 
             color: #555;
             white-space: nowrap;
             overflow: hidden;
@@ -156,11 +166,12 @@
         input[type="number"], select {
             width: 100%;
             padding: 0 12px;
-            font-size: 15px; /* 文字拡大 */
+            font-size: 15px;
             font-family: inherit;
             border: 1px solid #e0e0e0;
             border-radius: 10px;
-            height: 44px; /* 36pxからアプリ標準の44pxへ拡大 */
+            /* 改善点: 入力欄やセレクトボックスの高さを拡大 */
+            height: 48px; 
             box-sizing: border-box;
             background-color: #fafafa;
             -webkit-appearance: none;
@@ -175,11 +186,13 @@
 
         .calc-display {
             width: 100%;
-            height: 44px; /* 枠を拡大 */
+            /* 改善点: 結果表示の枠の高さを拡大 */
+            height: 48px; 
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px; /* 文字拡大 */
+            /* 改善点: 結果の文字サイズを拡大 */
+            font-size: 18px; 
             font-weight: 700;
             color: #333;
             background-color: #f2f2f7;
@@ -191,62 +204,68 @@
         }
 
         .section-title {
-            font-size: 13px; /* 文字拡大 */
+            font-size: 13px;
             font-weight: 700;
             color: #333;
             border-bottom: 1px solid #f0f0f0;
-            padding-bottom: 6px;
-            margin-bottom: 8px;
+            /* 改善点: セクションタイトルの余白を拡大 */
+            padding-bottom: 8px; 
+            margin-bottom: 10px; 
             margin-top: 8px;
         }
 
         .result-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px; /* 余白拡大 */
-            margin-bottom: 12px;
+            /* 改善点: グリッドの余白を拡大 */
+            gap: 12px; 
+            margin-bottom: 16px; 
         }
 
         .result-grid-2col {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px; /* 余白拡大 */
-            margin-bottom: 12px;
+            gap: 12px; 
+            margin-bottom: 16px; 
         }
 
         .result-box {
             background-color: #fafafa;
             border: 1px solid #f0f0f0;
             border-radius: 10px;
-            padding: 10px 4px; /* ボックス内を拡大 */
+            /* 改善点: ボックス内の余白を拡大 */
+            padding: 12px 6px; 
             text-align: center;
         }
 
         .result-label {
-            font-size: 11px; /* 文字拡大 */
+            /* 改善点: 結果ラベルの文字サイズと余白を拡大 */
+            font-size: 12px; 
             font-weight: 700;
             color: #666;
-            margin-bottom: 6px;
+            margin-bottom: 8px; 
         }
 
         .profit-bold {
-            font-size: 16px; /* 利益の文字を大きく */
+            /* 改善点: 金額の文字サイズを拡大 */
+            font-size: 18px; 
             font-weight: 700;
         }
 
         .margin-normal {
-            font-size: 13px; /* 利益率の文字を大きく */
+            /* 改善点: 利益率の文字サイズを拡大 */
+            font-size: 14px; 
             font-weight: 400;
         }
 
         .reset-btn {
             width: 100%;
-            padding: 16px; /* ボタンを太くタップしやすく拡大 */
+            padding: 16px;
             background-color: rgba(255, 59, 48, 0.8);
             color: white;
             border: none;
-            border-radius: 12px; /* 丸み拡大 */
-            font-size: 16px; /* 文字拡大 */
+            border-radius: 12px;
+            font-size: 16px;
             font-weight: 700;
             font-family: inherit;
             cursor: pointer;
@@ -342,7 +361,9 @@
                         <option value="AirPods Pro 3">AirPods Pro 3</option>
                         <option value="AirPods 4">AirPods 4</option>
                         <option value="AirPods 4 ANC">AirPods 4 ANC</option>
+                        <option value="Apple Pencil 第1世代">Apple Pencil 第1世代</option>
                         <option value="Home Pod mini">Home Pod mini</option>
+                        <option value="iPad mini 第6世代">iPad mini 第6世代</option>
                         <option value="iPhone13 mini">iPhone13 mini</option>
                         <option value="AirPods Max 第1世代">AirPods Max 第1世代</option>
                     </select>
@@ -403,10 +424,10 @@
 
         <div class="card" style="margin-bottom: 0;">
             <h2>相場検索結果</h2>
-            <div class="row-flex" style="align-items: flex-end; margin-bottom: 12px;">
+            <div class="row-flex" style="align-items: flex-end; margin-bottom: 16px;">
                 <div class="input-group-large">
                     <label>目標仕入額</label>
-                    <div class="calc-display" id="market-target-cost" style="color: var(--line-red); font-size: 20px; height: 50px;">-</div>
+                    <div class="calc-display" id="market-target-cost" style="color: var(--line-red); font-size: 22px;">-</div>
                 </div>
             </div>
             <div class="section-title">販売想定</div>
@@ -435,20 +456,20 @@
             </div>
         </div>
 
-        <div class="row-flex" style="margin-top: auto; margin-bottom: 0; padding-bottom: max(12px, env(safe-area-inset-bottom)); gap: 12px;">
+        <div class="row-flex" style="margin-top: auto; margin-bottom: 0; padding-bottom: max(12px, env(safe-area-inset-bottom)); gap: 14px;">
             <button class="reset-btn" style="flex: 1; width: auto; background-color: rgba(142, 142, 147, 0.6);" onclick="resetMarket()">リセット</button>
             <button class="reset-btn" style="flex: 1; width: auto;" onclick="openDbModal()">登録</button>
         </div>
     </div>
 
     <div id="mode-calc" style="display: none;">
-        <div class="card" style="padding: 12px 16px; margin-bottom: 8px;">
-            <h2 style="margin-bottom: 8px;">メモ</h2>
+        <div class="card">
+            <h2>メモ</h2>
             <textarea id="calc-memo" class="memo-input" placeholder="商品名や特記事項など" rows="1"></textarea>
         </div>
-        <div class="card" style="padding: 12px 16px; margin-bottom: 8px;">
-            <h2 style="margin-bottom: 8px;">利益計算</h2>
-            <div class="row-flex" style="margin-bottom: 8px;">
+        <div class="card">
+            <h2>利益計算</h2>
+            <div class="row-flex">
                 <div class="input-group">
                     <label>仕入値 (円)</label>
                     <input type="number" id="calc-cost-price" inputmode="numeric" placeholder="0" oninput="calculateCalc()">
@@ -491,10 +512,10 @@
                 </div>
             </div>
         </div>
-        <div class="card" style="padding: 12px 16px; margin-bottom: 0;">
-            <h2 style="margin-bottom: 8px;">計算結果</h2>
-            <div class="section-title" style="margin-top: 0;">利益</div>
-            <div class="result-grid" style="margin-bottom: 8px;">
+        <div class="card" style="margin-bottom: 0;">
+            <h2>計算結果</h2>
+            <div class="section-title">利益</div>
+            <div class="result-grid">
                 <div class="result-box">
                     <div class="result-label">最低売値</div>
                     <div class="profit-bold" style="color: var(--main-blue);" id="calc-profit-min">0 円</div>
@@ -525,9 +546,7 @@
             </div>
         </div>
         
-        <div class="row-flex" style="margin-top: auto; margin-bottom: 0; padding-top: 8px; padding-bottom: max(12px, env(safe-area-inset-bottom));">
-            <button class="reset-btn" style="margin-top: 0;" onclick="resetCalc()">すべてリセット</button>
-        </div>
+        <button class="reset-btn" style="margin-top: auto; margin-bottom: 0; padding-bottom: max(16px, env(safe-area-inset-bottom));" onclick="resetCalc()">すべてリセット</button>
     </div>
 
 </div>
@@ -610,8 +629,11 @@
         "AirPods 4_0_新品": { min: 16000, max: 16000, shipping: "210" },
         "AirPods 4 ANC_0_中古": { min: 17000, max: 17000, shipping: "210" },
         "AirPods 4 ANC_0_新品": { min: 22000, max: 22000, shipping: "210" },
+        "Apple Pencil 第1世代_0_新品": { min: 11000, max: 11000, shipping: "210" },
         "Home Pod mini_0_中古": { min: 8000, max: 8000, shipping: "750" },
         "Home Pod mini_0_新品": { min: 11000, max: 11800, shipping: "750" },
+        "iPad mini 第6世代_64GB_中古": { min: 44000, max: 44000, shipping: "560" },
+        "iPad mini 第6世代_256GB_中古": { min: 48000, max: 48000, shipping: "560" },
         "iPhone13 mini_128GB_中古": { min: 35800, max: 36400, shipping: "210" },
         "AirPods Max 第1世代_Lightning_中古": { min: 30000, max: 34000, shipping: "750" },
         "AirPods Max 第1世代_Type-C_中古": { min: 40800, max: 55800, shipping: "750" }
@@ -744,9 +766,6 @@
 
         const minSalePrice = marketData.min;
         const maxSalePrice = marketData.max;
-
-        document.getElementById('market-sale-min').innerText = minSalePrice.toLocaleString() + " 円";
-        document.getElementById('market-sale-max').innerText = maxSalePrice.toLocaleString() + " 円";
 
         const targetProfit = condition === "中古" ? 2000 : 1000;
 
