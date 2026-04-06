@@ -51,7 +51,7 @@
             background-color: #e5e5ea;
             border-radius: 12px;
             padding: 6px;
-            margin-bottom: 14px; /* 18pxから14pxへ縮小 */
+            margin-bottom: 10px; /* 14pxから10pxへ変更 */
             flex-shrink: 0;
         }
 
@@ -87,7 +87,7 @@
             background: white;
             border-radius: 16px;
             padding: 20px; 
-            margin-bottom: 14px; /* 18pxから14pxへ縮小 */
+            margin-bottom: 10px; /* 14pxから10pxへ変更 */
             box-shadow: 0 4px 12px rgba(0,0,0,0.04);
             flex-shrink: 0;
         }
@@ -127,8 +127,8 @@
 
         .row-flex {
             display: flex;
-            gap: 14px; 
-            margin-bottom: 14px; 
+            gap: 10px; /* 14pxから10pxへ変更 */
+            margin-bottom: 10px; /* 14pxから10pxへ変更 */
             width: 100%;
         }
 
@@ -404,7 +404,7 @@
 
         <div class="card" style="margin-bottom: 0;">
             <h2>相場検索結果</h2>
-            <div class="row-flex" style="align-items: flex-end; margin-bottom: 14px;">
+            <div class="row-flex" style="align-items: flex-end; margin-bottom: 10px;">
                 <div class="input-group-large">
                     <label>目標仕入額</label>
                     <div class="calc-display" id="market-target-cost" style="color: var(--line-red); font-size: 22px;">-</div>
@@ -436,7 +436,7 @@
             </div>
         </div>
 
-        <div class="row-flex" style="margin-top: 0; margin-bottom: 0; padding-bottom: max(16px, env(safe-area-inset-bottom)); gap: 14px;">
+        <div class="row-flex" style="margin-top: 0; margin-bottom: 0; padding-bottom: max(16px, env(safe-area-inset-bottom)); gap: 10px;">
             <button class="reset-btn" style="flex: 1; width: auto; background-color: rgba(142, 142, 147, 0.6);" onclick="resetMarket()">リセット</button>
             <button class="reset-btn" style="flex: 1; width: auto;" onclick="openDbModal()">登録</button>
         </div>
