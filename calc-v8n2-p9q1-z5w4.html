@@ -39,7 +39,6 @@
             max-width: 400px;
         }
 
-        /* タブ切り替え用デザイン */
         .tab-container {
             display: flex;
             background-color: #e5e5ea;
@@ -86,7 +85,6 @@
             transition: border-color 0.3s ease;
         }
 
-        /* メモ欄（1行サイズ） */
         textarea.memo-input {
             width: 100%;
             height: 48px;
@@ -240,7 +238,6 @@
             transform: scale(0.98);
         }
 
-        /* モーダル用スタイル */
         #db-modal {
             display: none;
             position: fixed;
@@ -305,7 +302,6 @@
     <div id="mode-market" style="display: block;">
         <div class="card">
             <h2>製品情報</h2>
-            
             <div class="row-flex">
                 <div class="input-group">
                     <label>製品名</label>
@@ -322,6 +318,9 @@
                         <option value="AirPods 4 ANC">AirPods 4 ANC</option>
                         <option value="Apple Pencil">Apple Pencil</option>
                         <option value="Apple Pencil 第2世代">Apple Pencil 第2世代</option>
+                        <option value="Home Pod mini">Home Pod mini</option>
+                        <option value="iPad mini">iPad mini</option>
+                        <option value="iPhone13 mini">iPhone13 mini</option>
                     </select>
                 </div>
             </div>
@@ -566,8 +565,46 @@
 </div>
 
 <script>
-    // --- データベース管理 ---
-    let marketDB = JSON.parse(localStorage.getItem('marketDB')) || {};
+    // --- 初期データベースの構築 (33件の登録データ) ---
+    const defaultDB = {
+        "Apple Watch SE 第2世代_40_ー_中古": { min: 20000, max: 20000, shipping: "210" },
+        "Apple Watch SE 第2世代_40_ー_新品": { min: 24000, max: 24000, shipping: "210" },
+        "Apple Watch SE 第2世代_44_ー_中古": { min: 23000, max: 23000, shipping: "210" },
+        "Apple Watch SE 第2世代_44_ー_新品": { min: 27000, max: 27000, shipping: "210" },
+        "Apple Watch SE 第3世代_40_ミッドナイト_中古": { min: 29500, max: 30500, shipping: "210" },
+        "Apple Watch SE 第3世代_40_ミッドナイト_新品": { min: 32500, max: 34000, shipping: "210" },
+        "Apple Watch SE 第3世代_44_ミッドナイト_中古": { min: 29000, max: 30500, shipping: "210" },
+        "Apple Watch SE 第3世代_44_ミッドナイト_新品": { min: 35600, max: 38200, shipping: "210" },
+        "Apple Watch SE 第3世代_40_スターライト_中古": { min: 29000, max: 32500, shipping: "210" },
+        "Apple Watch SE 第3世代_40_スターライト_新品": { min: 32900, max: 34500, shipping: "210" },
+        "Apple Watch SE 第3世代_44_スターライト_中古": { min: 30000, max: 30000, shipping: "210" },
+        "Apple Watch Series10_42_ー_中古": { min: 38000, max: 41900, shipping: "210" },
+        "Apple Watch Series10_42_ー_新品": { min: 46000, max: 46000, shipping: "210" },
+        "Apple Watch Series10_46_ー_中古": { min: 39700, max: 42000, shipping: "210" },
+        "Apple Watch Series10_46_ー_新品": { min: 50000, max: 50000, shipping: "210" },
+        "Apple Watch Series11_42_ー_中古": { min: 50000, max: 50000, shipping: "210" },
+        "Apple Watch Series11_42_ー_新品": { min: 55000, max: 55000, shipping: "210" },
+        "Apple Watch Series11_46_ー_中古": { min: 54000, max: 54000, shipping: "210" },
+        "Apple Watch Series11_46_ー_新品": { min: 59000, max: 59000, shipping: "210" },
+        "AirPods Pro 2_Lightning_ー_中古": { min: 13000, max: 13000, shipping: "210" },
+        "AirPods Pro 2_Type-C_ー_中古": { min: 15000, max: 15000, shipping: "210" },
+        "AirPods Pro 3_0_ー_中古": { min: 28000, max: 32000, shipping: "210" },
+        "AirPods Pro 3_0_ー_新品": { min: 31900, max: 33333, shipping: "210" },
+        "AirPods 4_0_ー_中古": { min: 13000, max: 13000, shipping: "210" },
+        "AirPods 4_0_ー_新品": { min: 16000, max: 16000, shipping: "210" },
+        "AirPods 4 ANC_0_ー_中古": { min: 17000, max: 17000, shipping: "210" },
+        "AirPods 4 ANC_0_ー_新品": { min: 22000, max: 22000, shipping: "210" },
+        "Apple Pencil_0_ー_新品": { min: 11000, max: 11000, shipping: "210" },
+        "Home Pod mini_0_ー_中古": { min: 8000, max: 8000, shipping: "750" },
+        "Home Pod mini_0_ー_新品": { min: 11000, max: 11800, shipping: "750" },
+        "iPad mini_64GB_ー_中古": { min: 44000, max: 44000, shipping: "560" },
+        "iPad mini_256GB_ー_中古": { min: 48000, max: 48000, shipping: "560" },
+        "iPhone13 mini_64GB_ー_中古": { min: 35800, max: 36400, shipping: "210" }
+    };
+
+    // LocalStorageのデータと統合（手動登録分が優先されます）
+    let userDB = JSON.parse(localStorage.getItem('marketDB')) || {};
+    let marketDB = { ...defaultDB, ...userDB };
 
     function generateDbKey(product, model, color, condition) {
         return `${product}_${model}_${color}_${condition}`;
@@ -803,13 +840,18 @@
         const maxPrice = Math.max(...prices);
 
         const dbKey = generateDbKey(product, model, color, condition);
-        marketDB[dbKey] = {
+        
+        // ローカルストレージ用のデータにのみ新規・上書きを保存
+        let userDB = JSON.parse(localStorage.getItem('marketDB')) || {};
+        userDB[dbKey] = {
             min: minPrice,
             max: maxPrice,
             shipping: shipping
         };
+        localStorage.setItem('marketDB', JSON.stringify(userDB));
 
-        localStorage.setItem('marketDB', JSON.stringify(marketDB));
+        // メモリ上のDBも更新
+        marketDB[dbKey] = userDB[dbKey];
 
         alert("相場データを登録しました！");
         closeDbModal();
