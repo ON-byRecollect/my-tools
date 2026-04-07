@@ -326,14 +326,14 @@
             font-weight: 400;
         }
 
-        /* 3つのボタン用の共通スタイル */
+        /* アクションボタン用の共通スタイル（3等分＆フル幅兼用） */
         .action-btn {
-            flex: 1; /* 3等分にする */
+            flex: 1; /* 横並びの時は均等幅になる */
             padding: 16px 0;
             color: white;
             border: none;
             border-radius: 14px;
-            font-size: 15px; /* 少し文字を小さくして収まりを良くする */
+            font-size: 15px;
             font-weight: 700;
             font-family: inherit;
             cursor: pointer;
@@ -362,7 +362,7 @@
         }
 
         .btn-register {
-            background-color: var(--line-red); /* またはお好みの色 */
+            background-color: var(--line-red);
         }
 
         #db-modal {
@@ -647,7 +647,8 @@
                 </div>
             </div>
         </div>
-        <button class="action-btn btn-reset" style="width: 100%; margin-top: 10px;" onclick="resetCalc()">すべてリセット</button>
+        
+        <button class="action-btn btn-reset" style="width: 100%; margin-top: 10px;" onclick="resetCalc()">リセット</button>
     </div>
 
 </div>
