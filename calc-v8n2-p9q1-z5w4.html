@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="robots" content="noindex, nofollow">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,43 +23,35 @@
             --current-accent: var(--line-red); 
         }
 
-        /* スクロール禁止と1画面固定化 */
-        html, body {
-            height: 100dvh;
-            overflow: hidden;
-            margin: 0;
-            padding: 0;
+        body {
             font-family: 'Line Seed JP', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             color: #333;
-            touch-action: none;
         }
 
         .container {
             width: 100%;
-            height: 100dvh;
-            max-width: 440px; 
-            margin: 0 auto;
-            padding: 12px; 
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
+            max-width: 400px;
         }
 
         .tab-container {
             display: flex;
             background-color: #e5e5ea;
             border-radius: 12px;
-            padding: 6px;
-            margin-bottom: 10px; 
-            flex-shrink: 0;
+            padding: 4px;
+            margin-bottom: 20px;
         }
 
         .tab-btn {
             flex: 1;
             text-align: center;
             padding: 10px 0;
-            font-size: 15px; 
+            font-size: 14px;
             font-weight: 700;
             color: #8e8e93;
             border-radius: 10px;
@@ -74,39 +66,30 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
-        #mode-calc, #mode-market {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
-            overflow: hidden;
-        }
-
         .card {
             background: white;
             border-radius: 16px;
-            padding: 20px; 
-            margin-bottom: 10px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-            flex-shrink: 0;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
         h2 {
-            font-size: 17px; 
+            font-size: 18px;
             margin-top: 0;
-            margin-bottom: 16px; 
+            margin-bottom: 20px;
             color: #000;
             border-left: 5px solid var(--current-accent);
-            padding-left: 10px;
+            padding-left: 12px;
             font-weight: 700;
             transition: border-color 0.3s ease;
         }
 
         textarea.memo-input {
             width: 100%;
-            height: 50px; 
-            padding: 12px 14px;
-            font-size: 16px; 
+            height: 48px;
+            padding: 14px;
+            font-size: 14px;
             font-family: inherit;
             border: 1px solid #e0e0e0;
             border-radius: 10px;
@@ -126,8 +109,8 @@
 
         .row-flex {
             display: flex;
-            gap: 10px; 
-            margin-bottom: 10px; 
+            gap: 12px;
+            margin-bottom: 18px;
             width: 100%;
         }
 
@@ -138,28 +121,26 @@
 
         .input-group-large {
             flex: 1.5;
-            min-width: 0;
         }
 
         label {
             display: block;
-            font-size: 13px; 
+            font-size: 12px;
             font-weight: 700;
-            margin-bottom: 6px; 
+            margin-bottom: 8px;
             color: #555;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        input[type="number"], select {
+        input[type="text"], input[type="number"], select {
             width: 100%;
-            padding: 0 12px;
-            font-size: 16px; 
+            padding: 14px;
+            font-size: 15px;
             font-family: inherit;
             border: 1px solid #e0e0e0;
             border-radius: 10px;
-            height: 50px; 
             box-sizing: border-box;
             background-color: #fafafa;
             -webkit-appearance: none;
@@ -174,13 +155,11 @@
 
         .calc-display {
             width: 100%;
-            height: 50px; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px; 
+            padding: 14px 0;
+            font-size: 15px;
             font-weight: 700;
             color: #333;
+            text-align: center;
             background-color: #f2f2f7;
             border: 1px solid #e0e0e0;
             border-radius: 10px;
@@ -190,72 +169,68 @@
         }
 
         .section-title {
-            font-size: 14px; 
+            font-size: 14px;
             font-weight: 700;
             color: #333;
             border-bottom: 1px solid #f0f0f0;
-            padding-bottom: 8px; 
-            margin-bottom: 10px; 
-            margin-top: 8px;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            margin-top: 5px;
         }
 
         .result-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px; 
-            margin-bottom: 16px; 
+            gap: 8px;
+            margin-bottom: 20px;
         }
 
         .result-grid-2col {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px; 
-            margin-bottom: 16px; 
+            gap: 8px;
+            margin-bottom: 20px;
         }
 
         .result-box {
             background-color: #fafafa;
             border: 1px solid #f0f0f0;
             border-radius: 10px;
-            padding: 14px 6px; 
+            padding: 12px 5px;
             text-align: center;
         }
 
         .result-label {
-            font-size: 12px; 
+            font-size: 11px;
             font-weight: 700;
             color: #666;
-            margin-bottom: 8px; 
+            margin-bottom: 6px;
         }
 
         .profit-bold {
-            font-size: 18px; 
+            font-size: 15px;
             font-weight: 700;
         }
 
         .margin-normal {
-            font-size: 15px; 
+            font-size: 15px;
             font-weight: 400;
         }
 
         .reset-btn {
             width: 100%;
-            height: 52px;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding: 16px;
             background-color: rgba(255, 59, 48, 0.8);
             color: white;
             border: none;
-            border-radius: 12px;
-            font-size: 17px; 
+            border-radius: 14px;
+            font-size: 16px;
             font-weight: 700;
             font-family: inherit;
             cursor: pointer;
+            margin-top: 10px;
             transition: all 0.2s;
             -webkit-tap-highlight-color: transparent;
-            flex-shrink: 0;
         }
 
         .reset-btn:active {
@@ -266,23 +241,21 @@
         #db-modal {
             display: none;
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100dvh;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5);
             justify-content: center;
             align-items: center;
             z-index: 100;
-            touch-action: auto; 
         }
 
         .modal-content {
             background: white;
-            padding: 20px;
+            padding: 24px;
             border-radius: 16px;
             width: 90%;
             max-width: 350px;
-            max-height: 85dvh;
+            max-height: 90vh;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
         }
 
         .db-grid {
@@ -298,7 +271,7 @@
             background-color: var(--line-green);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             font-size: 16px;
             font-weight: 700;
             margin-top: 10px;
@@ -326,7 +299,7 @@
         <div class="tab-btn" id="tab-calc" onclick="switchMode('calc')">利益計算</div>
     </div>
 
-    <div id="mode-market" style="display: flex;">
+    <div id="mode-market" style="display: block;">
         <div class="card">
             <h2>製品情報</h2>
             
@@ -405,12 +378,12 @@
             </div>
         </div>
 
-        <div class="card" style="margin-bottom: 0;">
+        <div class="card">
             <h2>相場検索結果</h2>
-            <div class="row-flex" style="align-items: flex-end; margin-bottom: 10px;">
+            <div class="row-flex" style="align-items: flex-end; margin-bottom: 20px;">
                 <div class="input-group-large">
                     <label>目標仕入額</label>
-                    <div class="calc-display" id="market-target-cost" style="color: var(--line-red); font-size: 22px;">-</div>
+                    <div class="calc-display" id="market-target-cost" style="color: var(--line-red); font-size: 18px;">-</div>
                 </div>
             </div>
             <div class="section-title">販売想定</div>
@@ -429,19 +402,19 @@
                 <div class="result-box">
                     <div class="result-label">最安値での利益</div>
                     <div class="profit-bold" style="color: #333;" id="market-profit-min">-</div>
-                    <div class="margin-normal" style="color: var(--text-gray);" id="market-margin-min">-</div>
+                    <div class="margin-normal" style="color: var(--text-gray); font-size:12px;" id="market-margin-min">-</div>
                 </div>
                 <div class="result-box">
                     <div class="result-label">最高値での利益</div>
                     <div class="profit-bold" style="color: #333;" id="market-profit-max">-</div>
-                    <div class="margin-normal" style="color: var(--text-gray);" id="market-margin-max">-</div>
+                    <div class="margin-normal" style="color: var(--text-gray); font-size:12px;" id="market-margin-max">-</div>
                 </div>
             </div>
         </div>
 
-        <div class="row-flex" style="margin-top: auto; margin-bottom: 0; padding-bottom: max(16px, env(safe-area-inset-bottom)); gap: 14px;">
-            <button class="reset-btn" style="flex: 1; width: auto; background-color: rgba(142, 142, 147, 0.6);" onclick="resetMarket()">リセット</button>
-            <button class="reset-btn" style="flex: 1; width: auto;" onclick="openDbModal()">登録</button>
+        <div class="row-flex" style="margin-bottom: 0; margin-top: 10px;">
+            <button class="reset-btn" style="margin-top: 0; background-color: rgba(142, 142, 147, 0.6);" onclick="resetMarket()">リセット</button>
+            <button class="reset-btn" style="margin-top: 0;" onclick="openDbModal()">登録</button>
         </div>
     </div>
 
@@ -495,7 +468,7 @@
                 </div>
             </div>
         </div>
-        <div class="card" style="margin-bottom: 0;">
+        <div class="card">
             <h2>計算結果</h2>
             <div class="section-title">利益</div>
             <div class="result-grid">
@@ -528,10 +501,7 @@
                 </div>
             </div>
         </div>
-        
-        <div class="row-flex" style="margin-top: auto; margin-bottom: 0; padding-bottom: max(16px, env(safe-area-inset-bottom));">
-            <button class="reset-btn" style="flex: 1; width: auto; background-color: rgba(142, 142, 147, 0.6);" onclick="resetCalc()">すべてリセット</button>
-        </div>
+        <button class="reset-btn" onclick="resetCalc()">すべてリセット</button>
     </div>
 
 </div>
@@ -539,15 +509,18 @@
 <div id="db-modal">
     <div class="modal-content">
         <h2 style="border-left-color: var(--line-red);">相場データ登録</h2>
-        <p style="font-size:11px; color:#666; margin-bottom:10px;">最低1件から登録可能。配送方法も初期値として保存されます。</p>
+        <p style="font-size:12px; color:#666; margin-bottom:15px;">最低1件から登録可能。配送方法も初期値として保存されます。</p>
         
-        <div class="row-flex" style="margin-bottom:8px;">
+        <div class="row-flex" style="margin-bottom:10px;">
             <div class="input-group">
-                <select id="db-product"><option value="0">製品名を選択</option></select>
+                <select id="db-product" onchange="toggleManualProduct()">
+                    <option value="0">製品名を選択</option>
+                    </select>
+                <input type="text" id="db-product-manual" style="display:none; margin-top:8px;" placeholder="新しい製品名を入力">
             </div>
         </div>
         
-        <div class="row-flex" style="margin-bottom:8px;">
+        <div class="row-flex" style="margin-bottom:10px;">
             <div class="input-group">
                 <select id="db-model"><option value="0">モデル選択</option></select>
             </div>
@@ -560,7 +533,7 @@
             </div>
         </div>
 
-        <div class="row-flex" style="margin-bottom:12px;">
+        <div class="row-flex" style="margin-bottom:15px;">
             <div class="input-group-large" style="min-width: 0;">
                 <select id="db-shipping"><option value="0">配送方法</option></select>
             </div>
@@ -619,7 +592,7 @@
         "Home Pod mini_0_新品": { min: 11000, max: 11800, shipping: "750" },
         "iPad mini 第6世代_64GB_中古": { min: 44000, max: 44000, shipping: "560" },
         "iPad mini 第6世代_256GB_中古": { min: 48000, max: 48000, shipping: "560" },
-        "iPhone13 mini_128GB_中古": { min: 35800, max: 36400, shipping: "210" },
+        "iPhone13 mini_64GB_中古": { min: 35800, max: 36400, shipping: "210" },
         "AirPods Max 第1世代_Lightning_中古": { min: 30000, max: 34000, shipping: "750" },
         "AirPods Max 第1世代_Type-C_中古": { min: 40800, max: 55800, shipping: "750" }
     };
@@ -631,6 +604,31 @@
         return `${product}_${model}_${condition}`;
     }
 
+    // 改善点: ページ読み込み時に、ユーザーが独自に追加した製品名をプルダウンに復元する機能
+    function initCustomProducts() {
+        const select = document.getElementById('market-product');
+        const existing = new Set(Array.from(select.options).map(o => o.value));
+        const customSet = new Set();
+        
+        for (let key in userDB) {
+            const p = key.split('_')[0];
+            if (!existing.has(p) && p !== "0" && p !== "") {
+                customSet.add(p);
+            }
+        }
+        
+        customSet.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p;
+            opt.innerText = p;
+            select.appendChild(opt);
+        });
+    }
+    // スクリプト実行時にプルダウンを更新
+    initCustomProducts();
+
+
+    // --- モード切り替え ---
     function switchMode(mode) {
         document.getElementById('tab-calc').classList.remove('active');
         document.getElementById('tab-market').classList.remove('active');
@@ -639,11 +637,11 @@
 
         if (mode === 'calc') {
             document.getElementById('tab-calc').classList.add('active');
-            document.getElementById('mode-calc').style.display = 'flex'; 
+            document.getElementById('mode-calc').style.display = 'block';
             document.documentElement.style.setProperty('--current-accent', 'var(--line-green)');
         } else {
             document.getElementById('tab-market').classList.add('active');
-            document.getElementById('mode-market').style.display = 'flex'; 
+            document.getElementById('mode-market').style.display = 'block';
             document.documentElement.style.setProperty('--current-accent', 'var(--line-red)');
             calculateMarket();
         }
@@ -751,9 +749,6 @@
         const minSalePrice = marketData.min;
         const maxSalePrice = marketData.max;
 
-        document.getElementById('market-sale-min').innerText = minSalePrice.toLocaleString() + " 円";
-        document.getElementById('market-sale-max').innerText = maxSalePrice.toLocaleString() + " 円";
-
         const targetProfit = condition === "中古" ? 2000 : 1000;
 
         if (!isNaN(shippingCost) && shippingCost > 0) {
@@ -794,12 +789,32 @@
     // ==============================================
     // モーダル・DB登録関連
     // ==============================================
+    
+    // 改善点: 手動入力用テキストボックスの表示切り替え
+    function toggleManualProduct() {
+        if (document.getElementById('db-product').value === 'manual') {
+            document.getElementById('db-product-manual').style.display = 'block';
+        } else {
+            document.getElementById('db-product-manual').style.display = 'none';
+        }
+    }
+
     function openDbModal() {
         document.getElementById('db-product').innerHTML = document.getElementById('market-product').innerHTML;
+        
+        // 改善点: プルダウンの最後に「手動で新規追加」オプションを動的に付与
+        const manualOpt = document.createElement('option');
+        manualOpt.value = "manual";
+        manualOpt.innerText = "＋ 手動で新規追加";
+        document.getElementById('db-product').appendChild(manualOpt);
+        
         document.getElementById('db-model').innerHTML = document.getElementById('market-model').innerHTML;
         document.getElementById('db-shipping').innerHTML = document.getElementById('market-shipping-method').innerHTML;
         
         document.getElementById('db-product').value = document.getElementById('market-product').value;
+        document.getElementById('db-product-manual').style.display = 'none';
+        document.getElementById('db-product-manual').value = '';
+        
         document.getElementById('db-model').value = document.getElementById('market-model').value;
         document.getElementById('db-condition').value = document.getElementById('market-condition').value;
         document.getElementById('db-shipping').value = document.getElementById('market-shipping-method').value;
@@ -817,6 +832,7 @@
 
     function resetDbModal() {
         document.getElementById('db-product').selectedIndex = 0;
+        toggleManualProduct();
         document.getElementById('db-model').selectedIndex = 0;
         document.getElementById('db-condition').selectedIndex = 0;
         document.getElementById('db-shipping').selectedIndex = 0;
@@ -826,13 +842,27 @@
     }
 
     function saveToDb() {
-        const product = document.getElementById('db-product').value;
+        let product = document.getElementById('db-product').value;
+        
+        // 改善点: 手動入力が選択されている場合のバリデーション処理
+        if (product === 'manual') {
+            // アンダーバーを空白に置換し、前後の空白を削除
+            product = document.getElementById('db-product-manual').value.trim().replace(/_/g, ' ');
+            if (!product) {
+                alert("新しい製品名を入力してください。");
+                return;
+            }
+        } else if (product === "0") {
+            alert("製品名を選択または入力してください。");
+            return;
+        }
+
         const model = document.getElementById('db-model').value;
         const condition = document.getElementById('db-condition').value;
         const shipping = document.getElementById('db-shipping').value;
 
-        if (product === "0" || condition === "0") {
-            alert("製品名と状態は必ず選択してください。");
+        if (condition === "0") {
+            alert("状態は必ず選択してください。");
             return;
         }
 
@@ -854,15 +884,24 @@
 
         const dbKey = generateDbKey(product, model, condition);
         
-        let userDB = JSON.parse(localStorage.getItem('marketDB')) || {};
-        userDB[dbKey] = {
+        let savedUserDB = JSON.parse(localStorage.getItem('marketDB')) || {};
+        savedUserDB[dbKey] = {
             min: minPrice,
             max: maxPrice,
             shipping: shipping
         };
-        localStorage.setItem('marketDB', JSON.stringify(userDB));
+        localStorage.setItem('marketDB', JSON.stringify(savedUserDB));
 
-        marketDB[dbKey] = userDB[dbKey];
+        marketDB[dbKey] = savedUserDB[dbKey];
+
+        // 改善点: 手動で追加された製品名がメインのプルダウンに無ければ追加する
+        let exists = Array.from(document.getElementById('market-product').options).some(opt => opt.value === product);
+        if (!exists) {
+            const newOpt = document.createElement('option');
+            newOpt.value = product;
+            newOpt.innerText = product;
+            document.getElementById('market-product').appendChild(newOpt);
+        }
 
         alert("相場データを登録しました！");
         closeDbModal();
