@@ -23,7 +23,6 @@
             --current-accent: var(--line-red); 
         }
 
-        /* バウンススクロール防止 */
         html, body {
             overscroll-behavior-y: none; 
         }
@@ -32,7 +31,6 @@
             font-family: 'Line Seed JP', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--bg-color);
             margin: 0;
-            /* 変更: 画面上部の余白を10pxに、左右下は20pxを維持 */
             padding: 10px 20px 20px 20px;
             display: flex;
             flex-direction: column;
@@ -904,15 +902,17 @@
         alert("相場データを登録しました！");
         closeDbModal();
 
+        // 修正: 登録完了後、入力欄を隠し、新しい製品名をプルダウンで選択状態にする
+        document.getElementById('db-product-manual').style.display = 'none';
         document.getElementById('market-product').value = product;
         document.getElementById('market-model').value = model;
         document.getElementById('market-condition').value = condition;
         document.getElementById('market-shipping-method').value = shipping;
         
+        // 修正: 値をセットした後に画面を更新
         calculateMarket();
     }
 
-    // --- 縦スクロール禁止（モーダル内は許可） ---
     document.addEventListener('touchmove', function(event) {
         if (event.target.closest('.modal-content')) {
             return;
