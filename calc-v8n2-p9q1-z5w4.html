@@ -78,7 +78,6 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            /* 中央揃えを解除し、上からキッチリ詰める */
             min-height: 0;
             overflow: hidden;
         }
@@ -239,7 +238,6 @@
             font-weight: 400;
         }
 
-        /* 改善点: ボタンの高さを正確に52pxに指定 */
         .reset-btn {
             width: 100%;
             height: 52px;
@@ -752,6 +750,9 @@
 
         const minSalePrice = marketData.min;
         const maxSalePrice = marketData.max;
+
+        document.getElementById('market-sale-min').innerText = minSalePrice.toLocaleString() + " 円";
+        document.getElementById('market-sale-max').innerText = maxSalePrice.toLocaleString() + " 円";
 
         const targetProfit = condition === "中古" ? 2000 : 1000;
 
