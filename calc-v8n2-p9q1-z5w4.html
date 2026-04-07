@@ -47,8 +47,8 @@
             onSnapshot(collection(db, "marketData"), (snapshot) => {
                 snapshot.docChanges().forEach((change) => {
                     if (change.type === "added" || change.type === "modified") {
+                        // クラウドから来た最新データをメモリに保存
                         window.marketDB[change.doc.id] = change.doc.data();
-                        localStorage.setItem('marketDB', JSON.stringify(window.marketDB));
                         
                         const product = change.doc.data().product;
                         if(product) {
@@ -67,6 +67,7 @@
                         const currentCondition = document.getElementById('market-condition').value;
                         const currentKey = `${currentProduct}_${currentModel}_${currentCondition}`;
                         
+                        // 現在表示中の製品データが更新されたら再計算
                         if(currentKey === change.doc.id) {
                             window.calculateMarket();
                         }
@@ -307,23 +308,6 @@
             transform: scale(0.98);
         }
 
-        /* 一括同期用ボタンのスタイル */
-        .sync-btn {
-            width: 100%;
-            padding: 16px;
-            background-color: #ff9500;
-            color: white;
-            border: none;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 700;
-            font-family: inherit;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.2s;
-            -webkit-tap-highlight-color: transparent;
-        }
-
         #db-modal {
             display: none;
             position: fixed;
@@ -520,8 +504,6 @@
             <button class="reset-btn" style="margin-top: 0; background-color: rgba(142, 142, 147, 0.6);" onclick="resetMarket()">リセット</button>
             <button class="reset-btn" style="margin-top: 0;" onclick="openDbModal()">登録</button>
         </div>
-        
-        <button class="sync-btn" id="sync-btn" onclick="syncAllToFirebase()">過去のデータをすべてクラウドへ同期</button>
     </div>
 
     <div id="mode-calc" style="display: none;">
@@ -667,8 +649,11 @@
 </div>
 
 <script>
-    // グローバル変数としてデータベースを管理
-    window.marketDB = JSON.parse(localStorage.getItem('marketDB')) || {};
+    // ブラウザに残っている過去のローカルデータを完全に削除
+    localStorage.removeItem('marketDB');
+
+    // 今後はFirebaseから取得したデータのみをこの変数に格納して動かします
+    window.marketDB = {};
 
     function generateDbKey(product, model, condition) {
         return `${product}_${model}_${condition}`;
@@ -967,51 +952,6 @@
             saveBtn.disabled = false;
         }
     }
-
-    // --- 過去のデータをFirebaseへ一括同期する機能 ---
-    window.syncAllToFirebase = async function() {
-        const db = window.marketDB;
-        const keys = Object.keys(db);
-        
-        if (keys.length === 0) {
-            alert("同期する過去のデータが見つかりません。");
-            return;
-        }
-
-        const confirmSync = confirm(`ローカルにある ${keys.length} 件のデータをクラウドへ同期しますか？\n（※すでにクラウドにある同名データは上書きされます）`);
-        if (!confirmSync) return;
-
-        const syncBtn = document.getElementById('sync-btn');
-        const originalText = syncBtn.innerText;
-        syncBtn.innerText = "同期中...そのままお待ちください";
-        syncBtn.disabled = true;
-
-        let successCount = 0;
-        for (let key of keys) {
-            const data = db[key];
-            
-            // 古い形式（min/maxのみ）と新しい形式（prices配列）の両方に対応
-            let pricesToSave = [];
-            if (data.prices && data.prices.length > 0) {
-                pricesToSave = data.prices;
-            } else if (data.min && data.max) {
-                pricesToSave = data.min === data.max ? [data.min] : [data.min, data.max];
-            }
-
-            const dataToSave = {
-                product: key.split('_')[0],
-                prices: pricesToSave,
-                shipping: data.shipping || "0"
-            };
-
-            const success = await window.saveToFirestore(key, dataToSave);
-            if (success) successCount++;
-        }
-
-        syncBtn.innerText = originalText;
-        syncBtn.disabled = false;
-        alert(`${successCount} / ${keys.length} 件のデータをクラウドへ同期しました！`);
-    };
 
     document.addEventListener('touchmove', function(event) {
         if (event.target.closest('.modal-content')) {
