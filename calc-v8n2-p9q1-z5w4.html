@@ -23,7 +23,7 @@
             --current-accent: var(--line-red); 
         }
 
-        /* 追加: バウンススクロール防止 */
+        /* バウンススクロール防止 */
         html, body {
             overscroll-behavior-y: none; 
         }
@@ -49,7 +49,8 @@
             background-color: #e5e5ea;
             border-radius: 12px;
             padding: 4px;
-            margin-bottom: 20px;
+            /* 変更: タブ下の余白を10pxに統一 */
+            margin-bottom: 10px;
         }
 
         .tab-btn {
@@ -75,7 +76,8 @@
             background: white;
             border-radius: 16px;
             padding: 24px;
-            margin-bottom: 20px;
+            /* 変更: カード同士の間隔を10pxに統一 */
+            margin-bottom: 10px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
@@ -233,6 +235,7 @@
             font-weight: 700;
             font-family: inherit;
             cursor: pointer;
+            /* カード側のmargin-bottom:10pxと合わせて合計20pxの隙間になります */
             margin-top: 10px;
             transition: all 0.2s;
             -webkit-tap-highlight-color: transparent;
@@ -261,7 +264,6 @@
             max-width: 350px;
             max-height: 90vh;
             overflow-y: auto;
-            /* iOSでのモーダル内スクロールを滑らかにする */
             -webkit-overflow-scrolling: touch; 
         }
 
@@ -912,13 +914,11 @@
         calculateMarket();
     }
 
-    // --- 追加: 縦スクロール禁止（モーダル内は許可）処理 ---
+    // --- 追加: 縦スクロール禁止（モーダル内は許可） ---
     document.addEventListener('touchmove', function(event) {
-        // モーダルのスクロール領域内のタッチ操作は許可する
         if (event.target.closest('.modal-content')) {
             return;
         }
-        // それ以外（背景など）のスクロールは禁止
         event.preventDefault();
     }, { passive: false });
 
