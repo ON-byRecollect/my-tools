@@ -16,7 +16,7 @@
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, collection, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
         // Step 3 で取得した構成オブジェクト
         const firebaseConfig = {
@@ -42,12 +42,52 @@
             }
         };
 
-        // リアルタイムリスナー：Firebase側でデータが変わったら画面を更新
+        // 手動で最新データをクラウドから読み込む関数（更新ボタン用）
+        window.refreshFromFirestore = async function() {
+            const refreshBtn = document.getElementById('refresh-btn');
+            const originalText = refreshBtn.innerText;
+            refreshBtn.innerText = "更新中...";
+            refreshBtn.disabled = true;
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "marketData"));
+                window.marketDB = {}; // 一旦クリアして最新に入れ直す
+                
+                querySnapshot.forEach((doc) => {
+                    window.marketDB[doc.id] = doc.data();
+                    
+                    const product = doc.data().product;
+                    if(product) {
+                        const select = document.getElementById('market-product');
+                        const exists = Array.from(select.options).some(opt => opt.value === product);
+                        if (!exists && product !== "0" && product !== "") {
+                            const opt = document.createElement('option');
+                            opt.value = product;
+                            opt.innerText = product;
+                            select.appendChild(opt);
+                        }
+                    }
+                });
+                
+                // 画面の数字を再計算
+                window.calculateMarket();
+                
+            } catch (error) {
+                console.error("データ更新エラー: ", error);
+                alert("データの更新に失敗しました。通信環境を確認してください。");
+            } finally {
+                setTimeout(() => {
+                    refreshBtn.innerText = originalText;
+                    refreshBtn.disabled = false;
+                }, 500); // 少しだけ待ってからボタンを戻す
+            }
+        };
+
+        // リアルタイムリスナー：Firebase側でデータが変わったら自動で画面を更新
         window.initFirestoreListener = function() {
             onSnapshot(collection(db, "marketData"), (snapshot) => {
                 snapshot.docChanges().forEach((change) => {
                     if (change.type === "added" || change.type === "modified") {
-                        // クラウドから来た最新データをメモリに保存
                         window.marketDB[change.doc.id] = change.doc.data();
                         
                         const product = change.doc.data().product;
@@ -67,7 +107,6 @@
                         const currentCondition = document.getElementById('market-condition').value;
                         const currentKey = `${currentProduct}_${currentModel}_${currentCondition}`;
                         
-                        // 現在表示中の製品データが更新されたら再計算
                         if(currentKey === change.doc.id) {
                             window.calculateMarket();
                         }
@@ -287,25 +326,43 @@
             font-weight: 400;
         }
 
-        .reset-btn {
-            width: 100%;
-            padding: 16px;
-            background-color: rgba(255, 59, 48, 0.8);
+        /* 3つのボタン用の共通スタイル */
+        .action-btn {
+            flex: 1; /* 3等分にする */
+            padding: 16px 0;
             color: white;
             border: none;
             border-radius: 14px;
-            font-size: 16px;
+            font-size: 15px; /* 少し文字を小さくして収まりを良くする */
             font-weight: 700;
             font-family: inherit;
             cursor: pointer;
-            margin-top: 10px;
             transition: all 0.2s;
             -webkit-tap-highlight-color: transparent;
+            text-align: center;
         }
 
-        .reset-btn:active {
+        .action-btn:active {
             opacity: 0.8;
             transform: scale(0.98);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-reset {
+            background-color: rgba(142, 142, 147, 0.8);
+        }
+
+        .btn-refresh {
+            background-color: var(--line-green);
+        }
+
+        .btn-register {
+            background-color: var(--line-red); /* またはお好みの色 */
         }
 
         #db-modal {
@@ -500,9 +557,10 @@
             </div>
         </div>
 
-        <div class="row-flex" style="margin-bottom: 0; margin-top: 10px;">
-            <button class="reset-btn" style="margin-top: 0; background-color: rgba(142, 142, 147, 0.6);" onclick="resetMarket()">リセット</button>
-            <button class="reset-btn" style="margin-top: 0;" onclick="openDbModal()">登録</button>
+        <div class="row-flex" style="margin-bottom: 0; margin-top: 10px; gap: 8px;">
+            <button class="action-btn btn-reset" onclick="resetMarket()">リセット</button>
+            <button class="action-btn btn-register" onclick="openDbModal()">登録</button>
+            <button class="action-btn btn-refresh" id="refresh-btn" onclick="refreshFromFirestore()">更新</button>
         </div>
     </div>
 
@@ -589,7 +647,7 @@
                 </div>
             </div>
         </div>
-        <button class="reset-btn" onclick="resetCalc()">すべてリセット</button>
+        <button class="action-btn btn-reset" style="width: 100%; margin-top: 10px;" onclick="resetCalc()">すべてリセット</button>
     </div>
 
 </div>
