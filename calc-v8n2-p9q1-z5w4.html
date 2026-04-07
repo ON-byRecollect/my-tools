@@ -520,6 +520,8 @@
             <button class="reset-btn" style="margin-top: 0; background-color: rgba(142, 142, 147, 0.6);" onclick="resetMarket()">リセット</button>
             <button class="reset-btn" style="margin-top: 0;" onclick="openDbModal()">登録</button>
         </div>
+        
+        <button class="sync-btn" id="sync-btn" onclick="syncAllToFirebase()">過去のデータをすべてクラウドへ同期</button>
     </div>
 
     <div id="mode-calc" style="display: none;">
@@ -606,8 +608,6 @@
             </div>
         </div>
         <button class="reset-btn" onclick="resetCalc()">すべてリセット</button>
-        
-        <button class="sync-btn" id="sync-btn" onclick="syncAllToFirebase()">過去のデータをすべてクラウドへ同期</button>
     </div>
 
 </div>
@@ -968,7 +968,7 @@
         }
     }
 
-    // --- 追加: 過去のデータをFirebaseへ一括同期する機能 ---
+    // --- 過去のデータをFirebaseへ一括同期する機能 ---
     window.syncAllToFirebase = async function() {
         const db = window.marketDB;
         const keys = Object.keys(db);
