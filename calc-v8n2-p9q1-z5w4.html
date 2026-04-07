@@ -870,8 +870,6 @@
 
         const dbKey = generateDbKey(product, model, condition);
         
-        // --- ここがエラー解消の最重要ポイント ---
-        // 1. ローカルDBに配列ごと保存し、即座に画面を書き換える
         marketDB[dbKey] = {
             prices: prices,
             shipping: shipping
@@ -886,7 +884,6 @@
             document.getElementById('market-product').appendChild(newOpt);
         }
 
-        // モーダルを閉じ、選んだ状態にしてから、すぐに計算を回す（タイムラグなし！）
         closeDbModal();
         document.getElementById('db-product-manual').style.display = 'none';
         document.getElementById('market-product').value = product;
@@ -895,7 +892,6 @@
         document.getElementById('market-shipping-method').value = shipping;
         calculateMarket();
 
-        // 2. その後、裏側でこっそりクラウドへデータ送信する
         const saveBtn = document.getElementById('save-btn');
         const originalBtnText = saveBtn.innerText;
         saveBtn.innerText = "クラウドへ保存中...";
@@ -907,14 +903,14 @@
                 headers: {
                     'Content-Type': 'text/plain',
                 },
+                redirect: 'follow', // 追加されたリダイレクト追従設定
                 body: JSON.stringify({
                     key: dbKey,
                     product: product,
-                    prices: prices, // 配列データをそのまま送信
+                    prices: prices,
                     shipping: shipping
                 })
             });
-            // 送信完了時は邪魔にならないようアラートは出さず、ボタンを戻すのみ
             console.log("クラウド保存完了");
         } catch (error) {
             console.error("GAS送信エラー:", error);
