@@ -134,6 +134,7 @@
             text-overflow: ellipsis;
         }
 
+        /* 修正: input[type="text"] にも同じスタイルを適用 */
         input[type="text"], input[type="number"], select {
             width: 100%;
             padding: 14px;
@@ -515,7 +516,7 @@
             <div class="input-group">
                 <select id="db-product" onchange="toggleManualProduct()">
                     <option value="0">製品名を選択</option>
-                    </select>
+                </select>
                 <input type="text" id="db-product-manual" style="display:none; margin-top:8px;" placeholder="新しい製品名を入力">
             </div>
         </div>
@@ -604,19 +605,20 @@
         return `${product}_${model}_${condition}`;
     }
 
-    // 改善点: ページ読み込み時に、ユーザーが独自に追加した製品名をプルダウンに復元する機能
+    // 修正: ページ読み込み時に手動登録された独自製品名をリストに復活させる
     function initCustomProducts() {
         const select = document.getElementById('market-product');
+        if (!select) return;
         const existing = new Set(Array.from(select.options).map(o => o.value));
         const customSet = new Set();
-        
+
         for (let key in userDB) {
             const p = key.split('_')[0];
             if (!existing.has(p) && p !== "0" && p !== "") {
                 customSet.add(p);
             }
         }
-        
+
         customSet.forEach(p => {
             const opt = document.createElement('option');
             opt.value = p;
@@ -624,9 +626,7 @@
             select.appendChild(opt);
         });
     }
-    // スクリプト実行時にプルダウンを更新
     initCustomProducts();
-
 
     // --- モード切り替え ---
     function switchMode(mode) {
@@ -749,6 +749,9 @@
         const minSalePrice = marketData.min;
         const maxSalePrice = marketData.max;
 
+        document.getElementById('market-sale-min').innerText = minSalePrice.toLocaleString() + " 円";
+        document.getElementById('market-sale-max').innerText = maxSalePrice.toLocaleString() + " 円";
+
         const targetProfit = condition === "中古" ? 2000 : 1000;
 
         if (!isNaN(shippingCost) && shippingCost > 0) {
@@ -790,7 +793,7 @@
     // モーダル・DB登録関連
     // ==============================================
     
-    // 改善点: 手動入力用テキストボックスの表示切り替え
+    // 修正: 手動入力枠の表示/非表示を切り替える関数
     function toggleManualProduct() {
         if (document.getElementById('db-product').value === 'manual') {
             document.getElementById('db-product-manual').style.display = 'block';
@@ -802,7 +805,7 @@
     function openDbModal() {
         document.getElementById('db-product').innerHTML = document.getElementById('market-product').innerHTML;
         
-        // 改善点: プルダウンの最後に「手動で新規追加」オプションを動的に付与
+        // 修正: プルダウンの最後に「手動で新規追加」を動的に生成
         const manualOpt = document.createElement('option');
         manualOpt.value = "manual";
         manualOpt.innerText = "＋ 手動で新規追加";
@@ -812,6 +815,8 @@
         document.getElementById('db-shipping').innerHTML = document.getElementById('market-shipping-method').innerHTML;
         
         document.getElementById('db-product').value = document.getElementById('market-product').value;
+        
+        // 修正: モーダルを開いた時は入力枠をリセット
         document.getElementById('db-product-manual').style.display = 'none';
         document.getElementById('db-product-manual').value = '';
         
@@ -843,26 +848,23 @@
 
     function saveToDb() {
         let product = document.getElementById('db-product').value;
-        
-        // 改善点: 手動入力が選択されている場合のバリデーション処理
+        const model = document.getElementById('db-model').value;
+        const condition = document.getElementById('db-condition').value;
+        const shipping = document.getElementById('db-shipping').value;
+
+        // 修正: 手動入力時の値の取得とサニタイズ（アンダーバーを半角スペースへ）
         if (product === 'manual') {
-            // アンダーバーを空白に置換し、前後の空白を削除
             product = document.getElementById('db-product-manual').value.trim().replace(/_/g, ' ');
             if (!product) {
                 alert("新しい製品名を入力してください。");
                 return;
             }
-        } else if (product === "0") {
-            alert("製品名を選択または入力してください。");
-            return;
-        }
-
-        const model = document.getElementById('db-model').value;
-        const condition = document.getElementById('db-condition').value;
-        const shipping = document.getElementById('db-shipping').value;
-
-        if (condition === "0") {
-            alert("状態は必ず選択してください。");
+            if (condition === "0") {
+                alert("状態は必ず選択してください。");
+                return;
+            }
+        } else if (product === "0" || condition === "0") {
+            alert("製品名と状態は必ず選択してください。");
             return;
         }
 
@@ -894,7 +896,7 @@
 
         marketDB[dbKey] = savedUserDB[dbKey];
 
-        // 改善点: 手動で追加された製品名がメインのプルダウンに無ければ追加する
+        // 修正: 新しい製品名ならメインのプルダウンに自動追加
         let exists = Array.from(document.getElementById('market-product').options).some(opt => opt.value === product);
         if (!exists) {
             const newOpt = document.createElement('option');
