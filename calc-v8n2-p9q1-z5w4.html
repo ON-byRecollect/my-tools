@@ -734,7 +734,6 @@
         const dbKey = generateDbKey(product, model, condition);
         const marketData = marketDB[dbKey];
 
-        // 修正: 過去の古いデータ（F列が空のデータ）でもエラーにならないようにする安全装置
         let prices = [];
         if (marketData) {
             if (marketData.prices && marketData.prices.length > 0) {
@@ -886,6 +885,7 @@
 
         const dbKey = generateDbKey(product, model, condition);
         
+        // 1. ローカルに即時保存
         marketDB[dbKey] = {
             prices: prices,
             shipping: shipping
@@ -900,25 +900,20 @@
             document.getElementById('market-product').appendChild(newOpt);
         }
 
-        closeDbModal();
-        document.getElementById('db-product-manual').style.display = 'none';
-        document.getElementById('market-product').value = product;
-        document.getElementById('market-model').value = model;
-        document.getElementById('market-condition').value = condition;
-        document.getElementById('market-shipping-method').value = shipping;
-        calculateMarket();
-
+        // 2. モーダルを閉じずにボタンの表示を変更
         const saveBtn = document.getElementById('save-btn');
         const originalBtnText = saveBtn.innerText;
         saveBtn.innerText = "クラウドへ保存中...";
         saveBtn.disabled = true;
 
         try {
+            // クラウド（スプレッドシート）へデータ送信
             await fetch(GAS_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'text/plain',
                 },
+                mode: 'no-cors', // 追加: ブラウザのセキュリティブロックを回避
                 redirect: 'follow', 
                 body: JSON.stringify({
                     key: dbKey,
@@ -927,13 +922,23 @@
                     shipping: shipping
                 })
             });
-            console.log("クラウド保存完了");
+            console.log("クラウド保存リクエスト完了");
+            alert("相場データをクラウドに登録しました！");
         } catch (error) {
             console.error("GAS送信エラー:", error);
-            alert("クラウドへの保存に失敗しました。\n※端末内には保存されています。");
+            alert("クラウドへの保存でエラーが発生しました。\n※端末内には保存されています。");
         } finally {
+            // 3. 通信が完了したらボタンを戻し、モーダルを閉じて画面を更新する
             saveBtn.innerText = originalBtnText;
             saveBtn.disabled = false;
+            
+            closeDbModal();
+            document.getElementById('db-product-manual').style.display = 'none';
+            document.getElementById('market-product').value = product;
+            document.getElementById('market-model').value = model;
+            document.getElementById('market-condition').value = condition;
+            document.getElementById('market-shipping-method').value = shipping;
+            calculateMarket();
         }
     }
 
