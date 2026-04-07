@@ -189,6 +189,13 @@
             margin-bottom: 20px;
         }
 
+        .result-grid-2col {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
         .result-box {
             background-color: #fafafa;
             border: 1px solid #f0f0f0;
@@ -727,13 +734,22 @@
         const dbKey = generateDbKey(product, model, condition);
         const marketData = marketDB[dbKey];
 
-        if (!marketData || !marketData.prices || marketData.prices.length === 0) {
+        // 修正: 過去の古いデータ（F列が空のデータ）でもエラーにならないようにする安全装置
+        let prices = [];
+        if (marketData) {
+            if (marketData.prices && marketData.prices.length > 0) {
+                prices = marketData.prices;
+            } else if (marketData.min && marketData.max) {
+                prices = marketData.min === marketData.max ? [marketData.min] : [marketData.min, marketData.max];
+            }
+        }
+
+        if (prices.length === 0) {
             document.getElementById('market-target-cost').innerText = "データ未登録";
             document.getElementById('market-target-cost').style.color = "var(--text-gray)";
             return;
         }
 
-        const prices = marketData.prices;
         const minSalePrice = Math.min(...prices);
         const maxSalePrice = Math.max(...prices);
         const avgSalePrice = Math.floor(prices.reduce((a, b) => a + b, 0) / prices.length);
@@ -903,7 +919,7 @@
                 headers: {
                     'Content-Type': 'text/plain',
                 },
-                redirect: 'follow', // 追加されたリダイレクト追従設定
+                redirect: 'follow', 
                 body: JSON.stringify({
                     key: dbKey,
                     product: product,
