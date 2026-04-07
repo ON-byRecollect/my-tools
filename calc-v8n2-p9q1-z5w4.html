@@ -16,7 +16,7 @@
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
         // Step 3 で取得した構成オブジェクト
         const firebaseConfig = {
@@ -28,11 +28,10 @@
             appId: "1:348625494376:web:e224c2847263ca186bf6dd"
         };
 
-        // Firebaseの初期化
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // グローバルにFirebaseの関数を公開（古い書き方のスクリプトから呼び出せるようにするため）
+        // 新規データの保存用関数
         window.saveToFirestore = async function(dbKey, data) {
             try {
                 await setDoc(doc(db, "marketData", dbKey), data);
@@ -43,16 +42,14 @@
             }
         };
 
-        // アプリ起動時にFirestoreからデータを全件取得し、リアルタイム更新（リスナー）をセットする
+        // リアルタイムリスナー：Firebase側でデータが変わったら画面を更新
         window.initFirestoreListener = function() {
             onSnapshot(collection(db, "marketData"), (snapshot) => {
                 snapshot.docChanges().forEach((change) => {
                     if (change.type === "added" || change.type === "modified") {
-                        // データが追加・更新されたら、ローカルの marketDB を更新して画面を再計算
                         window.marketDB[change.doc.id] = change.doc.data();
                         localStorage.setItem('marketDB', JSON.stringify(window.marketDB));
                         
-                        // プルダウンを最新化
                         const product = change.doc.data().product;
                         if(product) {
                             const select = document.getElementById('market-product');
@@ -65,7 +62,6 @@
                             }
                         }
                         
-                        // もし今その製品を表示中なら、画面の数字をアップデート
                         const currentProduct = document.getElementById('market-product').value;
                         const currentModel = document.getElementById('market-model').value;
                         const currentCondition = document.getElementById('market-condition').value;
@@ -79,7 +75,6 @@
             });
         };
         
-        // ページ読み込み時にリスナー起動
         window.initFirestoreListener();
     </script>
 
@@ -310,6 +305,23 @@
         .reset-btn:active {
             opacity: 0.8;
             transform: scale(0.98);
+        }
+
+        /* 一括同期用ボタンのスタイル */
+        .sync-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: #ff9500;
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
         }
 
         #db-modal {
@@ -594,6 +606,8 @@
             </div>
         </div>
         <button class="reset-btn" onclick="resetCalc()">すべてリセット</button>
+        
+        <button class="sync-btn" id="sync-btn" onclick="syncAllToFirebase()">過去のデータをすべてクラウドへ同期</button>
     </div>
 
 </div>
@@ -929,7 +943,6 @@
         saveBtn.innerText = "クラウドへ保存中...";
         saveBtn.disabled = true;
 
-        // Firebase（Firestore）へのデータ送信
         if (typeof window.saveToFirestore === 'function') {
             const success = await window.saveToFirestore(dbKey, dataToSave);
             
@@ -937,14 +950,12 @@
             saveBtn.disabled = false;
 
             if (success) {
-                // 送信完了後にポップアップを閉じ、画面を更新する
                 closeDbModal();
                 document.getElementById('db-product-manual').style.display = 'none';
                 document.getElementById('market-product').value = product;
                 document.getElementById('market-model').value = model;
                 document.getElementById('market-condition').value = condition;
                 document.getElementById('market-shipping-method').value = shipping;
-                // ※ Firebaseのリスナーが自動的に calculateMarket() を発火させます
                 
                 alert("相場データをクラウドに登録しました！");
             } else {
@@ -956,6 +967,51 @@
             saveBtn.disabled = false;
         }
     }
+
+    // --- 追加: 過去のデータをFirebaseへ一括同期する機能 ---
+    window.syncAllToFirebase = async function() {
+        const db = window.marketDB;
+        const keys = Object.keys(db);
+        
+        if (keys.length === 0) {
+            alert("同期する過去のデータが見つかりません。");
+            return;
+        }
+
+        const confirmSync = confirm(`ローカルにある ${keys.length} 件のデータをクラウドへ同期しますか？\n（※すでにクラウドにある同名データは上書きされます）`);
+        if (!confirmSync) return;
+
+        const syncBtn = document.getElementById('sync-btn');
+        const originalText = syncBtn.innerText;
+        syncBtn.innerText = "同期中...そのままお待ちください";
+        syncBtn.disabled = true;
+
+        let successCount = 0;
+        for (let key of keys) {
+            const data = db[key];
+            
+            // 古い形式（min/maxのみ）と新しい形式（prices配列）の両方に対応
+            let pricesToSave = [];
+            if (data.prices && data.prices.length > 0) {
+                pricesToSave = data.prices;
+            } else if (data.min && data.max) {
+                pricesToSave = data.min === data.max ? [data.min] : [data.min, data.max];
+            }
+
+            const dataToSave = {
+                product: key.split('_')[0],
+                prices: pricesToSave,
+                shipping: data.shipping || "0"
+            };
+
+            const success = await window.saveToFirestore(key, dataToSave);
+            if (success) successCount++;
+        }
+
+        syncBtn.innerText = originalText;
+        syncBtn.disabled = false;
+        alert(`${successCount} / ${keys.length} 件のデータをクラウドへ同期しました！`);
+    };
 
     document.addEventListener('touchmove', function(event) {
         if (event.target.closest('.modal-content')) {
