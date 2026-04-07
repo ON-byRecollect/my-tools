@@ -23,6 +23,11 @@
             --current-accent: var(--line-red); 
         }
 
+        /* 追加: バウンススクロール防止 */
+        html, body {
+            overscroll-behavior-y: none; 
+        }
+
         body {
             font-family: 'Line Seed JP', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--bg-color);
@@ -134,7 +139,6 @@
             text-overflow: ellipsis;
         }
 
-        /* 修正: input[type="text"] にも同じスタイルを適用 */
         input[type="text"], input[type="number"], select {
             width: 100%;
             padding: 14px;
@@ -257,6 +261,8 @@
             max-width: 350px;
             max-height: 90vh;
             overflow-y: auto;
+            /* iOSでのモーダル内スクロールを滑らかにする */
+            -webkit-overflow-scrolling: touch; 
         }
 
         .db-grid {
@@ -605,7 +611,6 @@
         return `${product}_${model}_${condition}`;
     }
 
-    // 修正: ページ読み込み時に手動登録された独自製品名をリストに復活させる
     function initCustomProducts() {
         const select = document.getElementById('market-product');
         if (!select) return;
@@ -749,9 +754,6 @@
         const minSalePrice = marketData.min;
         const maxSalePrice = marketData.max;
 
-        document.getElementById('market-sale-min').innerText = minSalePrice.toLocaleString() + " 円";
-        document.getElementById('market-sale-max').innerText = maxSalePrice.toLocaleString() + " 円";
-
         const targetProfit = condition === "中古" ? 2000 : 1000;
 
         if (!isNaN(shippingCost) && shippingCost > 0) {
@@ -792,8 +794,6 @@
     // ==============================================
     // モーダル・DB登録関連
     // ==============================================
-    
-    // 修正: 手動入力枠の表示/非表示を切り替える関数
     function toggleManualProduct() {
         if (document.getElementById('db-product').value === 'manual') {
             document.getElementById('db-product-manual').style.display = 'block';
@@ -805,7 +805,6 @@
     function openDbModal() {
         document.getElementById('db-product').innerHTML = document.getElementById('market-product').innerHTML;
         
-        // 修正: プルダウンの最後に「手動で新規追加」を動的に生成
         const manualOpt = document.createElement('option');
         manualOpt.value = "manual";
         manualOpt.innerText = "＋ 手動で新規追加";
@@ -816,7 +815,6 @@
         
         document.getElementById('db-product').value = document.getElementById('market-product').value;
         
-        // 修正: モーダルを開いた時は入力枠をリセット
         document.getElementById('db-product-manual').style.display = 'none';
         document.getElementById('db-product-manual').value = '';
         
@@ -852,7 +850,6 @@
         const condition = document.getElementById('db-condition').value;
         const shipping = document.getElementById('db-shipping').value;
 
-        // 修正: 手動入力時の値の取得とサニタイズ（アンダーバーを半角スペースへ）
         if (product === 'manual') {
             product = document.getElementById('db-product-manual').value.trim().replace(/_/g, ' ');
             if (!product) {
@@ -896,7 +893,6 @@
 
         marketDB[dbKey] = savedUserDB[dbKey];
 
-        // 修正: 新しい製品名ならメインのプルダウンに自動追加
         let exists = Array.from(document.getElementById('market-product').options).some(opt => opt.value === product);
         if (!exists) {
             const newOpt = document.createElement('option');
@@ -915,6 +911,17 @@
         
         calculateMarket();
     }
+
+    // --- 追加: 縦スクロール禁止（モーダル内は許可）処理 ---
+    document.addEventListener('touchmove', function(event) {
+        // モーダルのスクロール領域内のタッチ操作は許可する
+        if (event.target.closest('.modal-content')) {
+            return;
+        }
+        // それ以外（背景など）のスクロールは禁止
+        event.preventDefault();
+    }, { passive: false });
+
 </script>
 
 </body>
