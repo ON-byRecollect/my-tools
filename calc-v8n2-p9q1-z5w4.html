@@ -32,7 +32,8 @@
             font-family: 'Line Seed JP', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--bg-color);
             margin: 0;
-            padding: 20px;
+            /* 変更: 画面上部の余白を10pxに、左右下は20pxを維持 */
+            padding: 10px 20px 20px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -49,7 +50,6 @@
             background-color: #e5e5ea;
             border-radius: 12px;
             padding: 4px;
-            /* 変更: タブ下の余白を10pxに統一 */
             margin-bottom: 10px;
         }
 
@@ -76,7 +76,6 @@
             background: white;
             border-radius: 16px;
             padding: 24px;
-            /* 変更: カード同士の間隔を10pxに統一 */
             margin-bottom: 10px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
@@ -235,7 +234,6 @@
             font-weight: 700;
             font-family: inherit;
             cursor: pointer;
-            /* カード側のmargin-bottom:10pxと合わせて合計20pxの隙間になります */
             margin-top: 10px;
             transition: all 0.2s;
             -webkit-tap-highlight-color: transparent;
@@ -914,7 +912,7 @@
         calculateMarket();
     }
 
-    // --- 追加: 縦スクロール禁止（モーダル内は許可） ---
+    // --- 縦スクロール禁止（モーダル内は許可） ---
     document.addEventListener('touchmove', function(event) {
         if (event.target.closest('.modal-content')) {
             return;
