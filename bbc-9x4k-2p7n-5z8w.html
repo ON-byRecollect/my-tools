@@ -16,10 +16,11 @@
 <style>
   :root{
     --bg:#eef0f3; --panel:#ffffff; --line:#d9dce1; --line2:#eceef1;
-    --ink:#1c1c1e; --sub:#8e8e93; --accent:#0071e3;
+    --ink:#1c1c1e; --sub:#8e8e93; --accent:#0071e3; --blue:#2f6fd6;
     --red:#e0362c; --yellow:#fff2a8; --orange:#ef9a2e;
     --of:#9ccc65; --if:#f4d500; --posC:#29a3d6; --posDH:#9aa0a6; --posTou:#e2726e;
     --sen:#e35d6a; --dai:#efa63d; --osae:#7cb342; --head:#e7ebf0;
+    --kb:#4a90d9; --kp:#e0803a;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html,body{margin:0;height:100%;overflow:hidden;}
@@ -49,6 +50,7 @@
   .subttl.big{font-size:12px;color:var(--accent);justify-content:center;background:#f3f7fd;border-radius:8px;padding:4px;margin:2px 2px 5px;}
   .subttl .ln{flex:1;height:1px;background:var(--line2);}
   .redsep{height:3px;background:var(--red);border-radius:2px;margin:8px 2px 4px;}
+  .bluesep{height:3px;background:var(--blue);border-radius:2px;margin:8px 2px 4px;}
   .row{display:flex;align-items:center;gap:5px;padding:4px 4px;border-radius:9px;min-height:34px;touch-action:pan-y;}
   .row.drop-hi{outline:2px dashed var(--accent);outline-offset:-2px;background:#eaf3ff;}
   .row.lifted{opacity:.35;}
@@ -62,11 +64,13 @@
   .pos.mini{flex:0 0 22px;width:22px;height:20px;font-size:11px;border-radius:5px;}
   .subs{display:flex;gap:2px;flex:0 0 auto;}
   .pos.sub{flex:0 0 18px;width:18px;height:16px;font-size:9px;border-radius:4px;}
-  .badge{flex:0 0 auto;height:22px;padding:0 7px;border-radius:6px;display:inline-flex;align-items:center;font-size:11px;font-weight:700;color:#fff;background:var(--posDH);white-space:nowrap;}
+  .badge{flex:0 0 auto;height:24px;padding:0 7px;border-radius:6px;display:inline-flex;align-items:center;font-size:11px;font-weight:700;color:#fff;background:var(--posDH);white-space:nowrap;}
   .badge.sen{background:var(--sen);} .badge.dai{background:var(--dai);} .badge.osae{background:var(--osae);}
+  .badge.kb{background:var(--kb);} .badge.kp{background:var(--kp);}
   .nm{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:6px;}
-  .name{display:inline-flex;align-items:center;padding:3px 8px;border-radius:7px;min-width:74px;max-width:100%;}
+  .name{display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:6px;min-width:74px;max-width:100%;}
   .name .pn{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .name .team{font-size:10px;font-weight:700;color:var(--sub);margin-left:6px;white-space:nowrap;}
   .name.left .pn{color:var(--red);} .name.right .pn{color:var(--ink);}
   .name.empty{background:var(--yellow);}
   .tags{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto;flex:0 0 auto;}
@@ -74,7 +78,7 @@
   .tag.k{background:#fdecd2;color:#c9781a;} .tag.l{background:#fde3d0;color:#c0561f;} .tag.g{background:#e9eef5;color:#4a5b74;}
   .addrow{display:flex;align-items:center;justify-content:center;gap:6px;color:var(--accent);font-size:12px;font-weight:700;padding:5px;border:1px dashed var(--line);border-radius:9px;margin:6px 4px 2px;cursor:pointer;}
   .save-row{display:grid;grid-template-columns:40px 72px 1fr;align-items:center;gap:6px;padding:6px 8px;border-radius:9px;cursor:pointer;border-bottom:1px solid var(--line2);}
-  .save-row:active{background:#f0f4fa;}
+  .save-row:active,.row:active{background:#f0f4fa;}
   .save-row .no{font-weight:700;font-size:14px;text-align:center;color:#333;}
   .save-row .memo{font-size:11px;color:var(--sub);font-weight:700;}
   .save-row .kp{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -84,14 +88,14 @@
   .cycle td{text-align:center;}
   .cyc-ord{font-weight:700;font-size:13px;color:#444;width:30px;}
   .cyc-cell{width:23%;}
-  .cyc-btn{width:40px;height:30px;border-radius:8px;border:1px solid var(--line);background:#fbfcfd;display:inline-flex;align-items:center;justify-content:center;font-size:18px;color:#d98a00;cursor:pointer;}
+  .cyc-btn{width:38px;height:28px;border-radius:8px;border:1px solid var(--line);background:#fbfcfd;display:inline-flex;align-items:center;justify-content:center;font-size:18px;color:#d98a00;cursor:pointer;}
   .cyc-btn.on{background:#fff6d6;border-color:var(--orange);font-weight:700;}
   .cyc-row.done .cyc-ord{color:var(--osae);}
   .cyc-row.done .cyc-btn.on{background:#e6f4d8;border-color:var(--osae);color:#5a8a2a;}
   #ghost{position:fixed;z-index:80;pointer-events:none;transform:translate(-50%,-120%);background:var(--panel);border:2px solid var(--accent);border-radius:10px;padding:6px 12px;font-size:15px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.28);display:none;white-space:nowrap;}
   .overlay{position:fixed;inset:0;background:rgba(0,0,0,.32);display:none;align-items:center;justify-content:center;z-index:90;}
   .overlay.show{display:flex;}
-  .modal{background:var(--panel);border-radius:18px;width:460px;max-width:92vw;max-height:88vh;overflow:auto;padding:18px 20px 20px;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+  .modal{background:var(--panel);border-radius:18px;width:470px;max-width:92vw;max-height:88vh;overflow:auto;padding:18px 20px 20px;box-shadow:0 20px 60px rgba(0,0,0,.3);}
   .modal h3{margin:0 0 14px;font-size:17px;}
   .fld{margin-bottom:13px;}
   .fld label{display:block;font-size:12px;color:var(--sub);font-weight:700;margin-bottom:5px;}
@@ -102,7 +106,7 @@
   .togs button.on{background:var(--ink);color:#fff;border-color:var(--ink);}
   .togs button.on.red{background:var(--red);border-color:var(--red);}
   .chips{display:flex;flex-wrap:wrap;gap:6px;}
-  .chips button{font:inherit;font-size:14px;font-weight:700;padding:7px 12px;border-radius:9px;border:1px solid var(--line);background:#fafbfc;color:var(--sub);cursor:pointer;}
+  .chips button{font:inherit;font-size:14px;font-weight:700;padding:7px 12px;border-radius:9px;border:1px solid var(--line);background:#fafbfc;color:var(--sub);cursor:pointer;min-width:42px;}
   .chips button.on{background:var(--accent);color:#fff;border-color:var(--accent);}
   .mbtns{display:flex;gap:10px;margin-top:18px;}
   .mbtns button{flex:1;font:inherit;font-size:16px;font-weight:700;padding:12px;border-radius:12px;border:0;cursor:pointer;}
@@ -122,20 +126,23 @@
   </header>
   <main>
     <div class="col"><div class="card" style="flex:1 1 auto;">
-      <div class="chead"><h2>野手</h2><span class="sub">打順A・B／ベンチ／2軍</span></div>
+      <div class="chead"><h2>野手</h2><span class="sub">打順A・B／ベンチ／2軍／戦力外・移籍候補</span></div>
       <div class="cbody tight" id="battersBody"></div></div></div>
     <div class="col"><div class="card" style="flex:1 1 auto;">
-      <div class="chead"><h2>投手</h2><span class="sub">先発・第二・抑え・2軍</span></div>
+      <div class="chead"><h2>投手</h2><span class="sub">先発・第二・抑え／2軍／戦力外・移籍候補</span></div>
       <div class="cbody tight" id="pitchersBody"></div></div></div>
     <div class="col">
-      <div class="card" style="flex:1 1 55%;">
+      <div class="card" style="flex:1 1 0;min-height:0;">
         <div class="chead"><h2>セーブデータ</h2><span class="sub">No.1〜50</span><span class="spacer"></span></div>
         <div class="save-head"><div>No</div><div>メモ</div><div>キーポイント</div></div>
         <div class="cbody tight" id="saveBody"></div></div>
-      <div class="card" style="flex:1 1 45%;">
+      <div class="card" style="flex:0 0 auto;">
         <div class="chead"><h2>サイクル安打チェック</h2><span class="spacer"></span>
           <span class="badge" style="background:var(--head);color:var(--sub);cursor:pointer" id="cycleReset">リセット</span></div>
         <div class="cbody" id="cycleBody"></div></div>
+      <div class="card" style="flex:1 1 0;min-height:0;">
+        <div class="chead"><h2>獲得候補</h2><span class="sub">トレード・FAで狙う選手のメモ</span><span class="spacer"></span></div>
+        <div class="cbody tight" id="wishBody"></div></div>
     </div>
   </main>
 </div>
@@ -154,7 +161,7 @@ const PIT_ROLE=["先発","第二","抑え"];
 const BAT_KEYS=["position","subs","name","bat","awaken","limit","growth"];
 const PIT_KEYS=["name","thr","awaken","limit","growth"];
 
-function b(position,name,bat,awaken,limit,growth,subs){return {position,subs:subs||[],name,bat:bat||"右",awaken:awaken||"",limit:!!limit,growth:growth||""};}
+function b(position,name,bat,awaken,limit,growth){return {position,subs:[],name,bat:bat||"右",awaken:awaken||"",limit:!!limit,growth:growth||""};}
 function p(name,thr,awaken,limit,growth){return {name,thr:thr||"右",awaken:awaken||"",limit:!!limit,growth:growth||""};}
 
 function defaults(){return {
@@ -173,6 +180,7 @@ function defaults(){return {
           {role:"代打要員",...b("","","右","",false,"")},
           {role:"代走要員",...b("","","右","",false,"")} ],
   farmB:[ b("左","篠原和磨","左","能力覚醒",false,""), b("三","コステロ","左","",false,""), b("捕","倉橋樹生","右","",false,"") ],
+  releaseB:[],
   pit:{
     starters:[ p("長峰朔久","右","能力覚醒",false,""), p("田谷尊","左","能力覚醒",true,""),
                p("五十嵐陽","右","",true,""), p("","右","",false,""), p("高田真翔","右","能力覚醒",true,"") ].map((o,i)=>({...o,label:String(i+1)})),
@@ -182,8 +190,10 @@ function defaults(){return {
     farm:[ {role:"先発",...p("福留昊汰","左","",false,"")}, {role:"第二",...p("高見拓海","左","",false,"")},
            {role:"先発",...p("金剛直生","右","",false,"")}, {role:"先発",...p("高松玲央","右","",false,"")},
            {role:"第二",...p("中山壮","右","",false,"")}, {role:"第二",...p("寺本幸生","右","",false,"")},
-           {role:"第二",...p("折笠怜央","右","",false,"")}, {role:"第二",...p("田部啓介","右","",false,"")} ]
+           {role:"第二",...p("折笠怜央","右","",false,"")}, {role:"第二",...p("田部啓介","右","",false,"")} ],
+    release:[]
   },
+  wishlist:[],
   save:[ {no:50,memo:"8年目開始",kp:"大松突破（プレイ後）"}, {no:38,memo:"",kp:"大松突破／覚醒（オフ）"},
          {no:39,memo:"",kp:"ドラフト前"}, {no:40,memo:"",kp:"生田入団"},
          {no:43,memo:"9年目開始",kp:"自由契約交渉"}, {no:44,memo:"9年目開始",kp:"自由契約交渉"} ],
@@ -194,7 +204,10 @@ let S=load();
 function load(){ try{const raw=localStorage.getItem(LS_KEY); if(raw)return migrate(JSON.parse(raw));}catch(e){} return defaults(); }
 function migrate(s){ const d=defaults(); const m=Object.assign({},d,s);
   if(!m.cycle||m.cycle.length!==9)m.cycle=d.cycle;
-  [].concat(m.batters&&m.batters.A||[],m.batters&&m.batters.B||[],m.bench||[],m.farmB||[]).forEach(o=>{ if(o&&!Array.isArray(o.subs))o.subs=[]; });
+  if(!Array.isArray(m.releaseB))m.releaseB=[];
+  if(!Array.isArray(m.wishlist))m.wishlist=[];
+  if(!m.pit)m.pit=d.pit; if(!Array.isArray(m.pit.release))m.pit.release=[];
+  [].concat(m.batters&&m.batters.A||[],m.batters&&m.batters.B||[],m.bench||[],m.farmB||[],m.releaseB||[]).forEach(o=>{ if(o&&!Array.isArray(o.subs))o.subs=[]; });
   ["starters","second"].forEach(g=>{ (m.pit&&m.pit[g]||[]).forEach((o,i)=>{ if(o&&o.label===undefined)o.label=g==="starters"?String(i+1):(i+1)+"-"+(i+1); }); });
   return m; }
 function save(){ try{localStorage.setItem(LS_KEY,JSON.stringify(S));}catch(e){} }
@@ -203,23 +216,24 @@ function escapeH(s){return String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;
 function escapeAttr(s){return String(s).replace(/"/g,"&quot;").replace(/</g,"&lt;");}
 function posClass(p){ if(p==="投")return"tou"; if(p==="捕")return"c"; if(p==="指")return"dh"; if(["一","二","三","遊"].includes(p))return"if"; if(["左","中","右"].includes(p))return"of"; return"none"; }
 function tagsHTML(o){ let h=""; if(o.awaken)h+=`<span class="tag k">${o.awaken}</span>`; if(o.limit)h+=`<span class="tag l">限界突破</span>`; if(o.growth)h+=`<span class="tag g">${o.growth}</span>`; return h?`<span class="tags">${h}</span>`:""; }
-function nameHTML(o,kind){
+function nameHTML(o,kind,team){
   const isTou = kind==="bat" && o.position==="投";
   const empty = !o.name && !isTou;
   const dir = ((kind==="pit"?o.thr:o.bat)==="左")?"left":"right";
-  return `<div class="nm"><span class="name ${dir} ${empty?"empty":""}"><span class="pn">${o.name?escapeH(o.name):""}</span></span>${tagsHTML(o)}</div>`;
+  const t = team ? `<span class="team">${escapeH(team)}</span>` : "";
+  return `<div class="nm"><span class="name ${dir} ${empty?"empty":""}"><span class="pn">${o.name?escapeH(o.name):""}</span>${t}</span>${tagsHTML(o)}</div>`;
 }
 function subBadges(o){ if(!o.subs||!o.subs.length)return ""; return `<span class="subs">`+o.subs.map(s=>`<span class="pos sub ${posClass(s)}">${s}</span>`).join("")+`</span>`; }
 
-function getBatObj(g,i){ if(g==="A"||g==="B")return S.batters[g][i]; if(g==="bench")return S.bench[i]; if(g==="farmB")return S.farmB[i]; }
+function getBatObj(g,i){ if(g==="A"||g==="B")return S.batters[g][i]; if(g==="bench")return S.bench[i]; if(g==="farmB")return S.farmB[i]; if(g==="releaseB")return S.releaseB[i]; }
 function getPitObj(g,i){ return S.pit[g][i]; }
 function getPayload(cat,g,i){ const o=cat==="bat"?getBatObj(g,i):getPitObj(g,i); const keys=cat==="bat"?BAT_KEYS:PIT_KEYS; const r={}; keys.forEach(k=>r[k]=o[k]); return r; }
 function setPayload(cat,g,i,pl){ Object.assign(cat==="bat"?getBatObj(g,i):getPitObj(g,i), pl); }
 function swapPayload(cat,g1,i1,g2,i2){ const a=getPayload(cat,g1,i1), c=getPayload(cat,g2,i2); setPayload(cat,g1,i1,c); setPayload(cat,g2,i2,a); }
 
-/* position counts (dedup by name) */
 function positionCounts(){
   const seen=new Set(), cnt={}; FIELD_POS.forEach(p=>cnt[p]=0);
+  /* 戦力外・移籍候補は保有戦力の把握のためカウント対象外 */
   [].concat(S.batters.A,S.batters.B,S.bench,S.farmB).forEach(o=>{ if(o.name&&!seen.has(o.name)){ seen.add(o.name); if(cnt[o.position]!==undefined)cnt[o.position]++; } });
   return cnt;
 }
@@ -229,7 +243,6 @@ function renderCounts(){
   document.getElementById("countBar").innerHTML=h;
 }
 
-/* render */
 function batRow(o,g,i,lead,showSub){
   return `<div class="row" data-cat="bat" data-g="${g}" data-i="${i}">${lead}<span class="pos ${posClass(o.position)}">${o.position||"—"}</span>${showSub?subBadges(o):""}${nameHTML(o,"bat")}</div>`;
 }
@@ -244,11 +257,15 @@ function renderBatters(){
   h+=`<div class="redsep"></div><div class="subttl" style="color:var(--red)">2軍（昇格候補）<span class="ln"></span></div>`;
   S.farmB.forEach((o,i)=> h+=batRow(o,"farmB",i,`<span class="ord"></span>`,true));
   h+=`<div class="addrow" data-add="farmB">＋ 2軍野手を追加</div>`;
+  h+=`<div class="bluesep"></div><div class="subttl" style="color:var(--blue)">戦力外・移籍候補<span class="ln"></span></div>`;
+  S.releaseB.forEach((o,i)=> h+=batRow(o,"releaseB",i,`<span class="ord"></span>`,true));
+  h+=`<div class="addrow" data-add="releaseB">＋ 戦力外・移籍候補を追加</div>`;
   document.getElementById("battersBody").innerHTML=h;
 }
 function pitRow(o,g,i,label,cls,roleText){
   return `<div class="row" data-cat="pit" data-g="${g}" data-i="${i}"><span class="rot">${escapeH(label)}</span><span class="badge ${cls}">${roleText}</span>${nameHTML(o,"pit")}</div>`;
 }
+function pitFarmRow(o,g,i){ const cls=o.role==="先発"?"sen":o.role==="抑え"?"osae":"dai"; return pitRow(o,g,i,"",cls,o.role||"第二"); }
 function renderPitchers(){
   let h=`<div class="subttl">先発<span class="ln"></span></div>`;
   S.pit.starters.forEach((o,i)=> h+=pitRow(o,"starters",i,o.label!=null?o.label:(i+1),"sen","先発"));
@@ -257,9 +274,24 @@ function renderPitchers(){
   h+=`<div class="subttl">抑え<span class="ln"></span></div>`;
   S.pit.closer.forEach((o,i)=> h+=pitRow(o,"closer",i,"11","osae","抑え"));
   h+=`<div class="redsep"></div><div class="subttl" style="color:var(--red)">2軍（昇格候補）<span class="ln"></span></div>`;
-  S.pit.farm.forEach((o,i)=>{ const cls=o.role==="先発"?"sen":o.role==="抑え"?"osae":"dai"; h+=pitRow(o,"farm",i,"",cls,o.role||"第二"); });
+  S.pit.farm.forEach((o,i)=> h+=pitFarmRow(o,"farm",i));
   h+=`<div class="addrow" data-add="farmP">＋ 2軍投手を追加</div>`;
+  h+=`<div class="bluesep"></div><div class="subttl" style="color:var(--blue)">戦力外・移籍候補<span class="ln"></span></div>`;
+  S.pit.release.forEach((o,i)=> h+=pitFarmRow(o,"release",i));
+  h+=`<div class="addrow" data-add="releaseP">＋ 戦力外・移籍候補を追加</div>`;
   document.getElementById("pitchersBody").innerHTML=h;
+}
+function renderWish(){
+  let h="";
+  S.wishlist.forEach((o,i)=>{
+    let badge, extra="";
+    if(o.kind==="投手"){ const cls=o.role==="先発"?"sen":o.role==="抑え"?"osae":"dai"; badge=`<span class="badge ${cls}">${o.role||"第二"}</span>`; }
+    else { badge=`<span class="pos ${posClass(o.position)}">${o.position||"—"}</span>`; extra=subBadges(o); }
+    const kb=`<span class="badge ${o.kind==="投手"?"kp":"kb"}">${o.kind||"野手"}</span>`;
+    h+=`<div class="row" data-wish="${i}">${kb}${badge}${extra}${nameHTML(o,o.kind==="投手"?"pit":"bat",o.team)}</div>`;
+  });
+  h+=`<div class="addrow" data-add="wish">＋ 獲得候補を追加</div>`;
+  document.getElementById("wishBody").innerHTML=h;
 }
 function renderSave(){
   let h=""; S.save.forEach((o,i)=> h+=`<div class="save-row" data-save="${i}"><span class="no">${o.no||"—"}</span><span class="memo">${escapeH(o.memo||"")}</span><span class="kp">${escapeH(o.kp||"")}</span></div>`);
@@ -273,15 +305,18 @@ function renderCycle(){
     row.forEach((v,c)=> h+=`<td class="cyc-cell"><span class="cyc-btn ${v?"on":""}" data-cyc="${r},${c}">${v?"○":""}</span></td>`); h+=`</tr>`; });
   h+=`</tbody></table>`; document.getElementById("cycleBody").innerHTML=h;
 }
-function renderAll(){ renderCounts(); renderBatters(); renderPitchers(); renderSave(); renderCycle(); }
+function renderAll(){ renderCounts(); renderBatters(); renderPitchers(); renderWish(); renderSave(); renderCycle(); }
 
 function doAdd(type){
   if(type==="bench"){ S.bench.push({role:"守備要員",...b("","","右","",false,"")}); save(); renderBatters(); renderCounts(); }
   else if(type==="farmB"){ S.farmB.push(b("","","右","",false,"")); save(); renderBatters(); renderCounts(); }
+  else if(type==="releaseB"){ S.releaseB.push(b("","","右","",false,"")); save(); renderBatters(); renderCounts(); }
   else if(type==="farmP"){ S.pit.farm.push({role:"第二",...p("","右","",false,"")}); save(); renderPitchers(); }
+  else if(type==="releaseP"){ S.pit.release.push({role:"第二",...p("","右","",false,"")}); save(); renderPitchers(); }
+  else if(type==="wish"){ openWishModal(null); }
   else if(type==="save"){ S.save.push({no:"",memo:"",kp:""}); save(); renderSave(); editSave(S.save.length-1); }
 }
-function tapEdit(cat,g,i){ if(cat==="bat"){ if(g==="A"||g==="B")editBatter(g,i); else if(g==="bench")editBench(i); else editFarmB(i); } else editPit(g,i); }
+function tapEdit(cat,g,i){ if(cat==="bat"){ if(g==="A"||g==="B")editBatter(g,i); else if(g==="bench")editBench(i); else if(g==="farmB")editFarmB(i); else editReleaseB(i); } else editPit(g,i); }
 
 /* long-press drag */
 let drag=null; const ghost=document.getElementById("ghost");
@@ -314,11 +349,12 @@ window.addEventListener("touchmove",e=>{ if(drag&&drag.started)e.preventDefault(
 ["battersBody","pitchersBody"].forEach(id=>{ const box=document.getElementById(id);
   box.addEventListener("pointerdown",e=>{ if(e.target.closest('[data-add]'))return; onDown(e); });
   box.addEventListener("click",e=>{ const a=e.target.closest('[data-add]'); if(a)doAdd(a.dataset.add); }); });
+document.getElementById("wishBody").addEventListener("click",e=>{ const a=e.target.closest('[data-add]'); if(a){doAdd("wish");return;} const r=e.target.closest('[data-wish]'); if(r)openWishModal(parseInt(r.dataset.wish,10)); });
 document.getElementById("saveBody").addEventListener("click",e=>{ const a=e.target.closest('[data-add]'); if(a){doAdd("save");return;} const r=e.target.closest('[data-save]'); if(r)editSave(parseInt(r.dataset.save,10)); });
 document.getElementById("cycleBody").addEventListener("click",e=>{ const c=e.target.closest('[data-cyc]'); if(!c)return; const [r,col]=c.dataset.cyc.split(",").map(Number); S.cycle[r][col]=!S.cycle[r][col]; save(); renderCycle(); });
 document.getElementById("cycleReset").addEventListener("click",()=>{ S.cycle=Array.from({length:9},()=>[false,false,false,false]); save(); renderCycle(); });
 
-/* modal */
+/* modal helpers */
 const overlay=document.getElementById("overlay"), modalEl=document.getElementById("modal");
 function closeModal(){ overlay.classList.remove("show"); }
 overlay.addEventListener("click",e=>{ if(e.target===overlay)closeModal(); });
@@ -329,15 +365,17 @@ function fldSelect(id,label,opts,val){ let list=opts.slice(); if(!list.includes(
   return `<div class="fld"><label>${label}</label><select id="${id}">${o}</select></div>`; }
 function fldToggle(id,label,opts,val,redVal){ const btns=opts.map(x=>`<button type="button" data-v="${x}" class="${x===val?"on":""} ${x===redVal?"red":""}">${x}</button>`).join(""); return `<div class="fld"><label>${label}</label><div class="togs" id="${id}">${btns}</div></div>`; }
 function fldChips(id,label,opts,sel){ const b=opts.map(x=>`<button type="button" data-v="${x}" class="${sel.includes(x)?"on":""}">${x}</button>`).join(""); return `<div class="fld"><label>${label}</label><div class="chips" id="${id}">${b}</div></div>`; }
-function bindToggle(id){ const box=document.getElementById(id); box.addEventListener("click",e=>{ const btn=e.target.closest("button"); if(!btn)return; box.querySelectorAll("button").forEach(x=>x.classList.remove("on")); btn.classList.add("on"); }); }
-function bindChips(id){ const box=document.getElementById(id); box.addEventListener("click",e=>{ const btn=e.target.closest("button"); if(btn)btn.classList.toggle("on"); }); }
+function fldRadio(id,label,opts,val){ const b=opts.map(x=>`<button type="button" data-v="${x}" class="${x===val?"on":""}">${x}</button>`).join(""); return `<div class="fld"><label>${label}</label><div class="chips" id="${id}">${b}</div></div>`; }
+function bindToggle(id){ const box=document.getElementById(id); if(!box)return; box.addEventListener("click",e=>{ const btn=e.target.closest("button"); if(!btn)return; box.querySelectorAll("button").forEach(x=>x.classList.remove("on")); btn.classList.add("on"); }); }
+function bindChips(id){ const box=document.getElementById(id); if(!box)return; box.addEventListener("click",e=>{ const btn=e.target.closest("button"); if(btn)btn.classList.toggle("on"); }); }
+function bindRadio(id){ const box=document.getElementById(id); if(!box)return; box.addEventListener("click",e=>{ const btn=e.target.closest("button"); if(!btn)return; const on=btn.classList.contains("on"); box.querySelectorAll("button").forEach(x=>x.classList.remove("on")); if(!on)btn.classList.add("on"); }); }
 function togVal(id){ const on=document.querySelector(`#${id} button.on`); return on?on.dataset.v:""; }
 function chipsVal(id){ return Array.from(document.querySelectorAll(`#${id} button.on`)).map(x=>x.dataset.v); }
 
 function openBatterModal(title,o,onSave,onDelete,isBench){
   let html=`<h3>${title}</h3>`;
   if(isBench)html+=fldSelect("f_role","役割",["守備要員","代打要員","代走要員"],o.role||"守備要員");
-  html+=fldSelect("f_pos","メインポジション",MAIN_POS,o.position||"");
+  html+=fldRadio("f_pos","メインポジション（1つ）",MAIN_POS,o.position||"");
   html+=fldChips("f_subs","サブポジション（複数可）",SUB_POS,o.subs||[]);
   html+=fldText("f_name","選手名",o.name);
   html+=fldToggle("f_bat","打席",["右","左"],o.bat||"右","左");
@@ -345,30 +383,71 @@ function openBatterModal(title,o,onSave,onDelete,isBench){
   html+=fldToggle("f_lim","限界突破",["なし","あり"],o.limit?"あり":"なし","");
   html+=fldSelect("f_grw","成長タイプ",GROWTH,o.growth||"");
   html+=`<div class="mbtns">`+(onDelete?`<button class="del" id="m_del">削除</button>`:"")+`<button class="cancel" id="m_cancel">キャンセル</button><button class="ok" id="m_ok">保存</button></div>`;
-  modalEl.innerHTML=html; overlay.classList.add("show"); bindToggle("f_bat"); bindToggle("f_lim"); bindChips("f_subs");
+  modalEl.innerHTML=html; overlay.classList.add("show"); bindRadio("f_pos"); bindChips("f_subs"); bindToggle("f_bat"); bindToggle("f_lim");
   document.getElementById("m_cancel").onclick=closeModal;
-  document.getElementById("m_ok").onclick=()=>{ const r={position:document.getElementById("f_pos").value,subs:chipsVal("f_subs"),name:document.getElementById("f_name").value.trim(),bat:togVal("f_bat")||"右",awaken:document.getElementById("f_awk").value,limit:togVal("f_lim")==="あり",growth:document.getElementById("f_grw").value}; if(isBench)r.role=document.getElementById("f_role").value; onSave(r); save(); renderAll(); closeModal(); };
+  document.getElementById("m_ok").onclick=()=>{ const r={position:togVal("f_pos"),subs:chipsVal("f_subs"),name:document.getElementById("f_name").value.trim(),bat:togVal("f_bat")||"右",awaken:document.getElementById("f_awk").value,limit:togVal("f_lim")==="あり",growth:document.getElementById("f_grw").value}; if(isBench)r.role=document.getElementById("f_role").value; onSave(r); save(); renderAll(); closeModal(); };
   if(onDelete)document.getElementById("m_del").onclick=()=>{ if(confirm("この行を削除しますか？")){ onDelete(); save(); renderAll(); closeModal(); } };
 }
 window.editBatter=(g,i)=>openBatterModal(`打順${g} ${i+1}番 編集`,S.batters[g][i],r=>{S.batters[g][i]=r;},null,false);
 window.editBench=(i)=>openBatterModal("ベンチ編集",S.bench[i],r=>{S.bench[i]=r;},()=>{S.bench.splice(i,1);},true);
 window.editFarmB=(i)=>openBatterModal("2軍野手 編集",S.farmB[i],r=>{S.farmB[i]=r;},()=>{S.farmB.splice(i,1);},false);
-window.editPit=function(group,i){
-  const o=S.pit[group][i], isFarm=group==="farm", hasLabel=(group==="starters"||group==="second"), roleFixed=group==="starters"?"先発":group==="second"?"第二":"抑え";
-  let html=`<h3>${isFarm?"2軍投手 編集":(roleFixed+" 編集")}</h3>`;
-  if(isFarm)html+=fldSelect("f_role","位置",PIT_ROLE,o.role||"第二");
+window.editReleaseB=(i)=>openBatterModal("戦力外・移籍候補（野手）編集",S.releaseB[i],r=>{S.releaseB[i]=r;},()=>{S.releaseB.splice(i,1);},false);
+
+function openPitModal(title,o,onSave,onDelete,hasLabel,isFarmLike){
+  let html=`<h3>${title}</h3>`;
+  if(isFarmLike)html+=fldSelect("f_role","位置",PIT_ROLE,o.role||"第二");
   if(hasLabel)html+=fldText("f_lab","登板ラベル",o.label);
   html+=fldText("f_name","選手名",o.name);
   html+=fldToggle("f_thr","投球",["右","左"],o.thr||"右","左");
   html+=fldSelect("f_awk","覚醒",AWAKEN,o.awaken||"");
   html+=fldToggle("f_lim","限界突破",["なし","あり"],o.limit?"あり":"なし","");
   html+=fldSelect("f_grw","成長タイプ",GROWTH,o.growth||"");
-  html+=`<div class="mbtns">`+(isFarm?`<button class="del" id="m_del">削除</button>`:"")+`<button class="cancel" id="m_cancel">キャンセル</button><button class="ok" id="m_ok">保存</button></div>`;
+  html+=`<div class="mbtns">`+(onDelete?`<button class="del" id="m_del">削除</button>`:"")+`<button class="cancel" id="m_cancel">キャンセル</button><button class="ok" id="m_ok">保存</button></div>`;
   modalEl.innerHTML=html; overlay.classList.add("show"); bindToggle("f_thr"); bindToggle("f_lim");
   document.getElementById("m_cancel").onclick=closeModal;
-  document.getElementById("m_ok").onclick=()=>{ const r={name:document.getElementById("f_name").value.trim(),thr:togVal("f_thr")||"右",awaken:document.getElementById("f_awk").value,limit:togVal("f_lim")==="あり",growth:document.getElementById("f_grw").value}; if(isFarm)r.role=document.getElementById("f_role").value; if(hasLabel)r.label=document.getElementById("f_lab").value.trim(); S.pit[group][i]=r; save(); renderAll(); closeModal(); };
-  if(isFarm)document.getElementById("m_del").onclick=()=>{ if(confirm("この行を削除しますか？")){ S.pit.farm.splice(i,1); save(); renderPitchers(); closeModal(); } };
+  document.getElementById("m_ok").onclick=()=>{ const r={name:document.getElementById("f_name").value.trim(),thr:togVal("f_thr")||"右",awaken:document.getElementById("f_awk").value,limit:togVal("f_lim")==="あり",growth:document.getElementById("f_grw").value}; if(isFarmLike)r.role=document.getElementById("f_role").value; if(hasLabel)r.label=document.getElementById("f_lab").value.trim(); onSave(r); save(); renderAll(); closeModal(); };
+  if(onDelete)document.getElementById("m_del").onclick=()=>{ if(confirm("この行を削除しますか？")){ onDelete(); save(); renderAll(); closeModal(); } };
+}
+window.editPit=function(group,i){
+  const o=S.pit[group][i], isFarm=(group==="farm"||group==="release"), hasLabel=(group==="starters"||group==="second");
+  const title=group==="farm"?"2軍投手 編集":group==="release"?"戦力外・移籍候補（投手）編集":(group==="starters"?"先発":group==="second"?"第二":"抑え")+" 編集";
+  openPitModal(title,o,r=>{S.pit[group][i]=r;}, isFarm?()=>{S.pit[group].splice(i,1);}:null, hasLabel, isFarm);
 };
+
+/* wishlist modal (野手/投手 + 所属球団) */
+function openWishModal(idx){
+  const isNew = idx==null;
+  const o = isNew ? {kind:"野手",team:"",name:"",position:"",subs:[],bat:"右",role:"先発",thr:"右",awaken:"",limit:false,growth:""} : Object.assign({subs:[]},S.wishlist[idx]);
+  let html=`<h3>獲得候補 ${isNew?"追加":"編集"}</h3>`;
+  html+=fldToggle("w_kind","種別",["野手","投手"],o.kind||"野手","");
+  html+=fldText("w_team","所属球団",o.team);
+  html+=fldText("w_name","選手名",o.name);
+  html+=`<div id="w_fields"></div>`;
+  html+=fldSelect("w_awk","覚醒",AWAKEN,o.awaken||"");
+  html+=fldToggle("w_lim","限界突破",["なし","あり"],o.limit?"あり":"なし","");
+  html+=fldSelect("w_grw","成長タイプ",GROWTH,o.growth||"");
+  html+=`<div class="mbtns">`+(isNew?"":`<button class="del" id="m_del">削除</button>`)+`<button class="cancel" id="m_cancel">キャンセル</button><button class="ok" id="m_ok">保存</button></div>`;
+  modalEl.innerHTML=html; overlay.classList.add("show");
+  bindToggle("w_kind"); bindToggle("w_lim");
+  function renderKind(kind){
+    const box=document.getElementById("w_fields");
+    if(kind==="投手"){ box.innerHTML=fldSelect("w_role","位置",PIT_ROLE,o.role||"先発")+fldToggle("w_thr","投球",["右","左"],o.thr||"右","左"); bindToggle("w_thr"); }
+    else { box.innerHTML=fldRadio("w_pos","メインポジション（1つ）",MAIN_POS,o.position||"")+fldChips("w_subs","サブポジション（複数可）",SUB_POS,o.subs||[])+fldToggle("w_bat","打席",["右","左"],o.bat||"右","左"); bindRadio("w_pos"); bindChips("w_subs"); bindToggle("w_bat"); }
+  }
+  renderKind(o.kind||"野手");
+  document.querySelector("#w_kind").addEventListener("click",e=>{ const btn=e.target.closest("button"); if(btn)setTimeout(()=>renderKind(togVal("w_kind")),0); });
+  document.getElementById("m_cancel").onclick=closeModal;
+  document.getElementById("m_ok").onclick=()=>{
+    const kind=togVal("w_kind")||"野手";
+    const r={kind,team:document.getElementById("w_team").value.trim(),name:document.getElementById("w_name").value.trim(),awaken:document.getElementById("w_awk").value,limit:togVal("w_lim")==="あり",growth:document.getElementById("w_grw").value};
+    if(kind==="投手"){ r.role=document.getElementById("w_role").value; r.thr=togVal("w_thr")||"右"; }
+    else { r.position=togVal("w_pos"); r.subs=chipsVal("w_subs"); r.bat=togVal("w_bat")||"右"; }
+    if(isNew)S.wishlist.push(r); else S.wishlist[idx]=r;
+    save(); renderWish(); closeModal();
+  };
+  if(!isNew)document.getElementById("m_del").onclick=()=>{ if(confirm("この獲得候補を削除しますか？")){ S.wishlist.splice(idx,1); save(); renderWish(); closeModal(); } };
+}
+
 window.editSave=function(i){ const o=S.save[i];
   let html=`<h3>セーブ記録 編集</h3>`+fldNum("f_no","No（1〜50）",o.no)+fldText("f_memo","メモ",o.memo)+fldText("f_kp","キーポイント",o.kp)+`<div class="mbtns"><button class="del" id="m_del">削除</button><button class="cancel" id="m_cancel">キャンセル</button><button class="ok" id="m_ok">保存</button></div>`;
   modalEl.innerHTML=html; overlay.classList.add("show");
