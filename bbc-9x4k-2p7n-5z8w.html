@@ -35,6 +35,9 @@
   #countBar{display:flex;align-items:center;flex-wrap:wrap;gap:2px 4px;}
   .cchip{display:inline-flex;align-items:center;gap:4px;padding:2px 8px 2px 2px;font-size:13px;font-weight:700;color:#333;background:#f5f6f8;border-radius:20px;}
   .cchip b{font-size:14px;}
+  .cchip.total{background:#eaf1fb;padding-left:9px;}
+  .cchip.total.over{background:#fdeceb;color:var(--red);}
+  .cchip.total.over b{color:var(--red);}
   .clabel{font-size:11px;color:var(--sub);font-weight:700;margin-right:2px;}
   main{flex:1 1 auto;display:grid;grid-template-columns:1.72fr 1fr 1fr;gap:10px;padding:10px;min-height:0;}
   .col{display:flex;flex-direction:column;gap:10px;min-height:0;}
@@ -121,19 +124,17 @@
   <header>
     <span class="clabel">登録人数</span>
     <div id="countBar"></div>
-    <div class="spacer"></div>
-    <div class="hint">タップで編集／名前を長押しでドラッグ移動／端末内に自動保存</div>
   </header>
   <main>
     <div class="col"><div class="card" style="flex:1 1 auto;">
-      <div class="chead"><h2>野手</h2><span class="sub">打順A・B／ベンチ／2軍／戦力外・移籍候補</span></div>
+      <div class="chead"><h2>野手</h2></div>
       <div class="cbody tight" id="battersBody"></div></div></div>
     <div class="col"><div class="card" style="flex:1 1 auto;">
-      <div class="chead"><h2>投手</h2><span class="sub">先発・第二・抑え／2軍／戦力外・移籍候補</span></div>
+      <div class="chead"><h2>投手</h2></div>
       <div class="cbody tight" id="pitchersBody"></div></div></div>
     <div class="col">
       <div class="card" style="flex:1 1 0;min-height:0;">
-        <div class="chead"><h2>セーブデータ</h2><span class="sub">No.1〜50</span><span class="spacer"></span></div>
+        <div class="chead"><h2>セーブデータ</h2><span class="spacer"></span></div>
         <div class="save-head"><div>No</div><div>メモ</div><div>キーポイント</div></div>
         <div class="cbody tight" id="saveBody"></div></div>
       <div class="card" style="flex:0 0 auto;">
@@ -141,7 +142,7 @@
           <span class="badge" style="background:var(--head);color:var(--sub);cursor:pointer" id="cycleReset">リセット</span></div>
         <div class="cbody" id="cycleBody"></div></div>
       <div class="card" style="flex:1 1 0;min-height:0;">
-        <div class="chead"><h2>獲得候補</h2><span class="sub">トレード・FAで狙う選手のメモ</span><span class="spacer"></span></div>
+        <div class="chead"><h2>獲得候補</h2><span class="spacer"></span></div>
         <div class="cbody tight" id="wishBody"></div></div>
     </div>
   </main>
@@ -231,15 +232,21 @@ function getPayload(cat,g,i){ const o=cat==="bat"?getBatObj(g,i):getPitObj(g,i);
 function setPayload(cat,g,i,pl){ Object.assign(cat==="bat"?getBatObj(g,i):getPitObj(g,i), pl); }
 function swapPayload(cat,g1,i1,g2,i2){ const a=getPayload(cat,g1,i1), c=getPayload(cat,g2,i2); setPayload(cat,g1,i1,c); setPayload(cat,g2,i2,a); }
 
-function positionCounts(){
-  const seen=new Set(), cnt={}; FIELD_POS.forEach(p=>cnt[p]=0);
-  /* 戦力外・移籍候補は保有戦力の把握のためカウント対象外 */
-  [].concat(S.batters.A,S.batters.B,S.bench,S.farmB).forEach(o=>{ if(o.name&&!seen.has(o.name)){ seen.add(o.name); if(cnt[o.position]!==undefined)cnt[o.position]++; } });
-  return cnt;
+const REG_MAX=70;
+function counts(){
+  const cnt={}; FIELD_POS.forEach(p=>cnt[p]=0);
+  const bat=new Set();
+  [].concat(S.batters.A,S.batters.B,S.bench,S.farmB,S.releaseB).forEach(o=>{ if(o.name&&!bat.has(o.name)){ bat.add(o.name); if(cnt[o.position]!==undefined)cnt[o.position]++; } });
+  const pit=new Set();
+  [].concat(S.pit.starters,S.pit.second,S.pit.closer,S.pit.farm,S.pit.release).forEach(o=>{ if(o.name)pit.add(o.name); });
+  return {pos:cnt, bat:bat.size, pit:pit.size};
 }
 function renderCounts(){
-  const c=positionCounts(); let h="";
-  FIELD_POS.forEach(pp=> h+=`<span class="cchip"><span class="pos mini ${posClass(pp)}">${pp}</span><b>${c[pp]||0}</b></span>`);
+  const c=counts(), total=c.bat+c.pit, over=total>=REG_MAX;
+  let h="";
+  FIELD_POS.forEach(pp=> h+=`<span class="cchip"><span class="pos mini ${posClass(pp)}">${pp}</span><b>${c.pos[pp]||0}</b></span>`);
+  h+=`<span class="cchip"><span class="pos mini tou">投</span><b>${c.pit}</b></span>`;
+  h+=`<span class="cchip total ${over?"over":""}">合計 <b>${total}</b> / ${REG_MAX}</span>`;
   document.getElementById("countBar").innerHTML=h;
 }
 
