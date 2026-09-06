@@ -10,8 +10,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=LINE+Seed+JP:wght@400;700&display=swap" rel="stylesheet">
-<link rel="icon" href="sd3.png" type="image/png">
-<link rel="apple-touch-icon" href="sd3.png">
+<link rel="icon" href="icon.jpg">
+<link rel="apple-touch-icon" href="icon.jpg">
+<link rel="apple-touch-icon" sizes="180x180" href="icon.jpg">
 <title>プロスピ ペナント管理 (BBC)</title>
 <style>
   :root{
@@ -152,7 +153,8 @@
 
 <script>
 "use strict";
-const LS_KEY="bbc_pennant_v1";
+const LS_KEY="bbc_pennant_v2";
+try{localStorage.removeItem("bbc_pennant_v1");}catch(e){}
 const MAIN_POS=["投","捕","一","二","三","遊","左","中","右","指"];
 const SUB_POS=["捕","一","二","三","遊","左","中","右"];
 const FIELD_POS=["捕","一","二","三","遊","左","中","右","指"];
@@ -167,37 +169,18 @@ function p(name,thr,awaken,limit,growth){return {name,thr:thr||"右",awaken:awak
 
 function defaults(){return {
   batters:{
-    A:[ b("左","楠田彗大","右","能力覚醒",true,""), b("一","イーガン","右","",false,"超晩成"),
-        b("遊","大松佑斗","右","",true,""), b("右","片平悠翔","左","",true,"超晩成"),
-        b("二","曽根凌太朗","左","能力覚醒",false,""), b("中","新垣裕也","左","移籍覚醒",false,""),
-        b("捕","","右","",false,""), b("三","美濃口佑弥","右","",false,""), b("指","","右","",false,"") ],
-    B:[ b("一","長坂琉希","右","",false,""), b("二","","右","",false,""),
-        b("左","鵜飼健吾","左","",false,""), b("右","関水俊平","右","",false,"超晩成"),
-        b("中","黒田颯汰","右","",false,"超晩成"), b("三","ヘンマン","右","",false,"超晩成"),
-        b("捕","桑名将吾","左","",false,"超晩成"), b("遊","関屋瑛汰","右","",false,"超晩成"), b("指","","右","",false,"") ]
+    A:Array.from({length:9},()=>b("","","右","",false,"")),
+    B:Array.from({length:9},()=>b("","","右","",false,""))
   },
-  bench:[ {role:"守備要員",...b("捕","野田和樹","右","",false,"超晩成")},
-          {role:"守備要員",...b("","","右","",false,"")},
-          {role:"代打要員",...b("","","右","",false,"")},
-          {role:"代走要員",...b("","","右","",false,"")} ],
-  farmB:[ b("左","篠原和磨","左","能力覚醒",false,""), b("三","コステロ","左","",false,""), b("捕","倉橋樹生","右","",false,"") ],
-  releaseB:[],
+  bench:[], farmB:[], releaseB:[],
   pit:{
-    starters:[ p("長峰朔久","右","能力覚醒",false,""), p("田谷尊","左","能力覚醒",true,""),
-               p("五十嵐陽","右","",true,""), p("","右","",false,""), p("高田真翔","右","能力覚醒",true,"") ].map((o,i)=>({...o,label:String(i+1)})),
-    second:[ p("小牧陽琉","左","能力覚醒",true,""), p("","右","",false,""),
-             p("デンゼル","左","能力覚醒",false,""), p("三枝楓太","右","",false,""), p("","右","",false,"") ].map((o,i)=>({...o,label:(i+1)+"-"+(i+1)})),
-    closer:[ p("小林啓斗","右","能力覚醒",true,"") ],
-    farm:[ {role:"先発",...p("福留昊汰","左","",false,"")}, {role:"第二",...p("高見拓海","左","",false,"")},
-           {role:"先発",...p("金剛直生","右","",false,"")}, {role:"先発",...p("高松玲央","右","",false,"")},
-           {role:"第二",...p("中山壮","右","",false,"")}, {role:"第二",...p("寺本幸生","右","",false,"")},
-           {role:"第二",...p("折笠怜央","右","",false,"")}, {role:"第二",...p("田部啓介","右","",false,"")} ],
-    release:[]
+    starters:Array.from({length:6},(_,i)=>({...p("","右","",false,""),label:String(i+1)})),
+    second:Array.from({length:6},(_,i)=>({...p("","右","",false,""),label:(i+1)+"-"+(i+1)})),
+    closer:[ p("","右","",false,"") ],
+    farm:[], release:[]
   },
   wishlist:[],
-  save:[ {no:50,memo:"8年目開始",kp:"大松突破（プレイ後）"}, {no:38,memo:"",kp:"大松突破／覚醒（オフ）"},
-         {no:39,memo:"",kp:"ドラフト前"}, {no:40,memo:"",kp:"生田入団"},
-         {no:43,memo:"9年目開始",kp:"自由契約交渉"}, {no:44,memo:"9年目開始",kp:"自由契約交渉"} ],
+  save:[],
   cycle:Array.from({length:9},()=>[false,false,false,false])
 };}
 
