@@ -18,24 +18,23 @@
     --bg:#eef0f3; --panel:#ffffff; --line:#d9dce1; --line2:#eceef1;
     --ink:#1c1c1e; --sub:#8e8e93; --accent:#0071e3;
     --red:#e0362c; --yellow:#fff2a8; --orange:#ef9a2e;
-    --of:#9ccc65; --if:#f4d500; --posC:#29a3d6; --posDH:#9aa0a6;
+    --of:#9ccc65; --if:#f4d500; --posC:#29a3d6; --posDH:#9aa0a6; --posTou:#e2726e;
     --sen:#e35d6a; --dai:#efa63d; --osae:#7cb342; --head:#e7ebf0;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html,body{margin:0;height:100%;overflow:hidden;}
-  body{
-    font-family:"LINE Seed JP","Hiragino Sans","Helvetica Neue",Arial,sans-serif;
-    background:var(--bg); color:var(--ink);
-    -webkit-font-smoothing:antialiased; user-select:none; -webkit-user-select:none;
-    padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-  }
+  body{font-family:"LINE Seed JP","Hiragino Sans","Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--ink);
+    -webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);}
   body.dragging{cursor:grabbing;}
   #app{display:flex;flex-direction:column;height:100vh;height:100dvh;}
-  header{flex:0 0 auto;display:flex;align-items:center;gap:14px;padding:8px 16px;background:var(--panel);border-bottom:1px solid var(--line);}
-  header .title{font-weight:700;font-size:18px;letter-spacing:.5px;}
-  header .title small{font-weight:400;color:var(--sub);font-size:12px;margin-left:6px;}
+  header{flex:0 0 auto;display:flex;align-items:center;gap:14px;padding:7px 14px;background:var(--panel);border-bottom:1px solid var(--line);}
   header .spacer{flex:1;}
-  .hint{color:var(--sub);font-size:12px;}
+  .hint{color:var(--sub);font-size:11px;white-space:nowrap;}
+  #countBar{display:flex;align-items:center;flex-wrap:wrap;gap:2px 4px;}
+  .cchip{display:inline-flex;align-items:center;gap:4px;padding:2px 8px 2px 2px;font-size:13px;font-weight:700;color:#333;background:#f5f6f8;border-radius:20px;}
+  .cchip b{font-size:14px;}
+  .clabel{font-size:11px;color:var(--sub);font-weight:700;margin-right:2px;}
   main{flex:1 1 auto;display:grid;grid-template-columns:1.72fr 1fr 1fr;gap:10px;padding:10px;min-height:0;}
   .col{display:flex;flex-direction:column;gap:10px;min-height:0;}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;min-height:0;overflow:hidden;}
@@ -54,19 +53,23 @@
   .row.drop-hi{outline:2px dashed var(--accent);outline-offset:-2px;background:#eaf3ff;}
   .row.lifted{opacity:.35;}
   .ord{flex:0 0 18px;text-align:center;font-weight:700;font-size:13px;color:#444;}
-  .rot{flex:0 0 32px;text-align:center;font-weight:700;font-size:12px;color:#444;}
-  .role{flex:0 0 50px;font-size:10px;color:var(--sub);text-align:center;font-weight:700;line-height:1.2;}
+  .rot{flex:0 0 40px;text-align:center;font-weight:700;font-size:12px;color:#444;}
+  .role{flex:0 0 48px;font-size:10px;color:var(--sub);text-align:center;font-weight:700;line-height:1.2;}
   .pos{flex:0 0 28px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;background:var(--posDH);}
   .pos.of{background:var(--of);color:#2b4413;} .pos.if{background:var(--if);color:#5a4a00;}
-  .pos.c{background:var(--posC);color:#fff;} .pos.dh{background:var(--posDH);color:#fff;}
+  .pos.c{background:var(--posC);color:#fff;} .pos.dh{background:var(--posDH);color:#fff;} .pos.tou{background:var(--posTou);color:#fff;}
   .pos.none{background:transparent;color:var(--sub);border:1px dashed var(--line);}
+  .pos.mini{flex:0 0 22px;width:22px;height:20px;font-size:11px;border-radius:5px;}
+  .subs{display:flex;gap:2px;flex:0 0 auto;}
+  .pos.sub{flex:0 0 18px;width:18px;height:16px;font-size:9px;border-radius:4px;}
   .badge{flex:0 0 auto;height:22px;padding:0 7px;border-radius:6px;display:inline-flex;align-items:center;font-size:11px;font-weight:700;color:#fff;background:var(--posDH);white-space:nowrap;}
   .badge.sen{background:var(--sen);} .badge.dai{background:var(--dai);} .badge.osae{background:var(--osae);}
-  .nm{flex:1 1 auto;min-width:0;display:flex;align-items:center;flex-wrap:wrap;gap:4px 6px;padding:3px 7px;border-radius:7px;}
-  .nm .pn{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
-  .nm.left .pn{color:var(--red);} .nm.right .pn{color:var(--ink);}
-  .nm.empty{background:var(--yellow);}
-  .tags{display:flex;gap:3px;flex-wrap:wrap;}
+  .nm{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:6px;}
+  .name{display:inline-flex;align-items:center;padding:3px 8px;border-radius:7px;min-width:74px;max-width:100%;}
+  .name .pn{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .name.left .pn{color:var(--red);} .name.right .pn{color:var(--ink);}
+  .name.empty{background:var(--yellow);}
+  .tags{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto;flex:0 0 auto;}
   .tag{font-size:10px;font-weight:700;padding:2px 5px;border-radius:5px;white-space:nowrap;}
   .tag.k{background:#fdecd2;color:#c9781a;} .tag.l{background:#fde3d0;color:#c0561f;} .tag.g{background:#e9eef5;color:#4a5b74;}
   .addrow{display:flex;align-items:center;justify-content:center;gap:6px;color:var(--accent);font-size:12px;font-weight:700;padding:5px;border:1px dashed var(--line);border-radius:9px;margin:6px 4px 2px;cursor:pointer;}
@@ -85,13 +88,10 @@
   .cyc-btn.on{background:#fff6d6;border-color:var(--orange);font-weight:700;}
   .cyc-row.done .cyc-ord{color:var(--osae);}
   .cyc-row.done .cyc-btn.on{background:#e6f4d8;border-color:var(--osae);color:#5a8a2a;}
-  /* drag clone */
-  #ghost{position:fixed;z-index:80;pointer-events:none;transform:translate(-50%,-120%);background:var(--panel);border:2px solid var(--accent);
-    border-radius:10px;padding:6px 12px;font-size:15px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.28);display:none;white-space:nowrap;}
-  /* modal */
+  #ghost{position:fixed;z-index:80;pointer-events:none;transform:translate(-50%,-120%);background:var(--panel);border:2px solid var(--accent);border-radius:10px;padding:6px 12px;font-size:15px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.28);display:none;white-space:nowrap;}
   .overlay{position:fixed;inset:0;background:rgba(0,0,0,.32);display:none;align-items:center;justify-content:center;z-index:90;}
   .overlay.show{display:flex;}
-  .modal{background:var(--panel);border-radius:18px;width:440px;max-width:92vw;max-height:88vh;overflow:auto;padding:18px 20px 20px;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+  .modal{background:var(--panel);border-radius:18px;width:460px;max-width:92vw;max-height:88vh;overflow:auto;padding:18px 20px 20px;box-shadow:0 20px 60px rgba(0,0,0,.3);}
   .modal h3{margin:0 0 14px;font-size:17px;}
   .fld{margin-bottom:13px;}
   .fld label{display:block;font-size:12px;color:var(--sub);font-weight:700;margin-bottom:5px;}
@@ -101,6 +101,9 @@
   .togs button{flex:1;font:inherit;font-size:15px;font-weight:700;padding:9px;border-radius:10px;border:1px solid var(--line);background:#fafbfc;color:var(--sub);cursor:pointer;}
   .togs button.on{background:var(--ink);color:#fff;border-color:var(--ink);}
   .togs button.on.red{background:var(--red);border-color:var(--red);}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;}
+  .chips button{font:inherit;font-size:14px;font-weight:700;padding:7px 12px;border-radius:9px;border:1px solid var(--line);background:#fafbfc;color:var(--sub);cursor:pointer;}
+  .chips button.on{background:var(--accent);color:#fff;border-color:var(--accent);}
   .mbtns{display:flex;gap:10px;margin-top:18px;}
   .mbtns button{flex:1;font:inherit;font-size:16px;font-weight:700;padding:12px;border-radius:12px;border:0;cursor:pointer;}
   .mbtns .ok{background:var(--accent);color:#fff;}
@@ -112,34 +115,27 @@
 <body>
 <div id="app">
   <header>
-    <div class="title">プロスピ ペナント管理<small>BBC</small></div>
+    <span class="clabel">登録人数</span>
+    <div id="countBar"></div>
     <div class="spacer"></div>
     <div class="hint">タップで編集／名前を長押しでドラッグ移動／端末内に自動保存</div>
   </header>
   <main>
-    <div class="col">
-      <div class="card" style="flex:1 1 auto;">
-        <div class="chead"><h2>野手</h2><span class="sub">打順A・B／ベンチ／2軍</span></div>
-        <div class="cbody tight" id="battersBody"></div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card" style="flex:1 1 auto;">
-        <div class="chead"><h2>投手</h2><span class="sub">先発・第二・抑え・2軍</span></div>
-        <div class="cbody tight" id="pitchersBody"></div>
-      </div>
-    </div>
+    <div class="col"><div class="card" style="flex:1 1 auto;">
+      <div class="chead"><h2>野手</h2><span class="sub">打順A・B／ベンチ／2軍</span></div>
+      <div class="cbody tight" id="battersBody"></div></div></div>
+    <div class="col"><div class="card" style="flex:1 1 auto;">
+      <div class="chead"><h2>投手</h2><span class="sub">先発・第二・抑え・2軍</span></div>
+      <div class="cbody tight" id="pitchersBody"></div></div></div>
     <div class="col">
       <div class="card" style="flex:1 1 55%;">
         <div class="chead"><h2>セーブデータ</h2><span class="sub">No.1〜50</span><span class="spacer"></span></div>
         <div class="save-head"><div>No</div><div>メモ</div><div>キーポイント</div></div>
-        <div class="cbody tight" id="saveBody"></div>
-      </div>
+        <div class="cbody tight" id="saveBody"></div></div>
       <div class="card" style="flex:1 1 45%;">
         <div class="chead"><h2>サイクル安打チェック</h2><span class="spacer"></span>
           <span class="badge" style="background:var(--head);color:var(--sub);cursor:pointer" id="cycleReset">リセット</span></div>
-        <div class="cbody" id="cycleBody"></div>
-      </div>
+        <div class="cbody" id="cycleBody"></div></div>
     </div>
   </main>
 </div>
@@ -149,14 +145,16 @@
 <script>
 "use strict";
 const LS_KEY="bbc_pennant_v1";
-const POS_BAT=["捕","一","二","三","遊","左","中","右","指"];
+const MAIN_POS=["投","捕","一","二","三","遊","左","中","右","指"];
+const SUB_POS=["捕","一","二","三","遊","左","中","右"];
+const FIELD_POS=["捕","一","二","三","遊","左","中","右","指"];
 const AWAKEN=["","能力覚醒","移籍覚醒"];
 const GROWTH=["","早熟","普通","晩成","超晩成","持続"];
 const PIT_ROLE=["先発","第二","抑え"];
-const BAT_KEYS=["position","name","bat","awaken","limit","growth"];
+const BAT_KEYS=["position","subs","name","bat","awaken","limit","growth"];
 const PIT_KEYS=["name","thr","awaken","limit","growth"];
 
-function b(position,name,bat,awaken,limit,growth){return {position,name,bat:bat||"右",awaken:awaken||"",limit:!!limit,growth:growth||""};}
+function b(position,name,bat,awaken,limit,growth,subs){return {position,subs:subs||[],name,bat:bat||"右",awaken:awaken||"",limit:!!limit,growth:growth||""};}
 function p(name,thr,awaken,limit,growth){return {name,thr:thr||"右",awaken:awaken||"",limit:!!limit,growth:growth||""};}
 
 function defaults(){return {
@@ -177,9 +175,9 @@ function defaults(){return {
   farmB:[ b("左","篠原和磨","左","能力覚醒",false,""), b("三","コステロ","左","",false,""), b("捕","倉橋樹生","右","",false,"") ],
   pit:{
     starters:[ p("長峰朔久","右","能力覚醒",false,""), p("田谷尊","左","能力覚醒",true,""),
-               p("五十嵐陽","右","",true,""), p("","右","",false,""), p("高田真翔","右","能力覚醒",true,"") ],
+               p("五十嵐陽","右","",true,""), p("","右","",false,""), p("高田真翔","右","能力覚醒",true,"") ].map((o,i)=>({...o,label:String(i+1)})),
     second:[ p("小牧陽琉","左","能力覚醒",true,""), p("","右","",false,""),
-             p("デンゼル","左","能力覚醒",false,""), p("三枝楓太","右","",false,""), p("","右","",false,"") ],
+             p("デンゼル","左","能力覚醒",false,""), p("三枝楓太","右","",false,""), p("","右","",false,"") ].map((o,i)=>({...o,label:(i+1)+"-"+(i+1)})),
     closer:[ p("小林啓斗","右","能力覚醒",true,"") ],
     farm:[ {role:"先発",...p("福留昊汰","左","",false,"")}, {role:"第二",...p("高見拓海","左","",false,"")},
            {role:"先発",...p("金剛直生","右","",false,"")}, {role:"先発",...p("高松玲央","右","",false,"")},
@@ -194,52 +192,68 @@ function defaults(){return {
 
 let S=load();
 function load(){ try{const raw=localStorage.getItem(LS_KEY); if(raw)return migrate(JSON.parse(raw));}catch(e){} return defaults(); }
-function migrate(s){ const d=defaults(); const m=Object.assign({},d,s); if(!m.cycle||m.cycle.length!==9)m.cycle=d.cycle; return m; }
+function migrate(s){ const d=defaults(); const m=Object.assign({},d,s);
+  if(!m.cycle||m.cycle.length!==9)m.cycle=d.cycle;
+  [].concat(m.batters&&m.batters.A||[],m.batters&&m.batters.B||[],m.bench||[],m.farmB||[]).forEach(o=>{ if(o&&!Array.isArray(o.subs))o.subs=[]; });
+  ["starters","second"].forEach(g=>{ (m.pit&&m.pit[g]||[]).forEach((o,i)=>{ if(o&&o.label===undefined)o.label=g==="starters"?String(i+1):(i+1)+"-"+(i+1); }); });
+  return m; }
 function save(){ try{localStorage.setItem(LS_KEY,JSON.stringify(S));}catch(e){} }
 
 function escapeH(s){return String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));}
 function escapeAttr(s){return String(s).replace(/"/g,"&quot;").replace(/</g,"&lt;");}
-function posClass(p){ if(p==="捕")return"c"; if(p==="指")return"dh"; if(["一","二","三","遊"].includes(p))return"if"; if(["左","中","右"].includes(p))return"of"; return"none"; }
+function posClass(p){ if(p==="投")return"tou"; if(p==="捕")return"c"; if(p==="指")return"dh"; if(["一","二","三","遊"].includes(p))return"if"; if(["左","中","右"].includes(p))return"of"; return"none"; }
 function tagsHTML(o){ let h=""; if(o.awaken)h+=`<span class="tag k">${o.awaken}</span>`; if(o.limit)h+=`<span class="tag l">限界突破</span>`; if(o.growth)h+=`<span class="tag g">${o.growth}</span>`; return h?`<span class="tags">${h}</span>`:""; }
-function nameHTML(o,kind){ const empty=!o.name; const dir=((kind==="pit"?o.thr:o.bat)==="左")?"left":"right"; return `<div class="nm ${dir} ${empty?"empty":""}"><span class="pn">${empty?"（空き）":escapeH(o.name)}</span>${tagsHTML(o)}</div>`; }
+function nameHTML(o,kind){
+  const isTou = kind==="bat" && o.position==="投";
+  const empty = !o.name && !isTou;
+  const dir = ((kind==="pit"?o.thr:o.bat)==="左")?"left":"right";
+  return `<div class="nm"><span class="name ${dir} ${empty?"empty":""}"><span class="pn">${o.name?escapeH(o.name):""}</span></span>${tagsHTML(o)}</div>`;
+}
+function subBadges(o){ if(!o.subs||!o.subs.length)return ""; return `<span class="subs">`+o.subs.map(s=>`<span class="pos sub ${posClass(s)}">${s}</span>`).join("")+`</span>`; }
 
-/* ---- data accessors ---- */
 function getBatObj(g,i){ if(g==="A"||g==="B")return S.batters[g][i]; if(g==="bench")return S.bench[i]; if(g==="farmB")return S.farmB[i]; }
 function getPitObj(g,i){ return S.pit[g][i]; }
 function getPayload(cat,g,i){ const o=cat==="bat"?getBatObj(g,i):getPitObj(g,i); const keys=cat==="bat"?BAT_KEYS:PIT_KEYS; const r={}; keys.forEach(k=>r[k]=o[k]); return r; }
-function setPayload(cat,g,i,pl){ const o=cat==="bat"?getBatObj(g,i):getPitObj(g,i); Object.assign(o,pl); }
-function swapPayload(cat,g1,i1,g2,i2){ const a=getPayload(cat,g1,i1), b2=getPayload(cat,g2,i2); setPayload(cat,g1,i1,b2); setPayload(cat,g2,i2,a); }
+function setPayload(cat,g,i,pl){ Object.assign(cat==="bat"?getBatObj(g,i):getPitObj(g,i), pl); }
+function swapPayload(cat,g1,i1,g2,i2){ const a=getPayload(cat,g1,i1), c=getPayload(cat,g2,i2); setPayload(cat,g1,i1,c); setPayload(cat,g2,i2,a); }
 
-/* ---- render ---- */
-function batRow(o,g,i,lead){
-  return `<div class="row" data-cat="bat" data-g="${g}" data-i="${i}">
-    ${lead}<span class="pos ${posClass(o.position)}">${o.position||"—"}</span>${nameHTML(o,"bat")}</div>`;
+/* position counts (dedup by name) */
+function positionCounts(){
+  const seen=new Set(), cnt={}; FIELD_POS.forEach(p=>cnt[p]=0);
+  [].concat(S.batters.A,S.batters.B,S.bench,S.farmB).forEach(o=>{ if(o.name&&!seen.has(o.name)){ seen.add(o.name); if(cnt[o.position]!==undefined)cnt[o.position]++; } });
+  return cnt;
+}
+function renderCounts(){
+  const c=positionCounts(); let h="";
+  FIELD_POS.forEach(pp=> h+=`<span class="cchip"><span class="pos mini ${posClass(pp)}">${pp}</span><b>${c[pp]||0}</b></span>`);
+  document.getElementById("countBar").innerHTML=h;
+}
+
+/* render */
+function batRow(o,g,i,lead,showSub){
+  return `<div class="row" data-cat="bat" data-g="${g}" data-i="${i}">${lead}<span class="pos ${posClass(o.position)}">${o.position||"—"}</span>${showSub?subBadges(o):""}${nameHTML(o,"bat")}</div>`;
 }
 function renderBatters(){
   let h=`<div class="lineups">`;
-  ["A","B"].forEach(g=>{
-    h+=`<div><div class="subttl big">打順${g}</div>`;
-    S.batters[g].forEach((o,i)=> h+=batRow(o,g,i,`<span class="ord">${i+1}</span>`));
-    h+=`</div>`;
-  });
+  ["A","B"].forEach(g=>{ h+=`<div><div class="subttl big">打順${g}</div>`;
+    S.batters[g].forEach((o,i)=> h+=batRow(o,g,i,`<span class="ord">${i+1}</span>`,false)); h+=`</div>`; });
   h+=`</div>`;
   h+=`<div class="subttl">ベンチ<span class="ln"></span></div>`;
-  S.bench.forEach((o,i)=> h+=batRow(o,"bench",i,`<span class="role">${escapeH(o.role||"—")}</span>`));
+  S.bench.forEach((o,i)=> h+=batRow(o,"bench",i,`<span class="role">${escapeH(o.role||"—")}</span>`,true));
   h+=`<div class="addrow" data-add="bench">＋ ベンチを追加</div>`;
   h+=`<div class="redsep"></div><div class="subttl" style="color:var(--red)">2軍（昇格候補）<span class="ln"></span></div>`;
-  S.farmB.forEach((o,i)=> h+=batRow(o,"farmB",i,`<span class="ord"></span>`));
+  S.farmB.forEach((o,i)=> h+=batRow(o,"farmB",i,`<span class="ord"></span>`,true));
   h+=`<div class="addrow" data-add="farmB">＋ 2軍野手を追加</div>`;
   document.getElementById("battersBody").innerHTML=h;
 }
 function pitRow(o,g,i,label,cls,roleText){
-  return `<div class="row" data-cat="pit" data-g="${g}" data-i="${i}">
-    <span class="rot">${label}</span><span class="badge ${cls}">${roleText}</span>${nameHTML(o,"pit")}</div>`;
+  return `<div class="row" data-cat="pit" data-g="${g}" data-i="${i}"><span class="rot">${escapeH(label)}</span><span class="badge ${cls}">${roleText}</span>${nameHTML(o,"pit")}</div>`;
 }
 function renderPitchers(){
   let h=`<div class="subttl">先発<span class="ln"></span></div>`;
-  S.pit.starters.forEach((o,i)=> h+=pitRow(o,"starters",i,i+1,"sen","先発"));
+  S.pit.starters.forEach((o,i)=> h+=pitRow(o,"starters",i,o.label!=null?o.label:(i+1),"sen","先発"));
   h+=`<div class="subttl">第二先発<span class="ln"></span></div>`;
-  S.pit.second.forEach((o,i)=> h+=pitRow(o,"second",i,`${i+1}-${i+1}`,"dai","第二"));
+  S.pit.second.forEach((o,i)=> h+=pitRow(o,"second",i,o.label!=null?o.label:((i+1)+"-"+(i+1)),"dai","第二"));
   h+=`<div class="subttl">抑え<span class="ln"></span></div>`;
   S.pit.closer.forEach((o,i)=> h+=pitRow(o,"closer",i,"11","osae","抑え"));
   h+=`<div class="redsep"></div><div class="subttl" style="color:var(--red)">2軍（昇格候補）<span class="ln"></span></div>`;
@@ -248,7 +262,7 @@ function renderPitchers(){
   document.getElementById("pitchersBody").innerHTML=h;
 }
 function renderSave(){
-  let h=""; S.save.forEach((o,i)=>{ h+=`<div class="save-row" data-save="${i}"><span class="no">${o.no||"—"}</span><span class="memo">${escapeH(o.memo||"")}</span><span class="kp">${escapeH(o.kp||"")}</span></div>`; });
+  let h=""; S.save.forEach((o,i)=> h+=`<div class="save-row" data-save="${i}"><span class="no">${o.no||"—"}</span><span class="memo">${escapeH(o.memo||"")}</span><span class="kp">${escapeH(o.kp||"")}</span></div>`);
   h+=`<div class="addrow" data-add="save">＋ セーブ記録を追加</div>`;
   document.getElementById("saveBody").innerHTML=h;
 }
@@ -259,98 +273,91 @@ function renderCycle(){
     row.forEach((v,c)=> h+=`<td class="cyc-cell"><span class="cyc-btn ${v?"on":""}" data-cyc="${r},${c}">${v?"○":""}</span></td>`); h+=`</tr>`; });
   h+=`</tbody></table>`; document.getElementById("cycleBody").innerHTML=h;
 }
-function renderAll(){ renderBatters(); renderPitchers(); renderSave(); renderCycle(); }
+function renderAll(){ renderCounts(); renderBatters(); renderPitchers(); renderSave(); renderCycle(); }
 
-/* ---- add / tap dispatch ---- */
 function doAdd(type){
-  if(type==="bench"){ S.bench.push({role:"守備要員",...b("","","右","",false,"")}); save(); renderBatters(); }
-  else if(type==="farmB"){ S.farmB.push(b("","","右","",false,"")); save(); renderBatters(); }
+  if(type==="bench"){ S.bench.push({role:"守備要員",...b("","","右","",false,"")}); save(); renderBatters(); renderCounts(); }
+  else if(type==="farmB"){ S.farmB.push(b("","","右","",false,"")); save(); renderBatters(); renderCounts(); }
   else if(type==="farmP"){ S.pit.farm.push({role:"第二",...p("","右","",false,"")}); save(); renderPitchers(); }
   else if(type==="save"){ S.save.push({no:"",memo:"",kp:""}); save(); renderSave(); editSave(S.save.length-1); }
 }
 function tapEdit(cat,g,i){ if(cat==="bat"){ if(g==="A"||g==="B")editBatter(g,i); else if(g==="bench")editBench(i); else editFarmB(i); } else editPit(g,i); }
 
-/* ---- long-press drag (pointer based) ---- */
-let drag=null;
-const ghost=document.getElementById("ghost");
-function slotUnder(x,y){ const el=document.elementFromPoint(x,y); if(!el)return null; const row=el.closest('[data-cat]'); return row; }
+/* long-press drag */
+let drag=null; const ghost=document.getElementById("ghost");
+function slotUnder(x,y){ const el=document.elementFromPoint(x,y); return el?el.closest('[data-cat]'):null; }
 function clearHi(){ document.querySelectorAll('.row.drop-hi').forEach(r=>r.classList.remove('drop-hi')); }
-function startGhost(o,cat){ const nm=o.name||"（空き）"; ghost.textContent=nm; ghost.style.display="block"; }
 function beginDrag(){ if(!drag)return; drag.started=true; document.body.classList.add("dragging");
-  const o = drag.cat==="bat"?getBatObj(drag.g,drag.i):getPitObj(drag.g,drag.i); startGhost(o,drag.cat);
+  const o=drag.cat==="bat"?getBatObj(drag.g,drag.i):getPitObj(drag.g,drag.i); ghost.textContent=o.name||"（空き）"; ghost.style.display="block";
   drag.el.classList.add("lifted"); moveGhost(drag.lastX,drag.lastY); if(navigator.vibrate)navigator.vibrate(15); }
 function moveGhost(x,y){ ghost.style.left=x+"px"; ghost.style.top=y+"px"; }
-function onDown(e){
-  const row=e.target.closest('[data-cat]'); if(!row)return;
+function onDown(e){ const row=e.target.closest('[data-cat]'); if(!row)return;
   drag={cat:row.dataset.cat,g:row.dataset.g,i:parseInt(row.dataset.i,10),el:row,started:false,startX:e.clientX,startY:e.clientY,lastX:e.clientX,lastY:e.clientY};
   drag.timer=setTimeout(beginDrag,320);
-  window.addEventListener("pointermove",onMove); window.addEventListener("pointerup",onUp); window.addEventListener("pointercancel",onUp);
-}
-function onMove(e){
-  if(!drag)return; drag.lastX=e.clientX; drag.lastY=e.clientY;
+  window.addEventListener("pointermove",onMove); window.addEventListener("pointerup",onUp); window.addEventListener("pointercancel",onUp); }
+function onMove(e){ if(!drag)return; drag.lastX=e.clientX; drag.lastY=e.clientY;
   const dx=Math.abs(e.clientX-drag.startX), dy=Math.abs(e.clientY-drag.startY);
   if(!drag.started){ if(dx>10||dy>10){ clearTimeout(drag.timer); cleanup(); } return; }
   moveGhost(e.clientX,e.clientY); clearHi();
   const tgt=slotUnder(e.clientX,e.clientY);
-  if(tgt&&tgt.dataset.cat===drag.cat&&!(tgt.dataset.g===drag.g&&+tgt.dataset.i===drag.i)) tgt.classList.add("drop-hi");
-}
-function onUp(e){
-  if(!drag)return; clearTimeout(drag.timer);
-  if(!drag.started){ const wasTap=Math.abs(e.clientX-drag.startX)<10&&Math.abs(e.clientY-drag.startY)<10; const d=drag; cleanup(); if(wasTap)tapEdit(d.cat,d.g,d.i); return; }
+  if(tgt&&tgt.dataset.cat===drag.cat&&!(tgt.dataset.g===drag.g&&+tgt.dataset.i===drag.i)) tgt.classList.add("drop-hi"); }
+function onUp(e){ if(!drag)return; clearTimeout(drag.timer);
+  if(!drag.started){ const tap=Math.abs(e.clientX-drag.startX)<10&&Math.abs(e.clientY-drag.startY)<10; const d=drag; cleanup(); if(tap)tapEdit(d.cat,d.g,d.i); return; }
   const tgt=slotUnder(e.clientX,e.clientY);
-  if(tgt&&tgt.dataset.cat===drag.cat&&!(tgt.dataset.g===drag.g&&+tgt.dataset.i===drag.i)){
-    swapPayload(drag.cat,drag.g,drag.i,tgt.dataset.g,parseInt(tgt.dataset.i,10)); save();
-  }
-  cleanup(); renderAll();
-}
+  if(tgt&&tgt.dataset.cat===drag.cat&&!(tgt.dataset.g===drag.g&&+tgt.dataset.i===drag.i)){ swapPayload(drag.cat,drag.g,drag.i,tgt.dataset.g,parseInt(tgt.dataset.i,10)); save(); }
+  cleanup(); renderAll(); }
 function cleanup(){ if(drag){ clearTimeout(drag.timer); if(drag.el)drag.el.classList.remove("lifted"); }
   clearHi(); ghost.style.display="none"; document.body.classList.remove("dragging");
   window.removeEventListener("pointermove",onMove); window.removeEventListener("pointerup",onUp); window.removeEventListener("pointercancel",onUp); drag=null; }
 window.addEventListener("touchmove",e=>{ if(drag&&drag.started)e.preventDefault(); },{passive:false});
 
-/* delegate pointerdown + clicks */
-["battersBody","pitchersBody"].forEach(id=>{
-  const box=document.getElementById(id);
+["battersBody","pitchersBody"].forEach(id=>{ const box=document.getElementById(id);
   box.addEventListener("pointerdown",e=>{ if(e.target.closest('[data-add]'))return; onDown(e); });
-  box.addEventListener("click",e=>{ const a=e.target.closest('[data-add]'); if(a)doAdd(a.dataset.add); });
-});
+  box.addEventListener("click",e=>{ const a=e.target.closest('[data-add]'); if(a)doAdd(a.dataset.add); }); });
 document.getElementById("saveBody").addEventListener("click",e=>{ const a=e.target.closest('[data-add]'); if(a){doAdd("save");return;} const r=e.target.closest('[data-save]'); if(r)editSave(parseInt(r.dataset.save,10)); });
 document.getElementById("cycleBody").addEventListener("click",e=>{ const c=e.target.closest('[data-cyc]'); if(!c)return; const [r,col]=c.dataset.cyc.split(",").map(Number); S.cycle[r][col]=!S.cycle[r][col]; save(); renderCycle(); });
-document.getElementById("cycleReset").addEventListener("click",()=>{ if(confirm("サイクル安打チェックをすべてリセットしますか？")){ S.cycle=Array.from({length:9},()=>[false,false,false,false]); save(); renderCycle(); } });
+document.getElementById("cycleReset").addEventListener("click",()=>{ S.cycle=Array.from({length:9},()=>[false,false,false,false]); save(); renderCycle(); });
 
-/* ---- edit modal ---- */
+/* modal */
 const overlay=document.getElementById("overlay"), modalEl=document.getElementById("modal");
 function closeModal(){ overlay.classList.remove("show"); }
 overlay.addEventListener("click",e=>{ if(e.target===overlay)closeModal(); });
-function fldText(id,label,val){return `<div class="fld"><label>${label}</label><input type="text" id="${id}" value="${escapeAttr(val||"")}"></div>`;}
+function fldText(id,label,val){return `<div class="fld"><label>${label}</label><input type="text" id="${id}" value="${escapeAttr(val==null?"":val)}"></div>`;}
 function fldNum(id,label,val){return `<div class="fld"><label>${label}</label><input type="number" id="${id}" min="1" max="50" value="${val||""}"></div>`;}
-function fldSelect(id,label,opts,val){ const o=opts.map(x=>`<option value="${escapeAttr(x)}" ${x===val?"selected":""}>${x===""?"（なし）":x}</option>`).join(""); return `<div class="fld"><label>${label}</label><select id="${id}">${o}</select></div>`; }
+function fldSelect(id,label,opts,val){ let list=opts.slice(); if(!list.includes(val))list=[val,...list];
+  const o=list.map(x=>`<option value="${escapeAttr(x)}" ${x===val?"selected":""}>${x===""?"（なし）":x}</option>`).join("");
+  return `<div class="fld"><label>${label}</label><select id="${id}">${o}</select></div>`; }
 function fldToggle(id,label,opts,val,redVal){ const btns=opts.map(x=>`<button type="button" data-v="${x}" class="${x===val?"on":""} ${x===redVal?"red":""}">${x}</button>`).join(""); return `<div class="fld"><label>${label}</label><div class="togs" id="${id}">${btns}</div></div>`; }
+function fldChips(id,label,opts,sel){ const b=opts.map(x=>`<button type="button" data-v="${x}" class="${sel.includes(x)?"on":""}">${x}</button>`).join(""); return `<div class="fld"><label>${label}</label><div class="chips" id="${id}">${b}</div></div>`; }
 function bindToggle(id){ const box=document.getElementById(id); box.addEventListener("click",e=>{ const btn=e.target.closest("button"); if(!btn)return; box.querySelectorAll("button").forEach(x=>x.classList.remove("on")); btn.classList.add("on"); }); }
+function bindChips(id){ const box=document.getElementById(id); box.addEventListener("click",e=>{ const btn=e.target.closest("button"); if(btn)btn.classList.toggle("on"); }); }
 function togVal(id){ const on=document.querySelector(`#${id} button.on`); return on?on.dataset.v:""; }
+function chipsVal(id){ return Array.from(document.querySelectorAll(`#${id} button.on`)).map(x=>x.dataset.v); }
 
 function openBatterModal(title,o,onSave,onDelete,isBench){
   let html=`<h3>${title}</h3>`;
   if(isBench)html+=fldSelect("f_role","役割",["守備要員","代打要員","代走要員"],o.role||"守備要員");
-  html+=fldSelect("f_pos","守備",["",...POS_BAT],o.position||"");
+  html+=fldSelect("f_pos","メインポジション",MAIN_POS,o.position||"");
+  html+=fldChips("f_subs","サブポジション（複数可）",SUB_POS,o.subs||[]);
   html+=fldText("f_name","選手名",o.name);
   html+=fldToggle("f_bat","打席",["右","左"],o.bat||"右","左");
   html+=fldSelect("f_awk","覚醒",AWAKEN,o.awaken||"");
   html+=fldToggle("f_lim","限界突破",["なし","あり"],o.limit?"あり":"なし","");
   html+=fldSelect("f_grw","成長タイプ",GROWTH,o.growth||"");
   html+=`<div class="mbtns">`+(onDelete?`<button class="del" id="m_del">削除</button>`:"")+`<button class="cancel" id="m_cancel">キャンセル</button><button class="ok" id="m_ok">保存</button></div>`;
-  modalEl.innerHTML=html; overlay.classList.add("show"); bindToggle("f_bat"); bindToggle("f_lim");
+  modalEl.innerHTML=html; overlay.classList.add("show"); bindToggle("f_bat"); bindToggle("f_lim"); bindChips("f_subs");
   document.getElementById("m_cancel").onclick=closeModal;
-  document.getElementById("m_ok").onclick=()=>{ const r={position:document.getElementById("f_pos").value,name:document.getElementById("f_name").value.trim(),bat:togVal("f_bat")||"右",awaken:document.getElementById("f_awk").value,limit:togVal("f_lim")==="あり",growth:document.getElementById("f_grw").value}; if(isBench)r.role=document.getElementById("f_role").value; onSave(r); save(); renderAll(); closeModal(); };
+  document.getElementById("m_ok").onclick=()=>{ const r={position:document.getElementById("f_pos").value,subs:chipsVal("f_subs"),name:document.getElementById("f_name").value.trim(),bat:togVal("f_bat")||"右",awaken:document.getElementById("f_awk").value,limit:togVal("f_lim")==="あり",growth:document.getElementById("f_grw").value}; if(isBench)r.role=document.getElementById("f_role").value; onSave(r); save(); renderAll(); closeModal(); };
   if(onDelete)document.getElementById("m_del").onclick=()=>{ if(confirm("この行を削除しますか？")){ onDelete(); save(); renderAll(); closeModal(); } };
 }
 window.editBatter=(g,i)=>openBatterModal(`打順${g} ${i+1}番 編集`,S.batters[g][i],r=>{S.batters[g][i]=r;},null,false);
 window.editBench=(i)=>openBatterModal("ベンチ編集",S.bench[i],r=>{S.bench[i]=r;},()=>{S.bench.splice(i,1);},true);
 window.editFarmB=(i)=>openBatterModal("2軍野手 編集",S.farmB[i],r=>{S.farmB[i]=r;},()=>{S.farmB.splice(i,1);},false);
 window.editPit=function(group,i){
-  const o=S.pit[group][i], isFarm=group==="farm", roleFixed=group==="starters"?"先発":group==="second"?"第二":group==="closer"?"抑え":null;
+  const o=S.pit[group][i], isFarm=group==="farm", hasLabel=(group==="starters"||group==="second"), roleFixed=group==="starters"?"先発":group==="second"?"第二":"抑え";
   let html=`<h3>${isFarm?"2軍投手 編集":(roleFixed+" 編集")}</h3>`;
   if(isFarm)html+=fldSelect("f_role","位置",PIT_ROLE,o.role||"第二");
+  if(hasLabel)html+=fldText("f_lab","登板ラベル",o.label);
   html+=fldText("f_name","選手名",o.name);
   html+=fldToggle("f_thr","投球",["右","左"],o.thr||"右","左");
   html+=fldSelect("f_awk","覚醒",AWAKEN,o.awaken||"");
@@ -359,7 +366,7 @@ window.editPit=function(group,i){
   html+=`<div class="mbtns">`+(isFarm?`<button class="del" id="m_del">削除</button>`:"")+`<button class="cancel" id="m_cancel">キャンセル</button><button class="ok" id="m_ok">保存</button></div>`;
   modalEl.innerHTML=html; overlay.classList.add("show"); bindToggle("f_thr"); bindToggle("f_lim");
   document.getElementById("m_cancel").onclick=closeModal;
-  document.getElementById("m_ok").onclick=()=>{ const r={name:document.getElementById("f_name").value.trim(),thr:togVal("f_thr")||"右",awaken:document.getElementById("f_awk").value,limit:togVal("f_lim")==="あり",growth:document.getElementById("f_grw").value}; if(isFarm)r.role=document.getElementById("f_role").value; S.pit[group][i]=r; save(); renderAll(); closeModal(); };
+  document.getElementById("m_ok").onclick=()=>{ const r={name:document.getElementById("f_name").value.trim(),thr:togVal("f_thr")||"右",awaken:document.getElementById("f_awk").value,limit:togVal("f_lim")==="あり",growth:document.getElementById("f_grw").value}; if(isFarm)r.role=document.getElementById("f_role").value; if(hasLabel)r.label=document.getElementById("f_lab").value.trim(); S.pit[group][i]=r; save(); renderAll(); closeModal(); };
   if(isFarm)document.getElementById("m_del").onclick=()=>{ if(confirm("この行を削除しますか？")){ S.pit.farm.splice(i,1); save(); renderPitchers(); closeModal(); } };
 };
 window.editSave=function(i){ const o=S.save[i];
