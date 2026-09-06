@@ -18,104 +18,87 @@
     --bg:#eef0f3; --panel:#ffffff; --line:#d9dce1; --line2:#eceef1;
     --ink:#1c1c1e; --sub:#8e8e93; --accent:#0071e3;
     --red:#e0362c; --yellow:#fff2a8; --orange:#ef9a2e;
-    --posC:#17a7c9; --posDH:#9aa0a6; --posDef:#f0932b;
-    --sen:#e35d6a; --dai:#efa63d; --osae:#7cb342;
-    --head:#e7ebf0;
+    --of:#9ccc65; --if:#f4d500; --posC:#29a3d6; --posDH:#9aa0a6;
+    --sen:#e35d6a; --dai:#efa63d; --osae:#7cb342; --head:#e7ebf0;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html,body{margin:0;height:100%;overflow:hidden;}
   body{
     font-family:"LINE Seed JP","Hiragino Sans","Helvetica Neue",Arial,sans-serif;
     background:var(--bg); color:var(--ink);
-    -webkit-font-smoothing:antialiased; user-select:none;
+    -webkit-font-smoothing:antialiased; user-select:none; -webkit-user-select:none;
     padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
+  body.dragging{cursor:grabbing;}
   #app{display:flex;flex-direction:column;height:100vh;height:100dvh;}
-  /* header */
-  header{
-    flex:0 0 auto;display:flex;align-items:center;gap:14px;
-    padding:8px 16px;background:var(--panel);border-bottom:1px solid var(--line);
-  }
+  header{flex:0 0 auto;display:flex;align-items:center;gap:14px;padding:8px 16px;background:var(--panel);border-bottom:1px solid var(--line);}
   header .title{font-weight:700;font-size:18px;letter-spacing:.5px;}
   header .title small{font-weight:400;color:var(--sub);font-size:12px;margin-left:6px;}
   header .spacer{flex:1;}
-  .seg{display:inline-flex;background:var(--head);border-radius:10px;padding:3px;gap:2px;}
-  .seg button{border:0;background:transparent;color:var(--sub);font:inherit;font-size:14px;
-    padding:6px 18px;border-radius:8px;font-weight:700;cursor:pointer;}
-  .seg button.on{background:var(--panel);color:var(--accent);box-shadow:0 1px 2px rgba(0,0,0,.12);}
   .hint{color:var(--sub);font-size:12px;}
-  /* main 3 columns */
-  main{flex:1 1 auto;display:grid;grid-template-columns:1.06fr 0.94fr 0.82fr;gap:10px;padding:10px;min-height:0;}
+  main{flex:1 1 auto;display:grid;grid-template-columns:1.72fr 1fr 1fr;gap:10px;padding:10px;min-height:0;}
   .col{display:flex;flex-direction:column;gap:10px;min-height:0;}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;
-    display:flex;flex-direction:column;min-height:0;overflow:hidden;}
-  .card > .chead{flex:0 0 auto;display:flex;align-items:center;gap:8px;
-    padding:7px 12px;border-bottom:1px solid var(--line2);background:#fafbfc;}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;min-height:0;overflow:hidden;}
+  .card > .chead{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid var(--line2);background:#fafbfc;}
   .card > .chead h2{margin:0;font-size:14px;font-weight:700;}
   .card > .chead .sub{color:var(--sub);font-size:11px;}
   .card > .chead .spacer{flex:1;}
-  .cbody{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;padding:4px 8px 8px;}
+  .cbody{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;padding:4px 8px 8px;touch-action:pan-y;}
   .cbody.tight{padding:2px 6px 6px;}
+  .lineups{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
   .subttl{font-size:11px;color:var(--sub);font-weight:700;margin:8px 4px 3px;display:flex;align-items:center;gap:6px;}
+  .subttl.big{font-size:12px;color:var(--accent);justify-content:center;background:#f3f7fd;border-radius:8px;padding:4px;margin:2px 2px 5px;}
   .subttl .ln{flex:1;height:1px;background:var(--line2);}
   .redsep{height:3px;background:var(--red);border-radius:2px;margin:8px 2px 4px;}
-  /* rows */
-  .row{display:flex;align-items:center;gap:6px;padding:4px 5px;border-radius:9px;cursor:pointer;min-height:34px;}
-  .row:active{background:#f0f4fa;}
-  .ord{flex:0 0 22px;text-align:center;font-weight:700;font-size:13px;color:#444;}
-  .rot{flex:0 0 34px;text-align:center;font-weight:700;font-size:12px;color:#444;}
-  .role{flex:0 0 52px;font-size:11px;color:var(--sub);text-align:center;font-weight:700;}
-  .pos{flex:0 0 30px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;
-    font-size:13px;font-weight:700;color:#fff;background:var(--posDef);}
-  .pos.c{background:var(--posC);} .pos.dh{background:var(--posDH);} .pos.none{background:transparent;color:var(--sub);border:1px dashed var(--line);}
-  .badge{flex:0 0 auto;height:22px;padding:0 8px;border-radius:6px;display:inline-flex;align-items:center;
-    font-size:11px;font-weight:700;color:#fff;background:var(--posDef);white-space:nowrap;}
+  .row{display:flex;align-items:center;gap:5px;padding:4px 4px;border-radius:9px;min-height:34px;touch-action:pan-y;}
+  .row.drop-hi{outline:2px dashed var(--accent);outline-offset:-2px;background:#eaf3ff;}
+  .row.lifted{opacity:.35;}
+  .ord{flex:0 0 18px;text-align:center;font-weight:700;font-size:13px;color:#444;}
+  .rot{flex:0 0 32px;text-align:center;font-weight:700;font-size:12px;color:#444;}
+  .role{flex:0 0 50px;font-size:10px;color:var(--sub);text-align:center;font-weight:700;line-height:1.2;}
+  .pos{flex:0 0 28px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;background:var(--posDH);}
+  .pos.of{background:var(--of);color:#2b4413;} .pos.if{background:var(--if);color:#5a4a00;}
+  .pos.c{background:var(--posC);color:#fff;} .pos.dh{background:var(--posDH);color:#fff;}
+  .pos.none{background:transparent;color:var(--sub);border:1px dashed var(--line);}
+  .badge{flex:0 0 auto;height:22px;padding:0 7px;border-radius:6px;display:inline-flex;align-items:center;font-size:11px;font-weight:700;color:#fff;background:var(--posDH);white-space:nowrap;}
   .badge.sen{background:var(--sen);} .badge.dai{background:var(--dai);} .badge.osae{background:var(--osae);}
-  .nm{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:6px;overflow:hidden;
-    padding:3px 8px;border-radius:7px;}
-  .nm .pn{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .nm{flex:1 1 auto;min-width:0;display:flex;align-items:center;flex-wrap:wrap;gap:4px 6px;padding:3px 7px;border-radius:7px;}
+  .nm .pn{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
   .nm.left .pn{color:var(--red);} .nm.right .pn{color:var(--ink);}
   .nm.empty{background:var(--yellow);}
-  .tags{display:flex;gap:4px;flex:0 0 auto;margin-left:auto;padding-left:6px;}
-  .tag{font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;white-space:nowrap;}
-  .tag.k{background:#fdecd2;color:#c9781a;} /* 覚醒 */
-  .tag.l{background:#fde3d0;color:#c0561f;} /* 限界突破 */
-  .tag.g{background:#e9eef5;color:#4a5b74;} /* 成長 */
-  .addrow{display:flex;align-items:center;justify-content:center;gap:6px;color:var(--accent);
-    font-size:12px;font-weight:700;padding:6px;border:1px dashed var(--line);border-radius:9px;margin:6px 4px 2px;cursor:pointer;}
-  /* save list */
-  .save-row{display:grid;grid-template-columns:44px 78px 1fr;align-items:center;gap:6px;
-    padding:6px 8px;border-radius:9px;cursor:pointer;border-bottom:1px solid var(--line2);}
+  .tags{display:flex;gap:3px;flex-wrap:wrap;}
+  .tag{font-size:10px;font-weight:700;padding:2px 5px;border-radius:5px;white-space:nowrap;}
+  .tag.k{background:#fdecd2;color:#c9781a;} .tag.l{background:#fde3d0;color:#c0561f;} .tag.g{background:#e9eef5;color:#4a5b74;}
+  .addrow{display:flex;align-items:center;justify-content:center;gap:6px;color:var(--accent);font-size:12px;font-weight:700;padding:5px;border:1px dashed var(--line);border-radius:9px;margin:6px 4px 2px;cursor:pointer;}
+  .save-row{display:grid;grid-template-columns:40px 72px 1fr;align-items:center;gap:6px;padding:6px 8px;border-radius:9px;cursor:pointer;border-bottom:1px solid var(--line2);}
   .save-row:active{background:#f0f4fa;}
   .save-row .no{font-weight:700;font-size:14px;text-align:center;color:#333;}
   .save-row .memo{font-size:11px;color:var(--sub);font-weight:700;}
   .save-row .kp{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .save-head{display:grid;grid-template-columns:44px 78px 1fr;gap:6px;padding:2px 8px;font-size:10px;color:var(--sub);font-weight:700;}
-  /* cycle */
+  .save-head{display:grid;grid-template-columns:40px 72px 1fr;gap:6px;padding:2px 8px;font-size:10px;color:var(--sub);font-weight:700;}
   .cycle{width:100%;border-collapse:separate;border-spacing:0 4px;}
   .cycle th{font-size:11px;color:var(--sub);font-weight:700;padding:2px 0;}
   .cycle td{text-align:center;}
-  .cyc-ord{font-weight:700;font-size:13px;color:#444;width:34px;}
+  .cyc-ord{font-weight:700;font-size:13px;color:#444;width:30px;}
   .cyc-cell{width:23%;}
-  .cyc-btn{width:38px;height:30px;border-radius:8px;border:1px solid var(--line);background:#fbfcfd;
-    display:inline-flex;align-items:center;justify-content:center;font-size:17px;color:var(--sub);cursor:pointer;}
-  .cyc-btn.on{background:#fff6d6;border-color:var(--orange);color:#d98a00;font-weight:700;}
+  .cyc-btn{width:40px;height:30px;border-radius:8px;border:1px solid var(--line);background:#fbfcfd;display:inline-flex;align-items:center;justify-content:center;font-size:18px;color:#d98a00;cursor:pointer;}
+  .cyc-btn.on{background:#fff6d6;border-color:var(--orange);font-weight:700;}
   .cyc-row.done .cyc-ord{color:var(--osae);}
   .cyc-row.done .cyc-btn.on{background:#e6f4d8;border-color:var(--osae);color:#5a8a2a;}
+  /* drag clone */
+  #ghost{position:fixed;z-index:80;pointer-events:none;transform:translate(-50%,-120%);background:var(--panel);border:2px solid var(--accent);
+    border-radius:10px;padding:6px 12px;font-size:15px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.28);display:none;white-space:nowrap;}
   /* modal */
-  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.32);display:none;align-items:center;justify-content:center;z-index:50;}
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.32);display:none;align-items:center;justify-content:center;z-index:90;}
   .overlay.show{display:flex;}
-  .modal{background:var(--panel);border-radius:18px;width:440px;max-width:92vw;max-height:88vh;overflow:auto;
-    padding:18px 20px 20px;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+  .modal{background:var(--panel);border-radius:18px;width:440px;max-width:92vw;max-height:88vh;overflow:auto;padding:18px 20px 20px;box-shadow:0 20px 60px rgba(0,0,0,.3);}
   .modal h3{margin:0 0 14px;font-size:17px;}
   .fld{margin-bottom:13px;}
   .fld label{display:block;font-size:12px;color:var(--sub);font-weight:700;margin-bottom:5px;}
-  .fld input[type=text], .fld input[type=number], .fld select{
-    width:100%;font:inherit;font-size:16px;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:#fafbfc;color:var(--ink);}
+  .fld input[type=text], .fld input[type=number], .fld select{width:100%;font:inherit;font-size:16px;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:#fafbfc;color:var(--ink);}
   .fld input:focus, .fld select:focus{outline:2px solid var(--accent);border-color:transparent;background:#fff;}
   .togs{display:flex;gap:8px;}
-  .togs button{flex:1;font:inherit;font-size:15px;font-weight:700;padding:9px;border-radius:10px;border:1px solid var(--line);
-    background:#fafbfc;color:var(--sub);cursor:pointer;}
+  .togs button{flex:1;font:inherit;font-size:15px;font-weight:700;padding:9px;border-radius:10px;border:1px solid var(--line);background:#fafbfc;color:var(--sub);cursor:pointer;}
   .togs button.on{background:var(--ink);color:#fff;border-color:var(--ink);}
   .togs button.on.red{background:var(--red);border-color:var(--red);}
   .mbtns{display:flex;gap:10px;margin-top:18px;}
@@ -130,29 +113,22 @@
 <div id="app">
   <header>
     <div class="title">プロスピ ペナント管理<small>BBC</small></div>
-    <div class="seg" id="patternSeg">
-      <button data-p="A" class="on">打順 A</button>
-      <button data-p="B">打順 B</button>
-    </div>
     <div class="spacer"></div>
-    <div class="hint">項目をタップで編集・端末内に自動保存</div>
+    <div class="hint">タップで編集／名前を長押しでドラッグ移動／端末内に自動保存</div>
   </header>
   <main>
-    <!-- 野手 -->
     <div class="col">
       <div class="card" style="flex:1 1 auto;">
-        <div class="chead"><h2>野手</h2><span class="sub" id="lineupSub">スタメン（打順A）</span></div>
+        <div class="chead"><h2>野手</h2><span class="sub">打順A・B／ベンチ／2軍</span></div>
         <div class="cbody tight" id="battersBody"></div>
       </div>
     </div>
-    <!-- 投手 -->
     <div class="col">
       <div class="card" style="flex:1 1 auto;">
         <div class="chead"><h2>投手</h2><span class="sub">先発・第二・抑え・2軍</span></div>
         <div class="cbody tight" id="pitchersBody"></div>
       </div>
     </div>
-    <!-- 右：セーブ + サイクル -->
     <div class="col">
       <div class="card" style="flex:1 1 55%;">
         <div class="chead"><h2>セーブデータ</h2><span class="sub">No.1〜50</span><span class="spacer"></span></div>
@@ -167,300 +143,233 @@
     </div>
   </main>
 </div>
-
-<!-- edit modal -->
-<div class="overlay" id="overlay">
-  <div class="modal" id="modal"></div>
-</div>
+<div id="ghost"></div>
+<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
 
 <script>
 "use strict";
-const LS_KEY = "bbc_pennant_v1";
-const POS_BAT = ["捕","一","二","三","遊","左","中","右","指"];
-const AWAKEN = ["", "能力覚醒","移籍覚醒"];
-const GROWTH = ["", "早熟","普通","晩成","超晩成","持続"];
-const PIT_ROLE = ["先発","第二","抑え"];
+const LS_KEY="bbc_pennant_v1";
+const POS_BAT=["捕","一","二","三","遊","左","中","右","指"];
+const AWAKEN=["","能力覚醒","移籍覚醒"];
+const GROWTH=["","早熟","普通","晩成","超晩成","持続"];
+const PIT_ROLE=["先発","第二","抑え"];
+const BAT_KEYS=["position","name","bat","awaken","limit","growth"];
+const PIT_KEYS=["name","thr","awaken","limit","growth"];
 
 function b(position,name,bat,awaken,limit,growth){return {position,name,bat:bat||"右",awaken:awaken||"",limit:!!limit,growth:growth||""};}
 function p(name,thr,awaken,limit,growth){return {name,thr:thr||"右",awaken:awaken||"",limit:!!limit,growth:growth||""};}
 
-function defaults(){
-  return {
-    pattern:"A",
-    batters:{
-      A:[ b("左","楠田彗大","右","能力覚醒",true,""), b("一","イーガン","右","",false,"超晩成"),
-          b("遊","大松佑斗","右","",true,""), b("右","片平悠翔","左","",true,"超晩成"),
-          b("二","曽根凌太朗","左","能力覚醒",false,""), b("中","新垣裕也","左","移籍覚醒",false,""),
-          b("捕","","右","",false,""), b("三","美濃口佑弥","右","",false,""),
-          b("指","","右","",false,"") ],
-      B:[ b("一","長坂琉希","右","",false,""), b("二","","右","",false,""),
-          b("左","鵜飼健吾","左","",false,""), b("右","関水俊平","右","",false,"超晩成"),
-          b("中","黒田颯汰","右","",false,"超晩成"), b("三","ヘンマン","右","",false,"超晩成"),
-          b("捕","桑名将吾","左","",false,"超晩成"), b("遊","関屋瑛汰","右","",false,"超晩成"),
-          b("指","","右","",false,"") ]
-    },
-    bench:[ {role:"守備要員", ...b("捕","野田和樹","右","",false,"超晩成")},
-            {role:"守備要員", ...b("","","右","",false,"")},
-            {role:"代打要員", ...b("","","右","",false,"")},
-            {role:"代走要員", ...b("","","右","",false,"")} ],
-    farmB:[ b("左","篠原和磨","左","能力覚醒",false,""), b("三","コステロ","左","",false,""),
-            b("捕","倉橋樹生","右","",false,"") ],
-    pit:{
-      starters:[ p("長峰朔久","右","能力覚醒",false,""), p("田谷尊","左","能力覚醒",true,""),
-                 p("五十嵐陽","右","",true,""), p("","右","",false,""), p("高田真翔","右","能力覚醒",true,"") ],
-      second:[ p("小牧陽琉","左","能力覚醒",true,""), p("","右","",false,""),
-               p("デンゼル","左","能力覚醒",false,""), p("三枝楓太","右","",false,""), p("","右","",false,"") ],
-      closer:[ p("小林啓斗","右","能力覚醒",true,"") ],
-      farm:[ {role:"先発", ...p("福留昊汰","左","",false,"")}, {role:"第二", ...p("高見拓海","左","",false,"")},
-             {role:"先発", ...p("金剛直生","右","",false,"")}, {role:"先発", ...p("高松玲央","右","",false,"")},
-             {role:"第二", ...p("中山壮","右","",false,"")}, {role:"第二", ...p("寺本幸生","右","",false,"")},
-             {role:"第二", ...p("折笠怜央","右","",false,"")}, {role:"第二", ...p("田部啓介","右","",false,"")} ]
-    },
-    save:[ {no:50,memo:"8年目開始",kp:"大松突破（プレイ後）"}, {no:38,memo:"",kp:"大松突破／覚醒（オフ）"},
-           {no:39,memo:"",kp:"ドラフト前"}, {no:40,memo:"",kp:"生田入団"},
-           {no:43,memo:"9年目開始",kp:"自由契約交渉"}, {no:44,memo:"9年目開始",kp:"自由契約交渉"} ],
-    cycle: Array.from({length:9},()=>[false,false,false,false])
-  };
-}
+function defaults(){return {
+  batters:{
+    A:[ b("左","楠田彗大","右","能力覚醒",true,""), b("一","イーガン","右","",false,"超晩成"),
+        b("遊","大松佑斗","右","",true,""), b("右","片平悠翔","左","",true,"超晩成"),
+        b("二","曽根凌太朗","左","能力覚醒",false,""), b("中","新垣裕也","左","移籍覚醒",false,""),
+        b("捕","","右","",false,""), b("三","美濃口佑弥","右","",false,""), b("指","","右","",false,"") ],
+    B:[ b("一","長坂琉希","右","",false,""), b("二","","右","",false,""),
+        b("左","鵜飼健吾","左","",false,""), b("右","関水俊平","右","",false,"超晩成"),
+        b("中","黒田颯汰","右","",false,"超晩成"), b("三","ヘンマン","右","",false,"超晩成"),
+        b("捕","桑名将吾","左","",false,"超晩成"), b("遊","関屋瑛汰","右","",false,"超晩成"), b("指","","右","",false,"") ]
+  },
+  bench:[ {role:"守備要員",...b("捕","野田和樹","右","",false,"超晩成")},
+          {role:"守備要員",...b("","","右","",false,"")},
+          {role:"代打要員",...b("","","右","",false,"")},
+          {role:"代走要員",...b("","","右","",false,"")} ],
+  farmB:[ b("左","篠原和磨","左","能力覚醒",false,""), b("三","コステロ","左","",false,""), b("捕","倉橋樹生","右","",false,"") ],
+  pit:{
+    starters:[ p("長峰朔久","右","能力覚醒",false,""), p("田谷尊","左","能力覚醒",true,""),
+               p("五十嵐陽","右","",true,""), p("","右","",false,""), p("高田真翔","右","能力覚醒",true,"") ],
+    second:[ p("小牧陽琉","左","能力覚醒",true,""), p("","右","",false,""),
+             p("デンゼル","左","能力覚醒",false,""), p("三枝楓太","右","",false,""), p("","右","",false,"") ],
+    closer:[ p("小林啓斗","右","能力覚醒",true,"") ],
+    farm:[ {role:"先発",...p("福留昊汰","左","",false,"")}, {role:"第二",...p("高見拓海","左","",false,"")},
+           {role:"先発",...p("金剛直生","右","",false,"")}, {role:"先発",...p("高松玲央","右","",false,"")},
+           {role:"第二",...p("中山壮","右","",false,"")}, {role:"第二",...p("寺本幸生","右","",false,"")},
+           {role:"第二",...p("折笠怜央","右","",false,"")}, {role:"第二",...p("田部啓介","右","",false,"")} ]
+  },
+  save:[ {no:50,memo:"8年目開始",kp:"大松突破（プレイ後）"}, {no:38,memo:"",kp:"大松突破／覚醒（オフ）"},
+         {no:39,memo:"",kp:"ドラフト前"}, {no:40,memo:"",kp:"生田入団"},
+         {no:43,memo:"9年目開始",kp:"自由契約交渉"}, {no:44,memo:"9年目開始",kp:"自由契約交渉"} ],
+  cycle:Array.from({length:9},()=>[false,false,false,false])
+};}
 
-let S = load();
-function load(){
-  try{ const raw=localStorage.getItem(LS_KEY); if(raw){ return migrate(JSON.parse(raw)); } }catch(e){}
-  return defaults();
-}
-function migrate(s){ const d=defaults(); return Object.assign({},d,s,{cycle:s.cycle&&s.cycle.length===9?s.cycle:d.cycle}); }
-function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(S)); }catch(e){} }
+let S=load();
+function load(){ try{const raw=localStorage.getItem(LS_KEY); if(raw)return migrate(JSON.parse(raw));}catch(e){} return defaults(); }
+function migrate(s){ const d=defaults(); const m=Object.assign({},d,s); if(!m.cycle||m.cycle.length!==9)m.cycle=d.cycle; return m; }
+function save(){ try{localStorage.setItem(LS_KEY,JSON.stringify(S));}catch(e){} }
 
-/* ---------- render helpers ---------- */
-function posClass(pos){ if(pos==="捕")return"c"; if(pos==="指")return"dh"; if(!pos)return"none"; return""; }
-function tagsHTML(o){
-  let h="";
-  if(o.awaken) h+=`<span class="tag k">${o.awaken}</span>`;
-  if(o.limit)  h+=`<span class="tag l">限界突破</span>`;
-  if(o.growth) h+=`<span class="tag g">${o.growth}</span>`;
-  return h?`<span class="tags">${h}</span>`:"";
-}
-function nameHTML(o, kind){
-  const empty = !o.name;
-  const dir = (kind==="pit" ? o.thr : o.bat)==="左" ? "left":"right";
-  const label = empty ? "（空き）" : o.name;
-  return `<div class="nm ${dir} ${empty?"empty":""}"><span class="pn">${escapeH(label)}</span>${tagsHTML(o)}</div>`;
-}
 function escapeH(s){return String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));}
+function escapeAttr(s){return String(s).replace(/"/g,"&quot;").replace(/</g,"&lt;");}
+function posClass(p){ if(p==="捕")return"c"; if(p==="指")return"dh"; if(["一","二","三","遊"].includes(p))return"if"; if(["左","中","右"].includes(p))return"of"; return"none"; }
+function tagsHTML(o){ let h=""; if(o.awaken)h+=`<span class="tag k">${o.awaken}</span>`; if(o.limit)h+=`<span class="tag l">限界突破</span>`; if(o.growth)h+=`<span class="tag g">${o.growth}</span>`; return h?`<span class="tags">${h}</span>`:""; }
+function nameHTML(o,kind){ const empty=!o.name; const dir=((kind==="pit"?o.thr:o.bat)==="左")?"left":"right"; return `<div class="nm ${dir} ${empty?"empty":""}"><span class="pn">${empty?"（空き）":escapeH(o.name)}</span>${tagsHTML(o)}</div>`; }
 
-/* ---------- batters column ---------- */
-function renderBatters(){
-  const pat = S.pattern;
-  document.getElementById("lineupSub").textContent = `スタメン（打順${pat}）`;
-  let h = "";
-  // starters
-  S.batters[pat].forEach((o,i)=>{
-    h += `<div class="row" onclick="editBatter('${pat}',${i})">
-      <span class="ord">${i+1}</span>
-      <span class="pos ${posClass(o.position)}">${o.position||"—"}</span>
-      ${nameHTML(o,"bat")}
-    </div>`;
-  });
-  // bench
-  h += `<div class="subttl">ベンチ<span class="ln"></span></div>`;
-  S.bench.forEach((o,i)=>{
-    h += `<div class="row" onclick="editBench(${i})">
-      <span class="role">${o.role||"—"}</span>
-      <span class="pos ${posClass(o.position)}">${o.position||"—"}</span>
-      ${nameHTML(o,"bat")}
-    </div>`;
-  });
-  h += `<div class="addrow" onclick="addBench()">＋ ベンチを追加</div>`;
-  // farm
-  h += `<div class="redsep"></div><div class="subttl" style="color:var(--red)">2軍（昇格候補）<span class="ln"></span></div>`;
-  S.farmB.forEach((o,i)=>{
-    h += `<div class="row" onclick="editFarmB(${i})">
-      <span class="ord"></span>
-      <span class="pos ${posClass(o.position)}">${o.position||"—"}</span>
-      ${nameHTML(o,"bat")}
-    </div>`;
-  });
-  h += `<div class="addrow" onclick="addFarmB()">＋ 2軍野手を追加</div>`;
-  document.getElementById("battersBody").innerHTML = h;
+/* ---- data accessors ---- */
+function getBatObj(g,i){ if(g==="A"||g==="B")return S.batters[g][i]; if(g==="bench")return S.bench[i]; if(g==="farmB")return S.farmB[i]; }
+function getPitObj(g,i){ return S.pit[g][i]; }
+function getPayload(cat,g,i){ const o=cat==="bat"?getBatObj(g,i):getPitObj(g,i); const keys=cat==="bat"?BAT_KEYS:PIT_KEYS; const r={}; keys.forEach(k=>r[k]=o[k]); return r; }
+function setPayload(cat,g,i,pl){ const o=cat==="bat"?getBatObj(g,i):getPitObj(g,i); Object.assign(o,pl); }
+function swapPayload(cat,g1,i1,g2,i2){ const a=getPayload(cat,g1,i1), b2=getPayload(cat,g2,i2); setPayload(cat,g1,i1,b2); setPayload(cat,g2,i2,a); }
+
+/* ---- render ---- */
+function batRow(o,g,i,lead){
+  return `<div class="row" data-cat="bat" data-g="${g}" data-i="${i}">
+    ${lead}<span class="pos ${posClass(o.position)}">${o.position||"—"}</span>${nameHTML(o,"bat")}</div>`;
 }
-
-/* ---------- pitchers column ---------- */
-function pitRow(o, group, i, label, cls, roleText){
-  return `<div class="row" onclick="editPit('${group}',${i})">
-    <span class="rot">${label}</span>
-    <span class="badge ${cls}">${roleText}</span>
-    ${nameHTML(o,"pit")}
-  </div>`;
+function renderBatters(){
+  let h=`<div class="lineups">`;
+  ["A","B"].forEach(g=>{
+    h+=`<div><div class="subttl big">打順${g}</div>`;
+    S.batters[g].forEach((o,i)=> h+=batRow(o,g,i,`<span class="ord">${i+1}</span>`));
+    h+=`</div>`;
+  });
+  h+=`</div>`;
+  h+=`<div class="subttl">ベンチ<span class="ln"></span></div>`;
+  S.bench.forEach((o,i)=> h+=batRow(o,"bench",i,`<span class="role">${escapeH(o.role||"—")}</span>`));
+  h+=`<div class="addrow" data-add="bench">＋ ベンチを追加</div>`;
+  h+=`<div class="redsep"></div><div class="subttl" style="color:var(--red)">2軍（昇格候補）<span class="ln"></span></div>`;
+  S.farmB.forEach((o,i)=> h+=batRow(o,"farmB",i,`<span class="ord"></span>`));
+  h+=`<div class="addrow" data-add="farmB">＋ 2軍野手を追加</div>`;
+  document.getElementById("battersBody").innerHTML=h;
+}
+function pitRow(o,g,i,label,cls,roleText){
+  return `<div class="row" data-cat="pit" data-g="${g}" data-i="${i}">
+    <span class="rot">${label}</span><span class="badge ${cls}">${roleText}</span>${nameHTML(o,"pit")}</div>`;
 }
 function renderPitchers(){
-  let h="";
-  h += `<div class="subttl">先発<span class="ln"></span></div>`;
+  let h=`<div class="subttl">先発<span class="ln"></span></div>`;
   S.pit.starters.forEach((o,i)=> h+=pitRow(o,"starters",i,i+1,"sen","先発"));
-  h += `<div class="subttl">第二先発<span class="ln"></span></div>`;
+  h+=`<div class="subttl">第二先発<span class="ln"></span></div>`;
   S.pit.second.forEach((o,i)=> h+=pitRow(o,"second",i,`${i+1}-${i+1}`,"dai","第二"));
-  h += `<div class="subttl">抑え<span class="ln"></span></div>`;
+  h+=`<div class="subttl">抑え<span class="ln"></span></div>`;
   S.pit.closer.forEach((o,i)=> h+=pitRow(o,"closer",i,"11","osae","抑え"));
-  h += `<div class="redsep"></div><div class="subttl" style="color:var(--red)">2軍（昇格候補）<span class="ln"></span></div>`;
-  S.pit.farm.forEach((o,i)=>{
-    const cls = o.role==="先発"?"sen":o.role==="抑え"?"osae":"dai";
-    h += `<div class="row" onclick="editPit('farm',${i})">
-      <span class="rot"></span>
-      <span class="badge ${cls}">${o.role||"第二"}</span>
-      ${nameHTML(o,"pit")}
-    </div>`;
-  });
-  h += `<div class="addrow" onclick="addFarmP()">＋ 2軍投手を追加</div>`;
-  document.getElementById("pitchersBody").innerHTML = h;
+  h+=`<div class="redsep"></div><div class="subttl" style="color:var(--red)">2軍（昇格候補）<span class="ln"></span></div>`;
+  S.pit.farm.forEach((o,i)=>{ const cls=o.role==="先発"?"sen":o.role==="抑え"?"osae":"dai"; h+=pitRow(o,"farm",i,"",cls,o.role||"第二"); });
+  h+=`<div class="addrow" data-add="farmP">＋ 2軍投手を追加</div>`;
+  document.getElementById("pitchersBody").innerHTML=h;
 }
-
-/* ---------- save data ---------- */
 function renderSave(){
-  let h="";
-  S.save.forEach((o,i)=>{
-    h += `<div class="save-row" onclick="editSave(${i})">
-      <span class="no">${o.no||"—"}</span>
-      <span class="memo">${escapeH(o.memo||"")}</span>
-      <span class="kp">${escapeH(o.kp||"")}</span>
-    </div>`;
-  });
-  h += `<div class="addrow" onclick="addSave()">＋ セーブ記録を追加</div>`;
-  document.getElementById("saveBody").innerHTML = h;
+  let h=""; S.save.forEach((o,i)=>{ h+=`<div class="save-row" data-save="${i}"><span class="no">${o.no||"—"}</span><span class="memo">${escapeH(o.memo||"")}</span><span class="kp">${escapeH(o.kp||"")}</span></div>`; });
+  h+=`<div class="addrow" data-add="save">＋ セーブ記録を追加</div>`;
+  document.getElementById("saveBody").innerHTML=h;
 }
-
-/* ---------- cycle ---------- */
 const CYC_COLS=["単打","二塁打","三塁打","本塁打"];
 function renderCycle(){
-  let h=`<table class="cycle"><thead><tr><th></th>`;
-  CYC_COLS.forEach(c=> h+=`<th>${c}</th>`); h+=`</tr></thead><tbody>`;
-  S.cycle.forEach((row,r)=>{
-    const done = row.every(x=>x);
-    h+=`<tr class="cyc-row ${done?"done":""}"><td class="cyc-ord">${r+1}</td>`;
-    row.forEach((v,c)=>{ h+=`<td class="cyc-cell"><span class="cyc-btn ${v?"on":""}" onclick="toggleCycle(${r},${c})">${v?"◎":"○"}</span></td>`; });
-    h+=`</tr>`;
-  });
-  h+=`</tbody></table>`;
-  document.getElementById("cycleBody").innerHTML=h;
+  let h=`<table class="cycle"><thead><tr><th></th>`; CYC_COLS.forEach(c=>h+=`<th>${c}</th>`); h+=`</tr></thead><tbody>`;
+  S.cycle.forEach((row,r)=>{ const done=row.every(x=>x); h+=`<tr class="cyc-row ${done?"done":""}"><td class="cyc-ord">${r+1}</td>`;
+    row.forEach((v,c)=> h+=`<td class="cyc-cell"><span class="cyc-btn ${v?"on":""}" data-cyc="${r},${c}">${v?"○":""}</span></td>`); h+=`</tr>`; });
+  h+=`</tbody></table>`; document.getElementById("cycleBody").innerHTML=h;
 }
-
 function renderAll(){ renderBatters(); renderPitchers(); renderSave(); renderCycle(); }
 
-/* ---------- interactions ---------- */
-window.setPattern=function(pat){ S.pattern=pat; save();
-  document.querySelectorAll("#patternSeg button").forEach(x=>x.classList.toggle("on",x.dataset.p===pat));
-  renderBatters();
-};
-document.getElementById("patternSeg").addEventListener("click",e=>{ const btn=e.target.closest("button"); if(btn) setPattern(btn.dataset.p); });
+/* ---- add / tap dispatch ---- */
+function doAdd(type){
+  if(type==="bench"){ S.bench.push({role:"守備要員",...b("","","右","",false,"")}); save(); renderBatters(); }
+  else if(type==="farmB"){ S.farmB.push(b("","","右","",false,"")); save(); renderBatters(); }
+  else if(type==="farmP"){ S.pit.farm.push({role:"第二",...p("","右","",false,"")}); save(); renderPitchers(); }
+  else if(type==="save"){ S.save.push({no:"",memo:"",kp:""}); save(); renderSave(); editSave(S.save.length-1); }
+}
+function tapEdit(cat,g,i){ if(cat==="bat"){ if(g==="A"||g==="B")editBatter(g,i); else if(g==="bench")editBench(i); else editFarmB(i); } else editPit(g,i); }
 
-window.toggleCycle=function(r,c){ S.cycle[r][c]=!S.cycle[r][c]; save(); renderCycle(); };
-document.getElementById("cycleReset").addEventListener("click",()=>{
-  if(confirm("サイクル安打チェックをすべてリセットしますか？")){ S.cycle=Array.from({length:9},()=>[false,false,false,false]); save(); renderCycle(); }
+/* ---- long-press drag (pointer based) ---- */
+let drag=null;
+const ghost=document.getElementById("ghost");
+function slotUnder(x,y){ const el=document.elementFromPoint(x,y); if(!el)return null; const row=el.closest('[data-cat]'); return row; }
+function clearHi(){ document.querySelectorAll('.row.drop-hi').forEach(r=>r.classList.remove('drop-hi')); }
+function startGhost(o,cat){ const nm=o.name||"（空き）"; ghost.textContent=nm; ghost.style.display="block"; }
+function beginDrag(){ if(!drag)return; drag.started=true; document.body.classList.add("dragging");
+  const o = drag.cat==="bat"?getBatObj(drag.g,drag.i):getPitObj(drag.g,drag.i); startGhost(o,drag.cat);
+  drag.el.classList.add("lifted"); moveGhost(drag.lastX,drag.lastY); if(navigator.vibrate)navigator.vibrate(15); }
+function moveGhost(x,y){ ghost.style.left=x+"px"; ghost.style.top=y+"px"; }
+function onDown(e){
+  const row=e.target.closest('[data-cat]'); if(!row)return;
+  drag={cat:row.dataset.cat,g:row.dataset.g,i:parseInt(row.dataset.i,10),el:row,started:false,startX:e.clientX,startY:e.clientY,lastX:e.clientX,lastY:e.clientY};
+  drag.timer=setTimeout(beginDrag,320);
+  window.addEventListener("pointermove",onMove); window.addEventListener("pointerup",onUp); window.addEventListener("pointercancel",onUp);
+}
+function onMove(e){
+  if(!drag)return; drag.lastX=e.clientX; drag.lastY=e.clientY;
+  const dx=Math.abs(e.clientX-drag.startX), dy=Math.abs(e.clientY-drag.startY);
+  if(!drag.started){ if(dx>10||dy>10){ clearTimeout(drag.timer); cleanup(); } return; }
+  moveGhost(e.clientX,e.clientY); clearHi();
+  const tgt=slotUnder(e.clientX,e.clientY);
+  if(tgt&&tgt.dataset.cat===drag.cat&&!(tgt.dataset.g===drag.g&&+tgt.dataset.i===drag.i)) tgt.classList.add("drop-hi");
+}
+function onUp(e){
+  if(!drag)return; clearTimeout(drag.timer);
+  if(!drag.started){ const wasTap=Math.abs(e.clientX-drag.startX)<10&&Math.abs(e.clientY-drag.startY)<10; const d=drag; cleanup(); if(wasTap)tapEdit(d.cat,d.g,d.i); return; }
+  const tgt=slotUnder(e.clientX,e.clientY);
+  if(tgt&&tgt.dataset.cat===drag.cat&&!(tgt.dataset.g===drag.g&&+tgt.dataset.i===drag.i)){
+    swapPayload(drag.cat,drag.g,drag.i,tgt.dataset.g,parseInt(tgt.dataset.i,10)); save();
+  }
+  cleanup(); renderAll();
+}
+function cleanup(){ if(drag){ clearTimeout(drag.timer); if(drag.el)drag.el.classList.remove("lifted"); }
+  clearHi(); ghost.style.display="none"; document.body.classList.remove("dragging");
+  window.removeEventListener("pointermove",onMove); window.removeEventListener("pointerup",onUp); window.removeEventListener("pointercancel",onUp); drag=null; }
+window.addEventListener("touchmove",e=>{ if(drag&&drag.started)e.preventDefault(); },{passive:false});
+
+/* delegate pointerdown + clicks */
+["battersBody","pitchersBody"].forEach(id=>{
+  const box=document.getElementById(id);
+  box.addEventListener("pointerdown",e=>{ if(e.target.closest('[data-add]'))return; onDown(e); });
+  box.addEventListener("click",e=>{ const a=e.target.closest('[data-add]'); if(a)doAdd(a.dataset.add); });
 });
+document.getElementById("saveBody").addEventListener("click",e=>{ const a=e.target.closest('[data-add]'); if(a){doAdd("save");return;} const r=e.target.closest('[data-save]'); if(r)editSave(parseInt(r.dataset.save,10)); });
+document.getElementById("cycleBody").addEventListener("click",e=>{ const c=e.target.closest('[data-cyc]'); if(!c)return; const [r,col]=c.dataset.cyc.split(",").map(Number); S.cycle[r][col]=!S.cycle[r][col]; save(); renderCycle(); });
+document.getElementById("cycleReset").addEventListener("click",()=>{ if(confirm("サイクル安打チェックをすべてリセットしますか？")){ S.cycle=Array.from({length:9},()=>[false,false,false,false]); save(); renderCycle(); } });
 
-/* add rows */
-window.addBench=function(){ S.bench.push({role:"守備要員",...b("","","右","",false,"")}); save(); renderBatters(); };
-window.addFarmB=function(){ S.farmB.push(b("","","右","",false,"")); save(); renderBatters(); };
-window.addFarmP=function(){ S.pit.farm.push({role:"第二",...p("","右","",false,"")}); save(); renderPitchers(); };
-window.addSave=function(){ S.save.push({no:"",memo:"",kp:""}); save(); renderSave(); editSave(S.save.length-1); };
-
-/* ---------- edit modal ---------- */
-let ctx=null;
+/* ---- edit modal ---- */
 const overlay=document.getElementById("overlay"), modalEl=document.getElementById("modal");
-function closeModal(){ overlay.classList.remove("show"); ctx=null; }
-overlay.addEventListener("click",e=>{ if(e.target===overlay) closeModal(); });
-
+function closeModal(){ overlay.classList.remove("show"); }
+overlay.addEventListener("click",e=>{ if(e.target===overlay)closeModal(); });
 function fldText(id,label,val){return `<div class="fld"><label>${label}</label><input type="text" id="${id}" value="${escapeAttr(val||"")}"></div>`;}
 function fldNum(id,label,val){return `<div class="fld"><label>${label}</label><input type="number" id="${id}" min="1" max="50" value="${val||""}"></div>`;}
-function fldSelect(id,label,opts,val){
-  let o=opts.map(x=>`<option value="${escapeAttr(x)}" ${x===val?"selected":""}>${x===""?"（なし）":x}</option>`).join("");
-  return `<div class="fld"><label>${label}</label><select id="${id}">${o}</select></div>`;
-}
-function fldToggle(id,label,opts,val,redVal){
-  const btns=opts.map(x=>`<button type="button" data-v="${x}" class="${x===val?"on":""} ${x===redVal?"red":""}">${x}</button>`).join("");
-  return `<div class="fld"><label>${label}</label><div class="togs" id="${id}">${btns}</div></div>`;
-}
-function escapeAttr(s){return String(s).replace(/"/g,"&quot;").replace(/</g,"&lt;");}
-function bindToggle(id){
-  const box=document.getElementById(id);
-  box.addEventListener("click",e=>{ const btn=e.target.closest("button"); if(!btn)return;
-    box.querySelectorAll("button").forEach(x=>x.classList.remove("on")); btn.classList.add("on"); });
-}
+function fldSelect(id,label,opts,val){ const o=opts.map(x=>`<option value="${escapeAttr(x)}" ${x===val?"selected":""}>${x===""?"（なし）":x}</option>`).join(""); return `<div class="fld"><label>${label}</label><select id="${id}">${o}</select></div>`; }
+function fldToggle(id,label,opts,val,redVal){ const btns=opts.map(x=>`<button type="button" data-v="${x}" class="${x===val?"on":""} ${x===redVal?"red":""}">${x}</button>`).join(""); return `<div class="fld"><label>${label}</label><div class="togs" id="${id}">${btns}</div></div>`; }
+function bindToggle(id){ const box=document.getElementById(id); box.addEventListener("click",e=>{ const btn=e.target.closest("button"); if(!btn)return; box.querySelectorAll("button").forEach(x=>x.classList.remove("on")); btn.classList.add("on"); }); }
 function togVal(id){ const on=document.querySelector(`#${id} button.on`); return on?on.dataset.v:""; }
 
-function openBatterModal(title,o,onSave,onDelete,extra){
+function openBatterModal(title,o,onSave,onDelete,isBench){
   let html=`<h3>${title}</h3>`;
-  if(extra==="bench") html+=fldSelect("f_role","役割",["守備要員","代打要員","代走要員"],o.role||"守備要員");
+  if(isBench)html+=fldSelect("f_role","役割",["守備要員","代打要員","代走要員"],o.role||"守備要員");
   html+=fldSelect("f_pos","守備",["",...POS_BAT],o.position||"");
   html+=fldText("f_name","選手名",o.name);
   html+=fldToggle("f_bat","打席",["右","左"],o.bat||"右","左");
   html+=fldSelect("f_awk","覚醒",AWAKEN,o.awaken||"");
   html+=fldToggle("f_lim","限界突破",["なし","あり"],o.limit?"あり":"なし","");
   html+=fldSelect("f_grw","成長タイプ",GROWTH,o.growth||"");
-  html+=`<div class="mbtns">`;
-  if(onDelete) html+=`<button class="del" id="m_del">削除</button>`;
-  html+=`<button class="cancel" id="m_cancel">キャンセル</button><button class="ok" id="m_ok">保存</button></div>`;
-  modalEl.innerHTML=html; overlay.classList.add("show");
-  bindToggle("f_bat"); bindToggle("f_lim");
+  html+=`<div class="mbtns">`+(onDelete?`<button class="del" id="m_del">削除</button>`:"")+`<button class="cancel" id="m_cancel">キャンセル</button><button class="ok" id="m_ok">保存</button></div>`;
+  modalEl.innerHTML=html; overlay.classList.add("show"); bindToggle("f_bat"); bindToggle("f_lim");
   document.getElementById("m_cancel").onclick=closeModal;
-  document.getElementById("m_ok").onclick=()=>{
-    const r={ position:document.getElementById("f_pos").value, name:document.getElementById("f_name").value.trim(),
-      bat:togVal("f_bat")||"右", awaken:document.getElementById("f_awk").value, limit:togVal("f_lim")==="あり",
-      growth:document.getElementById("f_grw").value };
-    if(extra==="bench") r.role=document.getElementById("f_role").value;
-    onSave(r); save(); renderAll(); closeModal();
-  };
-  if(onDelete) document.getElementById("m_del").onclick=()=>{ if(confirm("この行を削除しますか？")){ onDelete(); save(); renderAll(); closeModal(); } };
+  document.getElementById("m_ok").onclick=()=>{ const r={position:document.getElementById("f_pos").value,name:document.getElementById("f_name").value.trim(),bat:togVal("f_bat")||"右",awaken:document.getElementById("f_awk").value,limit:togVal("f_lim")==="あり",growth:document.getElementById("f_grw").value}; if(isBench)r.role=document.getElementById("f_role").value; onSave(r); save(); renderAll(); closeModal(); };
+  if(onDelete)document.getElementById("m_del").onclick=()=>{ if(confirm("この行を削除しますか？")){ onDelete(); save(); renderAll(); closeModal(); } };
 }
-
-window.editBatter=function(pat,i){ const o=S.batters[pat][i];
-  openBatterModal(`打順${pat} ${i+1}番 編集`,o,(r)=>{S.batters[pat][i]=r;},null); };
-window.editBench=function(i){ const o=S.bench[i];
-  openBatterModal(`ベンチ編集`,o,(r)=>{S.bench[i]=r;},()=>{S.bench.splice(i,1);},"bench"); };
-window.editFarmB=function(i){ const o=S.farmB[i];
-  openBatterModal(`2軍野手 編集`,o,(r)=>{S.farmB[i]=r;},()=>{S.farmB.splice(i,1);}); };
-
+window.editBatter=(g,i)=>openBatterModal(`打順${g} ${i+1}番 編集`,S.batters[g][i],r=>{S.batters[g][i]=r;},null,false);
+window.editBench=(i)=>openBatterModal("ベンチ編集",S.bench[i],r=>{S.bench[i]=r;},()=>{S.bench.splice(i,1);},true);
+window.editFarmB=(i)=>openBatterModal("2軍野手 編集",S.farmB[i],r=>{S.farmB[i]=r;},()=>{S.farmB.splice(i,1);},false);
 window.editPit=function(group,i){
-  const o=S.pit[group][i]; const isFarm=group==="farm";
-  const roleFixed = group==="starters"?"先発":group==="second"?"第二":group==="closer"?"抑え":null;
+  const o=S.pit[group][i], isFarm=group==="farm", roleFixed=group==="starters"?"先発":group==="second"?"第二":group==="closer"?"抑え":null;
   let html=`<h3>${isFarm?"2軍投手 編集":(roleFixed+" 編集")}</h3>`;
-  if(isFarm) html+=fldSelect("f_role","位置",PIT_ROLE,o.role||"第二");
+  if(isFarm)html+=fldSelect("f_role","位置",PIT_ROLE,o.role||"第二");
   html+=fldText("f_name","選手名",o.name);
   html+=fldToggle("f_thr","投球",["右","左"],o.thr||"右","左");
   html+=fldSelect("f_awk","覚醒",AWAKEN,o.awaken||"");
   html+=fldToggle("f_lim","限界突破",["なし","あり"],o.limit?"あり":"なし","");
   html+=fldSelect("f_grw","成長タイプ",GROWTH,o.growth||"");
-  html+=`<div class="mbtns">`;
-  if(isFarm) html+=`<button class="del" id="m_del">削除</button>`;
-  html+=`<button class="cancel" id="m_cancel">キャンセル</button><button class="ok" id="m_ok">保存</button></div>`;
-  modalEl.innerHTML=html; overlay.classList.add("show");
-  bindToggle("f_thr"); bindToggle("f_lim");
+  html+=`<div class="mbtns">`+(isFarm?`<button class="del" id="m_del">削除</button>`:"")+`<button class="cancel" id="m_cancel">キャンセル</button><button class="ok" id="m_ok">保存</button></div>`;
+  modalEl.innerHTML=html; overlay.classList.add("show"); bindToggle("f_thr"); bindToggle("f_lim");
   document.getElementById("m_cancel").onclick=closeModal;
-  document.getElementById("m_ok").onclick=()=>{
-    const r={ name:document.getElementById("f_name").value.trim(), thr:togVal("f_thr")||"右",
-      awaken:document.getElementById("f_awk").value, limit:togVal("f_lim")==="あり", growth:document.getElementById("f_grw").value };
-    if(isFarm) r.role=document.getElementById("f_role").value;
-    S.pit[group][i]=r; save(); renderAll(); closeModal();
-  };
-  if(isFarm) document.getElementById("m_del").onclick=()=>{ if(confirm("この行を削除しますか？")){ S.pit.farm.splice(i,1); save(); renderPitchers(); closeModal(); } };
+  document.getElementById("m_ok").onclick=()=>{ const r={name:document.getElementById("f_name").value.trim(),thr:togVal("f_thr")||"右",awaken:document.getElementById("f_awk").value,limit:togVal("f_lim")==="あり",growth:document.getElementById("f_grw").value}; if(isFarm)r.role=document.getElementById("f_role").value; S.pit[group][i]=r; save(); renderAll(); closeModal(); };
+  if(isFarm)document.getElementById("m_del").onclick=()=>{ if(confirm("この行を削除しますか？")){ S.pit.farm.splice(i,1); save(); renderPitchers(); closeModal(); } };
 };
-
 window.editSave=function(i){ const o=S.save[i];
-  let html=`<h3>セーブ記録 編集</h3>`;
-  html+=fldNum("f_no","No（1〜50）",o.no);
-  html+=fldText("f_memo","メモ",o.memo);
-  html+=fldText("f_kp","キーポイント",o.kp);
-  html+=`<div class="mbtns"><button class="del" id="m_del">削除</button><button class="cancel" id="m_cancel">キャンセル</button><button class="ok" id="m_ok">保存</button></div>`;
+  let html=`<h3>セーブ記録 編集</h3>`+fldNum("f_no","No（1〜50）",o.no)+fldText("f_memo","メモ",o.memo)+fldText("f_kp","キーポイント",o.kp)+`<div class="mbtns"><button class="del" id="m_del">削除</button><button class="cancel" id="m_cancel">キャンセル</button><button class="ok" id="m_ok">保存</button></div>`;
   modalEl.innerHTML=html; overlay.classList.add("show");
   document.getElementById("m_cancel").onclick=closeModal;
-  document.getElementById("m_ok").onclick=()=>{
-    const no=parseInt(document.getElementById("f_no").value,10);
-    S.save[i]={ no:isNaN(no)?"":Math.min(50,Math.max(1,no)), memo:document.getElementById("f_memo").value.trim(), kp:document.getElementById("f_kp").value.trim() };
-    save(); renderSave(); closeModal();
-  };
+  document.getElementById("m_ok").onclick=()=>{ const no=parseInt(document.getElementById("f_no").value,10); S.save[i]={no:isNaN(no)?"":Math.min(50,Math.max(1,no)),memo:document.getElementById("f_memo").value.trim(),kp:document.getElementById("f_kp").value.trim()}; save(); renderSave(); closeModal(); };
   document.getElementById("m_del").onclick=()=>{ if(confirm("この記録を削除しますか？")){ S.save.splice(i,1); save(); renderSave(); closeModal(); } };
 };
 
-/* init */
-document.querySelectorAll("#patternSeg button").forEach(x=>x.classList.toggle("on",x.dataset.p===S.pattern));
 renderAll();
 </script>
 </body>
